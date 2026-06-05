@@ -1,6 +1,6 @@
-# hello-ts
+# React-Digi-Pet
 
-Minimal TypeScript "Hello World" project.
+React-based Digital Pet Browser Game
 
 Windows / npm:
 

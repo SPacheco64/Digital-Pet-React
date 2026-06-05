@@ -1,5 +1,6 @@
 import React from 'react';
 import { GameDisplayProps } from './types';
+import Creature from './Creature';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -10,7 +11,8 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   return (
     <div id='GameDisplay'>
       {/* Displayed game content will go here */}
-      <span>Oh wow I am a game display</span>
+      <span>Oh wow I am a game display and here is your creature!</span>
+      <Creature creatureName='Cactuar' />
     </div>
   );
 };
