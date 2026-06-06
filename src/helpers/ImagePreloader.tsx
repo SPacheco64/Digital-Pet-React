@@ -4,6 +4,7 @@ import { preload } from 'react-dom';
 // Import all images for preloading
 import eggGif from '../graphics/creature_sprites/egg.gif';
 import petBgDay from '../graphics/backgrounds/pet-bg-day.png';
+import statusBg from '../graphics/backgrounds/status-bg.png';
 import chocoboAsleep from '../graphics/creature_sprites/chocobo_sprites/chocobo-asleep.gif';
 import chocoboEating from '../graphics/creature_sprites/chocobo_sprites/chocobo-eating.gif';
 import chocoboHappy from '../graphics/creature_sprites/chocobo_sprites/chocobo-happy.gif';
@@ -18,7 +19,7 @@ interface ImagePreloaderProps {
 const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const preloadImages = async () => {
+  const preloadImages = () => {
     try {
       const imagePaths = [
         chocoboAsleep,
@@ -29,12 +30,14 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         chocoboUpset,
         eggGif,
         petBgDay,
+        statusBg
       ];
 
       imagePaths.forEach((imagePath) => {
         preload(imagePath, { as: "image" });
       });
 
+      // setIsLoading(false);
       setTimeout(() => { 
         setIsLoading(false);
       }, 2000); // Simulate loading time
