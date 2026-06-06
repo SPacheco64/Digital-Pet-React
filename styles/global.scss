@@ -1,0 +1,19 @@
+#DigipetRoot {
+    // background: url('src/graphics/backgrounds/blue-bg.png');
+    background: #17EB8F;
+    background-size: cover;
+    background-position: center;
+
+    .top-panel, .bottom-panel {
+        // background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        flex-direction: column;
+        height: 50%;
+        width: 60%;
+        border-radius: 1rem;
+    }
+
+    .top-panel {
+        padding: 1.5rem 0 .5rem 0;
+    }
+}

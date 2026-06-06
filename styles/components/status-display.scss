@@ -1,0 +1,24 @@
+#StatusDisplay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ccc;
+    height: 100%;
+    border-radius: 1rem;
+    padding: 1rem 0;
+    border: .25rem solid #555;
+
+    .name {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .happiness {
+        .mood-icon {
+            img {
+                height: 1rem;
+            }
+        }
+    }
+}

@@ -1,8 +1,49 @@
 #Creature {
+    width: auto;
+    height: 40%;
+        
     .creature-graphic {
+        height: 100%;
+        width: 100%;
+
         img {
-            width: 5rem;
-            height: 5rem;
+            width: 100%;
+            height: 100%;
+
+            &.color {
+                &-normal {
+                    filter: hue-rotate(0deg);
+                }
+
+                &-green {
+                    filter: hue-rotate(44deg);
+                }
+
+                &-blue {
+                    filter: hue-rotate(140deg);
+                }
+
+                &-purple {
+                    filter: hue-rotate(220deg);
+                }
+
+                &-pink {
+                    filter: hue-rotate(290deg);
+                }
+
+                &-tinted {
+                    filter: hue-rotate(315deg);
+                }
+
+                &-gray {
+                    filter: hue-rotate(256deg) saturate(19%);
+                }
+
+                &-sepia {
+                    filter: sepia(100%);
+                }
+            }
+
         }
     }
 }

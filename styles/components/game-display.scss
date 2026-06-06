@@ -1,0 +1,23 @@
+#GameDisplay {
+    display: flex;
+    flex-direction: rows;
+    align-items: flex-end;
+    justify-content: center;
+    background: url('src/graphics/backgrounds/pet-bg-day.png');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    border: .25rem solid #555;
+    align-items: flex-end; 
+    padding-bottom: 5%;
+    border-radius: 1rem;
+
+    .food-graphic {
+        height: auto;
+        width: 10%;
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}

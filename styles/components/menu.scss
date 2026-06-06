@@ -1,0 +1,26 @@
+#Menu {
+    display: flex;
+    flex-direction: row wrap;
+    align-items: center;
+    justify-content: center;
+    // background-color: #ccc;
+    height: 100%;
+
+    .menu-option {
+        .menu-btn {
+            background-color: #eee;
+            border: .15rem solid #555;
+            color: #222;
+            font-weight: bold;
+            border-radius: .5rem;
+            padding: .2rem;
+            margin: .25rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #ddd;
+            }
+        }
+    }
+}
