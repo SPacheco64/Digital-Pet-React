@@ -12,6 +12,7 @@ export interface GameDisplayProps {
     currentEnergy: number;
     currentStrength: number;
     currentDefense: number;
+    currentMoodIcon: string;
 }
 
 export interface CreatureProps {
@@ -21,11 +22,14 @@ export interface CreatureProps {
 
 export interface MenuProps {
     inCombat: boolean;
+    currentStatus: string;
+    showStatusWindow: boolean;
+    setShowStatusWindow: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface StatusDisplayProps {
+export interface StatusWindowProps {
     creatureName: string;
     currentStatus: string;
     currentHealth: number;
@@ -35,4 +39,12 @@ export interface StatusDisplayProps {
     currentEnergy: number;
     currentStrength: number;
     currentDefense: number;
+}
+
+export interface MoodProps {
+    currentMoodIcon: string;
+}
+
+export interface StatusDisplayProps {
+    currentStatus: string;
 }

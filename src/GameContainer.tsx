@@ -3,7 +3,7 @@ import { GameContainerProps } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
-import StatusDisplay from './StatusDisplay';
+import StatusWindow from './StatusWindow';
 import ImagePreloader from './helpers/ImagePreloader';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
@@ -23,18 +23,19 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentEnergy, setCurrentEnergy] = useState<number>(100);
   const [currentStrength, setCurrentStrength] = useState<number>(1);
   const [currentDefense, setCurrentDefense] = useState<number>(1);
+  const [showStatusWindow, setShowStatusWindow] = useState<boolean>(false);
 
   useEffect(() => {
     const hatchingEvent = setTimeout(() => {
       if (currentStatus === 'Egg') {
         setCreatureName('Choco');
-        setCurrentStatus('Normal');
+        setCurrentStatus('normal');
       }
     }, 10000);
 
-    if (currentStatus === 'Eating') {
+    if (currentStatus === 'eating') {
       const eatingTimer = setTimeout(() => {
-        setCurrentStatus('Normal');
+        setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.max(prevHunger - 20, 0)); // Decrease hunger by 20, but not below 0
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + 10, 100)); // Increase happiness by 10, but not above 100
       }, 5000);
@@ -55,27 +56,35 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
-
-
   return (
     <ImagePreloader>
       <div id='GameContainer'>
         <div className='top-panel'>
-          <GameDisplay creatureName={creatureName} inCombat={inCombat} currentStatus={currentStatus} 
-            currentHealth={currentHealth} currentHappiness={currentHappiness} 
-            currentHunger={currentHunger} currentEnergy={currentEnergy} 
-            currentStrength={currentStrength} currentDefense={currentDefense} 
-          />
+          {
+            showStatusWindow && 
+            <StatusWindow creatureName={creatureName} currentStatus={currentStatus} 
+              currentHealth={currentHealth} currentHappiness={currentHappiness} 
+              currentMoodIcon={currentMoodIcon} currentHunger={currentHunger} 
+              currentEnergy={currentEnergy} currentStrength={currentStrength} 
+              currentDefense={currentDefense} 
+            />
+          }
+          {
+            !showStatusWindow &&
+            <GameDisplay creatureName={creatureName} inCombat={inCombat} 
+              currentStatus={currentStatus} currentHealth={currentHealth} 
+              currentHappiness={currentHappiness} currentHunger={currentHunger} 
+              currentEnergy={currentEnergy} currentStrength={currentStrength} 
+              currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
+            />
+          }
         </div>
         <div className='bottom-panel'>
-          <StatusDisplay creatureName={creatureName} currentStatus={currentStatus} 
-            currentHealth={currentHealth} currentHappiness={currentHappiness} 
-            currentMoodIcon={currentMoodIcon} currentHunger={currentHunger} 
-            currentEnergy={currentEnergy} currentStrength={currentStrength} 
-            currentDefense={currentDefense} 
+          <Menu 
+            inCombat={inCombat} currentStatus={currentStatus} 
+            showStatusWindow={showStatusWindow} setInCombat={setInCombat} 
+            setCurrentStatus={setCurrentStatus} setShowStatusWindow={setShowStatusWindow} 
           />
-
-          <Menu inCombat={inCombat} setInCombat={setInCombat} setCurrentStatus={setCurrentStatus} />
         </div>
       </div>
     </ImagePreloader>

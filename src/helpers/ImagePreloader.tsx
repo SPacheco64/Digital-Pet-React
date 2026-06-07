@@ -4,7 +4,7 @@ import { preload } from 'react-dom';
 // Import all images for preloading
 import eggGif from '../graphics/creature_sprites/egg.gif';
 import petBgDay from '../graphics/backgrounds/pet-bg-day.png';
-import statusBg from '../graphics/backgrounds/status-bg.png';
+import statusBg from '../graphics/backgrounds/status-window-bg.png';
 import chocoboAsleep from '../graphics/creature_sprites/chocobo_sprites/chocobo-asleep.gif';
 import chocoboEating from '../graphics/creature_sprites/chocobo_sprites/chocobo-eating.gif';
 import chocoboHappy from '../graphics/creature_sprites/chocobo_sprites/chocobo-happy.gif';

@@ -3,6 +3,8 @@ import { GameDisplayProps } from './types';
 import Creature from './Creature';
 import blueberries from './graphics/food_sprites/blueberries.png';
 import '../styles/components/game-display.scss';
+import MoodDisplay from './MoodDisplay';
+import StatusDisplay from './StatusDisplay';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -16,18 +18,14 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentEnergy,
     currentStrength,
     currentDefense,
+    currentMoodIcon,
   } = props;
 
   return (
     <div id='GameDisplay'>
       {/* Displayed game content will go here */}
-      {/* {
-        (currentStatus === 'Eating') && (
-          <div className='food-graphic'>
-            <img src = {blueberries} alt = 'Food' /> 
-          </div>  
-        )
-      }   */}
+      <MoodDisplay currentMoodIcon={currentMoodIcon} />
+      <StatusDisplay currentStatus={currentStatus} />
       <Creature currentStatus={currentStatus} creatureName={creatureName} />
     </div>
   );

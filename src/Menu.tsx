@@ -7,8 +7,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
   const {
     inCombat,
+    currentStatus,
+    showStatusWindow,
     setInCombat,
     setCurrentStatus,
+    setShowStatusWindow,
   } = props;
 
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
@@ -19,10 +22,24 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         // Normal Menu Options
         !inCombat && (
         <>
-          <MenuOption onClick={() => setCurrentStatus('Eating')} optionName='Feed' />
-          <MenuOption onClick={() => console.log('Train option clicked')} optionName='Train' />
-          <MenuOption onClick={() => console.log('Play option clicked')} optionName='Play' />
-          <MenuOption onClick={() => console.log('Sleep option clicked')} optionName='Sleep' />
+          <span className={currentStatus === 'Egg' ? 'disabled' : ''}>
+            <MenuOption onClick={() => setCurrentStatus('eating')} optionName='Feed' />
+          </span>
+          <span className='disabled'>
+            <MenuOption onClick={() => console.log('Train option clicked')} optionName='Train' />
+          </span>
+          <span className='disabled'>
+            <MenuOption onClick={() => console.log('Play option clicked')} optionName='Play' />
+          </span>
+          <span className='disabled'>
+            <MenuOption onClick={() => console.log('Sleep option clicked')} optionName='Sleep' />
+          </span>
+          {
+            showStatusWindow && <MenuOption onClick={() => setShowStatusWindow(false)} optionName='Go Back' />
+          }
+          {
+            !showStatusWindow && <MenuOption onClick={() => setShowStatusWindow(true)} optionName='Status' />
+          }
           {/* <MenuOption onClick={() => setInCombat(true)} optionName='Fight' /> */}
         </>
         )

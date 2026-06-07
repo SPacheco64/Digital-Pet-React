@@ -32,7 +32,7 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
           (currentStatus === 'Egg') ? (
             <img src={eggGif} alt={creatureName} />
           ) : (
-            (currentStatus === 'Eating') ? (
+            (currentStatus === 'eating') ? (
               <img src={chocoboEat} alt={creatureName} />
             ) : (
               <img src={chocobo} alt={creatureName} />
