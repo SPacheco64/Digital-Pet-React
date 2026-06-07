@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { preload } from 'react-dom';
+import '../../styles/components/loading-screen.scss';
 
 // Import all images for preloading
 import eggGif from '../graphics/creature_sprites/egg.gif';
@@ -67,7 +68,8 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         isLoading &&
         <>
           <div className='loading-screen'>
-            <div className='loading-text'>Loading...</div>
+            <div className='loading-text'>Loading</div>
+            <span className='loader'></span>
           </div>
         </>
       }
