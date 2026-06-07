@@ -19,12 +19,92 @@
     }
 
     .top-panel {
-        height: 17rem;
+        height: 15.5rem;
         width: 16rem;
-        padding: 1.5rem 0 .5rem 0;
+        margin: 1.5rem 0 .5rem 0;
     }
 
     .bottom-panel {
         padding-top: 1rem;
+    }
+
+    &.retro {
+        background-color: #222222;
+
+        #GameContainer {
+            // background-color: #c3bdbd;
+            background-image: none;
+
+            &.orange {
+                background-color: #faca3c;
+            }
+            &.red {
+                background-color: #fa3c3c;
+            }
+            &.green {
+                background-color: #3cfa55;
+            }
+            &.blue {
+                background-color: #3c9bfa;
+            }
+            &.pink {
+                background-color: #eb9de8;
+            }
+            &.purple {
+                background-color: #ae6afc;
+            }
+            &.gray {
+                background-color: #c8c4cc;
+            }
+            &.yellow {
+                background-color: #feff7a;
+            }
+        }
+
+        #Menu {
+            button {
+                background-color: #9d0341;
+                color: #f4f4f4;
+                border-color: transparent;
+                transform: rotate(25deg);
+                box-shadow: 1px 1px 1px #555;
+            }
+
+            .disabled {
+                button {
+                    background-color: #7f7a7e;
+                    color: #3e3d8d;
+                    filter: none;
+                }
+            }
+        }
+
+        .top-panel {
+            background-color: #0ca816;
+            border-radius: 1.25rem;
+            border: .25rem solid #555;
+            overflow: hidden;
+        }
+
+        #GameDisplay, #StatusWindow {
+            filter: opacity(.7) grayscale(100%);
+            border: none;
+
+            &::after {
+                content: " ";
+                display: block;
+                position: absolute;
+                top: 0; 
+                left: 0; 
+                bottom: 0; 
+                right: 0;
+                background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+                background-size: 100% 4px, 6px 100%;
+                z-index: 2;
+                pointer-events: none;
+                opacity: .75;
+            }
+        }
     }
 }

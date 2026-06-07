@@ -5,6 +5,8 @@ import Menu from './Menu';
 import '../styles/components/game-container.scss';
 import StatusWindow from './StatusWindow';
 import ImagePreloader from './helpers/ImagePreloader';
+import ExternalUI from './ExternalUI';
+import { eatFunction } from './helpers/OperationalFunctions';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -24,6 +26,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentStrength, setCurrentStrength] = useState<number>(1);
   const [currentDefense, setCurrentDefense] = useState<number>(1);
   const [showStatusWindow, setShowStatusWindow] = useState<boolean>(false);
+  const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
 
   useEffect(() => {
     const hatchingEvent = setTimeout(() => {
@@ -34,13 +37,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }, 10000);
 
     if (currentStatus === 'eating') {
-      const eatingTimer = setTimeout(() => {
-        setCurrentStatus('normal');
-        setCurrentHunger(prevHunger => Math.max(prevHunger - 20, 0)); // Decrease hunger by 20, but not below 0
-        setCurrentHappiness(prevHappiness => Math.min(prevHappiness + 10, 100)); // Increase happiness by 10, but not above 100
-      }, 5000);
-
-      return () => clearTimeout(eatingTimer);
+      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness);
     }
 
     return () => clearTimeout(hatchingEvent);
@@ -58,7 +55,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      <div id='GameContainer'>
+      <ExternalUI setCurrentShellColor={setCurrentShellColor} />
+
+      <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
           {
             showStatusWindow && 

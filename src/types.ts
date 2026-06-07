@@ -48,3 +48,15 @@ export interface MoodProps {
 export interface StatusDisplayProps {
     currentStatus: string;
 }
+
+export interface OptionsMenuProps {
+
+}
+
+export interface ColorPickerProps {
+    setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface ExternalUIProps {
+    setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
+}

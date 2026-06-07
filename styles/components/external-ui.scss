@@ -1,0 +1,103 @@
+#ExternalUI {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem;
+
+    button img, button {
+        height: 2rem;
+        width: 2rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    #ColorPicker {
+        float: left;
+
+        img {
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            &.open {
+                rotate: -180deg;
+                transition: rotate .35s;
+            }
+
+            &.closed {
+                rotate: 0deg;
+                transition: rotate .35s;
+            }
+        }
+
+        .color-selection {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .color-circle {
+            display: inline-block;
+            margin: 0 .15rem;
+            background: #fff;
+            border-radius: 10rem;
+            height: 1.25rem;
+            width: 1.25rem;
+            overflow: hidden;
+            border: .1rem solid #fff;
+            cursor: pointer;
+            color: transparent;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    #OptionsMenu {
+        float: right;
+        text-align: right;
+
+        button {
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        .option-selection {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+
+            .option-container {
+                position: relative;
+
+                .hover-text {
+                    position: absolute;
+                    font-size: .5rem;
+                    top: 0;
+                    left: -2rem;
+                    width: 2rem;
+                    background: #fff;
+                    text-align: center;
+                    border-radius: .5rem;
+                    padding: .5rem 0;
+                }
+
+                button {
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    height: fit-content;
+                    padding: .5rem 0;
+
+                    img {
+                        height: 1.25rem;
+                        width: 1.25rem;
+                    }
+                }
+            }
+        }
+    }
+}

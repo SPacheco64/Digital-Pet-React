@@ -8,5 +8,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <GameContainer />
+  <>
+    <GameContainer />
+  </>
 );
