@@ -3,7 +3,6 @@
     flex-direction: rows;
     align-items: flex-end;
     justify-content: center;
-    background: url('src/graphics/backgrounds/pet-bg-day.png');
     background-size: cover;
     background-position: center;
     background-color: #222;
@@ -13,6 +12,17 @@
     padding-bottom: 5%;
     border-radius: 1rem;
     position: relative;
+
+    // Determines which game bg to show based on time of day
+    &.day-bg {
+         background: url('src/graphics/backgrounds/pet-bg-day.png');
+    }
+    &.evening-bg {
+         background: url('src/graphics/backgrounds/pet-bg-evening.png');
+    }
+    &.night-bg {
+         background: url('src/graphics/backgrounds/pet-bg-night.png');
+    }
 
     .food-graphic {
         height: auto;

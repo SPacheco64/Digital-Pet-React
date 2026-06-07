@@ -5,7 +5,7 @@ import { StatusDisplayProps } from './types';
 const StatusDisplay: React.FC<StatusDisplayProps> = (props: StatusDisplayProps) => {
   // Destructure props for ease of access & documentation
   const {
-    currentStatus,
+    currentStatus
   } = props;
 
   return (

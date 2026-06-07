@@ -13,6 +13,7 @@ export interface GameDisplayProps {
     currentStrength: number;
     currentDefense: number;
     currentMoodIcon: string;
+    currentTime: string;
 }
 
 export interface CreatureProps {
@@ -57,6 +58,11 @@ export interface ColorPickerProps {
     setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
 }
 
+export interface TimeOfDayProps {
+    setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
+}
+
 export interface ExternalUIProps {
     setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
+    setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
 }

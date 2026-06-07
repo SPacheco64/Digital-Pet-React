@@ -19,10 +19,22 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentStrength,
     currentDefense,
     currentMoodIcon,
+    currentTime
   } = props;
 
+  const determineTimeClass = () => {
+    switch (currentTime) {
+      case 'Day':
+        return 'day-bg';
+      case 'Evening':
+        return 'evening-bg';
+      default:
+        return 'night-bg';
+    }
+  }
+
   return (
-    <div id='GameDisplay'>
+    <div id='GameDisplay' className={determineTimeClass()}>
       {/* Displayed game content will go here */}
       <MoodDisplay currentMoodIcon={currentMoodIcon} />
       <StatusDisplay currentStatus={currentStatus} />

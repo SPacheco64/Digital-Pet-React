@@ -15,6 +15,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   } = props;
 
   // State variables for game status and creature attributes
+  const [currentTime, setCurrentTime] = useState<string>('Day');
   const [creatureName, setCreatureName] = useState<string>('???');
   const [inCombat, setInCombat] = useState<boolean>(false);
   const [currentStatus, setCurrentStatus] = useState<string>('Egg');
@@ -55,7 +56,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      <ExternalUI setCurrentShellColor={setCurrentShellColor} />
+      <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
@@ -75,6 +76,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentHappiness={currentHappiness} currentHunger={currentHunger} 
               currentEnergy={currentEnergy} currentStrength={currentStrength} 
               currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
+              currentTime={currentTime}
             />
           }
         </div>

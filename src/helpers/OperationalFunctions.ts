@@ -12,6 +12,9 @@ export const retroFunction = () => {
 export const githubFunction = () => {
     window.open('https://spacheco64.github.io', '_blank');
 };
+export const infoFunction = () => {
+    
+};
 
 // Game-Based Action Functions
 export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
