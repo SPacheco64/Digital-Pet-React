@@ -38,7 +38,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {/* Displayed game content will go here */}
       <MoodDisplay currentMoodIcon={currentMoodIcon} />
       <StatusDisplay currentStatus={currentStatus} />
-      <Creature currentStatus={currentStatus} creatureName={creatureName} />
+      <Creature currentStatus={currentStatus} currentHappiness={currentHappiness} creatureName={creatureName} />
     </div>
   );
 };

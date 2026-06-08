@@ -14,6 +14,8 @@ import chocoboHappy from '../../graphics/creature_sprites/chocobo_sprites/chocob
 import chocoboNormal from '../../graphics/creature_sprites/chocobo_sprites/chocobo-normal.gif';
 import chocoboTraining from '../../graphics/creature_sprites/chocobo_sprites/chocobo-training.gif';
 import chocoboUpset from '../../graphics/creature_sprites/chocobo_sprites/chocobo-upset.gif';
+import chocoboThinking from '../../graphics/creature_sprites/chocobo_sprites/chocobo-thinking.gif'
+import chocoboHeadshake from '../../graphics/creature_sprites/chocobo_sprites/chocobo-headshake.gif'
 import daySymbol from '../../graphics/time_of_day/sun.png'
 import eveningSymbol from '../../graphics/time_of_day/sun-cloud.png'
 import nightSymbol from '../../graphics/time_of_day/moon.png'
@@ -34,6 +36,8 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         chocoboNormal,
         chocoboTraining,
         chocoboUpset,
+        chocoboThinking,
+        chocoboHeadshake,
         eggGif,
         petBgDay,
         petBgEvening,

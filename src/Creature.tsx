@@ -6,6 +6,7 @@ import chocoboSleep from './graphics/creature_sprites/chocobo_sprites/chocobo-as
 import chocoboTrain from './graphics/creature_sprites/chocobo_sprites/chocobo-training.gif';
 import eggGif from './graphics/creature_sprites/egg.gif';
 import '../styles/components/creature-graphic.scss';
+import { touchReaction } from './helpers/functions/TouchReaction';
 
 /*
 Store info about the creature here, such as:
@@ -22,6 +23,7 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
+    currentHappiness,
     creatureName,
   } = props;
 
@@ -56,9 +58,11 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
       <div className='creature-graphic'>
         {
           (currentStatus === 'Egg') ? (
-            <img src={eggGif} alt={'???'} />
+            <img className='egg' src={eggGif} alt={'???'}
+              onClick={() => touchReaction(currentHappiness, event)} />
           ) : (
-            <img src={determinePetState()} alt={creatureName} />
+            <img src={determinePetState()} alt={creatureName} 
+              onClick={() => touchReaction(currentHappiness, event)} />
           )
         }
       </div>

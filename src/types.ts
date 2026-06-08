@@ -18,6 +18,7 @@ export interface GameDisplayProps {
 
 export interface CreatureProps {
     currentStatus: string;
+    currentHappiness: number;
     creatureName: string;
 }
 

@@ -4,7 +4,7 @@ import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
 import StatusWindow from './StatusWindow';
-import ImagePreloader from './helpers/functions/ImagePreloader';
+import ImagePreloader from './helpers/components/ImagePreloader';
 import ExternalUI from './ExternalUI';
 import { eatFunction, hatchingEvent, trainingFunction } from './helpers/functions/OperationalFunctions';
 
@@ -28,6 +28,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentDefense, setCurrentDefense] = useState<number>(1);
   const [showStatusWindow, setShowStatusWindow] = useState<boolean>(false);
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
+  const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
 
   useEffect(() => {
     hatchingEvent(currentStatus, setCreatureName, setCurrentStatus);
