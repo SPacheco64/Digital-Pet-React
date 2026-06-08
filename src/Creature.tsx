@@ -2,7 +2,8 @@ import React from 'react';
 import { CreatureProps } from './types';
 import chocobo from './graphics/creature_sprites/chocobo_sprites/chocobo-normal.gif';
 import chocoboEat from './graphics/creature_sprites/chocobo_sprites/chocobo-eating.gif';
-import chocoboSleep from './graphics/creature_sprites/chocobo_sprites/chocobo-sleeping.gif';
+import chocoboSleep from './graphics/creature_sprites/chocobo_sprites/chocobo-asleep.gif';
+import chocoboTrain from './graphics/creature_sprites/chocobo_sprites/chocobo-training.gif';
 import eggGif from './graphics/creature_sprites/egg.gif';
 import '../styles/components/creature-graphic.scss';
 
@@ -24,19 +25,40 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
     creatureName,
   } = props;
 
+  const determinePetState = () => {
+    switch (currentStatus) {
+      // case 'dead':
+      //   return deadIcon;
+      case 'eating':
+        return chocoboEat;
+      // case 'fighting':
+      //   return fightingIcon;
+      // case 'hurt':
+      //   return hurtIcon;
+      // case 'sick':
+      //   return sickIcon;
+      case 'sleeping':
+        return chocoboSleep;
+      // case 'tired':
+      //   return tiredIcon;
+      case 'training':
+        return chocoboTrain;
+      // case 'hungry':
+      //     return hungryIcon;
+      default:
+        return chocobo;
+    }
+  }
+
   return (
     <div id='Creature'>
       {/* Creature content will go here */}
       <div className='creature-graphic'>
         {
           (currentStatus === 'Egg') ? (
-            <img src={eggGif} alt={creatureName} />
+            <img src={eggGif} alt={'???'} />
           ) : (
-            (currentStatus === 'eating') ? (
-              <img src={chocoboEat} alt={creatureName} />
-            ) : (
-              <img src={chocobo} alt={creatureName} />
-            )
+            <img src={determinePetState()} alt={creatureName} />
           )
         }
       </div>

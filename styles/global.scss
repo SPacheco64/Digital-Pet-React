@@ -12,8 +12,6 @@
     .top-panel, .bottom-panel {
         display: flex;
         flex-direction: column;
-        // height: 50%;
-        // width: 60%;
         border-radius: 1rem;
     }
 
@@ -23,16 +21,16 @@
         margin: 1.5rem 0 .5rem 0;
     }
 
-    .bottom-panel {
-        padding-top: 1rem;
-    }
+    // .bottom-panel {
+    //     padding-top: 1rem;
+    // }
 
     &.retro {
         background-color: #222222;
 
         #GameContainer {
             background-image: none;
-            // background-image: url(src/graphics/shell_textures/retro-squiggles.png);
+            background-image: url(src/graphics/shell_textures/retro-shell.png);
 
             &.orange { background-color: #faca3c; }
             &.red { background-color: #fa3c3c; }
@@ -48,9 +46,11 @@
             button {
                 background-color: #9d0341;
                 color: #f4f4f4;
-                border-color: transparent;
-                transform: rotate(25deg);
-                box-shadow: 1px 1px 1px #555;
+                border-color: #6d022d;
+
+                img {
+                    filter: brightness(0) saturate(100%) invert(7%) sepia(48%) saturate(4185%) hue-rotate(316deg) brightness(91%) contrast(105%);                  
+                }
             }
 
             .disabled {

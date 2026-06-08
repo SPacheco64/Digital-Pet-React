@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { MenuProps } from './types';
 import '../styles/components/menu.scss';
 import MenuOption from './helpers/MenuOption';
+import feedIcon from './graphics/icons/game_buttons/normal/feed.svg';
+import trainIcon from './graphics/icons/game_buttons/normal/train.svg';
+import playIcon from './graphics/icons/game_buttons/normal/play.svg';
+import sleepIcon from './graphics/icons/game_buttons/normal/sleep.svg';
+import statusIcon from './graphics/icons/game_buttons/normal/status.svg';
+import backIcon from './graphics/icons/game_buttons/normal/back.svg';
 
 const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
@@ -15,6 +21,20 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   } = props;
 
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
+  
+  const normalButtonList = [
+    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating')}},
+    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{setCurrentStatus('training')}},
+    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{console.log('Play option clicked')}},
+    {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{console.log('Sleep option clicked')}},
+    {buttonName: 'Status', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow)}},
+  ];
+
+  const combatButtonList = [
+    {buttonName: 'Attack', buttonIcon: '', buttonFunction: ()=>{}},
+    {buttonName: 'Special', buttonIcon: '', buttonFunction: ()=>{}},
+    {buttonName: 'Run', buttonIcon: '', buttonFunction: ()=>{}},
+  ];
 
   return (
     <div id='Menu'>
@@ -22,29 +42,17 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         // Normal Menu Options
         !inCombat && (
         <>
-          <span className={currentStatus === 'Egg' ? 'disabled' : ''}>
-            <MenuOption onClick={() => setCurrentStatus('eating')} optionName='Feed' />
-          </span>
-          <span className='disabled'>
-            <MenuOption onClick={() => console.log('Train option clicked')} optionName='Train' />
-          </span>
-          <span className='disabled'>
-            <MenuOption onClick={() => console.log('Play option clicked')} optionName='Play' />
-          </span>
-          <span className='disabled'>
-            <MenuOption onClick={() => console.log('Sleep option clicked')} optionName='Sleep' />
-          </span>
           {
-            showStatusWindow && <MenuOption onClick={() => setShowStatusWindow(false)} optionName='Go Back' />
+            normalButtonList.map((button, index) => (
+              <span className={`normal-button-${index}`}>
+                <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
+              </span>
+            ))
           }
-          {
-            !showStatusWindow && <MenuOption onClick={() => setShowStatusWindow(true)} optionName='Status' />
-          }
-          {/* <MenuOption onClick={() => setInCombat(true)} optionName='Fight' /> */}
         </>
         )
       }
-      {
+      {/* {
         // Combat Menu Options
         inCombat && !specialsOpen && (
           <>
@@ -53,8 +61,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
             <MenuOption onClick={() => setInCombat(false)} optionName='Run' />
           </>
         )
-      }
-      {
+      } */}
+      {/* {
         // Special Action Menu Options
         inCombat && specialsOpen && (
           <>
@@ -63,7 +71,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
             <MenuOption onClick={() => setSpecialsOpen(false)} optionName='Back' />
           </>
         )
-      }
+      } */}
     </div>
   );
 };

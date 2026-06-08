@@ -6,7 +6,7 @@ import '../styles/components/game-container.scss';
 import StatusWindow from './StatusWindow';
 import ImagePreloader from './helpers/ImagePreloader';
 import ExternalUI from './ExternalUI';
-import { eatFunction } from './helpers/OperationalFunctions';
+import { eatFunction, trainingFunction } from './helpers/OperationalFunctions';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -39,6 +39,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     if (currentStatus === 'eating') {
       eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness);
+    } else if (currentStatus === 'training') {
+      trainingFunction('Strength', setCurrentStatus, setCurrentHunger, 
+        setCurrentEnergy, setCurrentStrength, setCurrentDefense
+      );
     }
 
     return () => clearTimeout(hatchingEvent);
