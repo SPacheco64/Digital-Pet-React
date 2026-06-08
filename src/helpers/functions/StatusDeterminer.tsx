@@ -10,7 +10,7 @@ import sleepingIcon from '../../graphics/icons/status/sleeping.svg';
 import tiredIcon from '../../graphics/icons/status/tired.svg';
 import trainingIcon from '../../graphics/icons/status/training.svg';
 
-export const determineStatus = (status: string): string => {
+export const determineStatus = (status: string) => {
   switch (status) {
     case 'dead':
       return deadIcon;
