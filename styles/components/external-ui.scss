@@ -84,15 +84,18 @@
                     position: relative;
 
                     .hover-text {
+                        font-family: "Press Start 2P", system-ui;
+                        font-style: normal;
                         position: absolute;
-                        font-size: .5rem;
-                        top: 0;
-                        left: -2rem;
-                        width: 2rem;
+                        font-size: .4rem;
+                        top: 0.35rem;
+                        left: -6rem;
+                        width: 6rem;
+                        min-width: fit-content;
                         background: #fff;
                         text-align: center;
                         border-radius: .5rem;
-                        padding: .5rem 0;
+                        padding: .5rem;
                     }
 
                     button {

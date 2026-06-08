@@ -18,7 +18,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
     {colorName: 'pink', circleColor: '#fc62f5'},
     {colorName: 'purple', circleColor: '#7b0bb3'},
     {colorName: 'gray', circleColor: '#9e9d9e'},
-    {colorName: 'yellow', circleColor: '#ebc934'}
+    {colorName: 'yellow', circleColor: '#ffff00'}
   ];
 
   return (

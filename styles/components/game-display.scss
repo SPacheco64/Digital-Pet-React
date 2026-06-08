@@ -15,13 +15,13 @@
 
     // Determines which game bg to show based on time of day
     &.day-bg {
-         background: url('src/graphics/backgrounds/pet-bg-day.png');
+         background: url('/src/graphics/backgrounds/pet-bg-day.png');
     }
     &.evening-bg {
-         background: url('src/graphics/backgrounds/pet-bg-evening.png');
+         background: url('/src/graphics/backgrounds/pet-bg-evening.png');
     }
     &.night-bg {
-         background: url('src/graphics/backgrounds/pet-bg-night.png');
+         background: url('/src/graphics/backgrounds/pet-bg-night.png');
     }
 
     .food-graphic {

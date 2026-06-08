@@ -19,6 +19,8 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
 
   const isHappy = (currentHappiness >= 70);
   const isSad = (currentHappiness <=30);
+  const strengthCount = '★'.repeat(currentStrength);
+  const defenseCount = '★'.repeat(currentDefense);
 
   const determineMood = () => {
     if (isHappy) {
@@ -39,9 +41,6 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
             <div className='status'>
                 Status: {currentStatus}
             </div>
-            <div className='health'>
-                Health: {currentHealth}
-            </div>
             <div className='happiness'>
                 Mood: {determineMood()}
             </div>
@@ -51,11 +50,16 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
             <div className='energy'>
                 Energy: {currentEnergy}
             </div>
+            <div className='health'>
+                Health: {currentHealth}
+            </div>
             <div className='strength'>
-                Strength: {currentStrength}
+                <span className='label'>Strength:</span>
+                <span className='star-value'>{strengthCount}</span>
             </div>
             <div className='defense'>
-                Defense: {currentDefense}
+                <span className='label'>Defense:</span>
+                <span className='star-value'>{defenseCount}</span>
             </div>
         </div>
     </div>

@@ -21,7 +21,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = (props: OptionsMenuProps) => {
     {optionName: 'Save', function: saveFunction, icon: saveIcon},
     {optionName: 'Reset', function: resetFunction, icon: resetIcon},
     {optionName: 'Retro', function: retroFunction, icon: retroIcon},
-    {optionName: 'Portfolio Link', function: githubFunction, icon: githubIcon},
+    {optionName: 'Portfolio', function: githubFunction, icon: githubIcon},
     {optionName: 'Info', function: infoFunction, icon: infoIcon}
   ];
 

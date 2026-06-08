@@ -10,39 +10,23 @@
     justify-content: center;
     
     border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-    background: url('src/graphics/shell_textures/shell-texture-2.png');
+    background: url('/src/graphics/shell_textures/shell-texture-2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: antiquewhite;
+    background-color: #faebd7;
 
     box-shadow: inset 1px 3px 7px rgba(0,0,0,.4);
 
     // List of possible Game Shell color classes
-    &.orange {
-        background-color: orange;
-    }
-    &.red {
-        background-color: red;
-    }
-    &.green {
-        background-color: green;
-    }
-    &.blue {
-        background-color: blue;
-    }
-    &.pink {
-        background-color: pink;
-    }
-    &.purple {
-        background-color: purple;
-    }
-    &.gray {
-        background-color: gray;
-    }
-    &.yellow {
-        background-color: yellow;
-    }
+    &.orange { background-color: #ffa500; }
+    &.red { background-color: #ff0000; }
+    &.green { background-color: #008000; }
+    &.blue { background-color: #0000ff; }
+    &.pink { background-color: #ffc0cb; }
+    &.purple { background-color: #800080; }
+    &.gray { background-color: #808080; }
+    &.yellow { background-color: #ffff00; }
 
     #GameDisplay {
         flex: auto;

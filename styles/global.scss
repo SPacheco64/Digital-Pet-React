@@ -3,9 +3,6 @@
     background-size: cover;
     background-position: center;
 
-    // font-family: "Press Start 2P", system-ui;
-    // font-style: normal;
-
     .disabled {
         opacity: .8;
         filter: grayscale(100%);
@@ -34,33 +31,17 @@
         background-color: #222222;
 
         #GameContainer {
-            // background-color: #c3bdbd;
             background-image: none;
+            // background-image: url(src/graphics/shell_textures/retro-squiggles.png);
 
-            &.orange {
-                background-color: #faca3c;
-            }
-            &.red {
-                background-color: #fa3c3c;
-            }
-            &.green {
-                background-color: #3cfa55;
-            }
-            &.blue {
-                background-color: #3c9bfa;
-            }
-            &.pink {
-                background-color: #eb9de8;
-            }
-            &.purple {
-                background-color: #ae6afc;
-            }
-            &.gray {
-                background-color: #c8c4cc;
-            }
-            &.yellow {
-                background-color: #feff7a;
-            }
+            &.orange { background-color: #faca3c; }
+            &.red { background-color: #fa3c3c; }
+            &.green { background-color: #3cfa55; }
+            &.blue { background-color: #3c9bfa; }
+            &.pink { background-color: #eb9de8; }
+            &.purple { background-color: #ae6afc; }
+            &.gray { background-color: #c8c4cc; }
+            &.yellow { background-color: #feff7a; }
         }
 
         #Menu {
