@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface MenuOptionProps {
   onClick: () => void;
   icon: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ColorPickerProps } from '../../types';
 import colorPickerIcon from '../../graphics/icons/external_ui/color-picker.svg';
 
