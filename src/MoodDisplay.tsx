@@ -1,5 +1,5 @@
 import React from 'react';
-import { determineMood } from './helpers/MoodDeterminer';
+import { determineMood } from './helpers/components/MoodDeterminer';
 import { MoodProps } from './types';
 
 const MoodDisplay: React.FC<MoodProps> = (props: MoodProps) => {

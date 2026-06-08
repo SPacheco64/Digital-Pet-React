@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StatusWindowProps } from './types';
 import '../styles/components/status-window.scss';
-import { determineMood } from './helpers/MoodDeterminer';
+import { determineMood } from './helpers/components/MoodDeterminer';
 
 const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => {
   // Destructure props for ease of access & documentation

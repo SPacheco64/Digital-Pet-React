@@ -1,9 +1,9 @@
 import React from 'react';
 import '../styles/components/external-ui.scss';
 import { ExternalUIProps } from './types';
-import OptionsMenu from './helpers/OptionsMenu';
-import ColorPicker from './helpers/ColorPicker';
-import TimeOfDay from './helpers/TimeOfDay';
+import OptionsMenu from './helpers/components/OptionsMenu';
+import ColorPicker from './helpers/components/ColorPicker';
+import TimeOfDay from './helpers/components/TimeOfDay';
 
 const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
   // Destructure props for ease of access & documentation

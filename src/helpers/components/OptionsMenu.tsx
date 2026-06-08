@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { OptionsMenuProps } from '../types';
-import { saveFunction, resetFunction, githubFunction, retroFunction, infoFunction } from './OperationalFunctions';
+import { OptionsMenuProps } from '../../types';
+import { saveFunction, resetFunction, githubFunction, retroFunction, infoFunction } from '../functions/OperationalFunctions';
 import closedMenuIcon from '../graphics/icons/external_ui/closed-menu.svg';
 import openedMenuIcon from '../graphics/icons/external_ui/opened-menu.svg';
 import saveIcon from '../graphics/icons/external_ui/save.svg';

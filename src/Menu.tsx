@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MenuProps } from './types';
 import '../styles/components/menu.scss';
-import MenuOption from './helpers/MenuOption';
+import MenuOption from './helpers/components/MenuOption';
 import feedIcon from './graphics/icons/game_buttons/normal/feed.svg';
 import trainIcon from './graphics/icons/game_buttons/normal/train.svg';
 import playIcon from './graphics/icons/game_buttons/normal/play.svg';

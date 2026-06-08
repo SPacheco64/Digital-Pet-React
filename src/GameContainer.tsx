@@ -4,9 +4,9 @@ import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
 import StatusWindow from './StatusWindow';
-import ImagePreloader from './helpers/ImagePreloader';
+import ImagePreloader from './helpers/functions/ImagePreloader';
 import ExternalUI from './ExternalUI';
-import { eatFunction, hatchingEvent, trainingFunction } from './helpers/OperationalFunctions';
+import { eatFunction, hatchingEvent, trainingFunction } from './helpers/functions/OperationalFunctions';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation

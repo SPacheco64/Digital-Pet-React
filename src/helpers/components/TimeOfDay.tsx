@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TimeOfDayProps } from '../types';
+import { TimeOfDayProps } from '../../types';
 import daySymbol from '../graphics/time_of_day/sun.png'
 import eveningSymbol from '../graphics/time_of_day/sun-cloud.png'
 import nightSymbol from '../graphics/time_of_day/moon.png'
