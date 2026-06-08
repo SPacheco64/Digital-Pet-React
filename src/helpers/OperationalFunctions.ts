@@ -17,6 +17,21 @@ export const infoFunction = () => {
 };
 
 // Game-Based Action Functions
+export const hatchingEvent = (currentStatus: string, 
+    setCreatureName: React.Dispatch<React.SetStateAction<string>>,
+    setCurrentStatus: React.Dispatch<React.SetStateAction<string>>
+) => {
+    const hatchingTimeout = setTimeout(() => {
+        if (currentStatus === 'Egg') {
+            setCreatureName('Choco');
+            setCurrentStatus('normal');
+        }
+    }, 13000);
+
+    return () => clearTimeout(hatchingTimeout);
+}
+
+
 export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>) => {

@@ -15,6 +15,12 @@
             position: relative;
             top: 2rem;
         }
+
+        &-4 {
+            .menu-option {
+                padding: 0;
+            }
+        }
     }
 
     .menu-option {

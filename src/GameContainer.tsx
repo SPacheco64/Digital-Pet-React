@@ -6,7 +6,7 @@ import '../styles/components/game-container.scss';
 import StatusWindow from './StatusWindow';
 import ImagePreloader from './helpers/ImagePreloader';
 import ExternalUI from './ExternalUI';
-import { eatFunction, trainingFunction } from './helpers/OperationalFunctions';
+import { eatFunction, hatchingEvent, trainingFunction } from './helpers/OperationalFunctions';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -30,12 +30,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
 
   useEffect(() => {
-    const hatchingEvent = setTimeout(() => {
-      if (currentStatus === 'Egg') {
-        setCreatureName('Choco');
-        setCurrentStatus('normal');
-      }
-    }, 10000);
+    hatchingEvent(currentStatus, setCreatureName, setCurrentStatus);
 
     if (currentStatus === 'eating') {
       eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness);
@@ -44,8 +39,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setCurrentEnergy, setCurrentStrength, setCurrentDefense
       );
     }
-
-    return () => clearTimeout(hatchingEvent);
   }, [currentStatus]);
 
   useEffect(() => {

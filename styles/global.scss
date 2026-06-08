@@ -30,7 +30,7 @@
 
         #GameContainer {
             background-image: none;
-            background-image: url(src/graphics/shell_textures/retro-shell.png);
+            // background-image: url(src/graphics/shell_textures/retro-shell.png);
 
             &.orange { background-color: #faca3c; }
             &.red { background-color: #fa3c3c; }
