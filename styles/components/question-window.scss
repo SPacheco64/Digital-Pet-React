@@ -1,0 +1,25 @@
+.question-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url(../../src/graphics/backgrounds/status-window-bg.png);
+    background-size: contain;
+    background-color: #cbcaff;
+    height: 100%;
+    border-radius: 1rem;
+    padding: 1rem 0;
+    border: .25rem solid #555;
+    font-family: "Press Start 2P", system-ui;
+    font-style: normal;
+
+    .responses {
+        display: flex;
+        flex-direction: column;
+        padding-top: 1rem;
+        font-size: .75rem;
+        text-align: left;
+        line-height: 1.25rem;
+        text-transform: capitalize;
+    }
+}

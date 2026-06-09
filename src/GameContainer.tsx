@@ -7,6 +7,7 @@ import StatusWindow from './StatusWindow';
 import ImagePreloader from './helpers/components/ImagePreloader';
 import ExternalUI from './ExternalUI';
 import { eatFunction, hatchingEvent, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
+import QuestionWindow from './helpers/components/QuestionWindow';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -30,6 +31,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
 
+  const [questionWindowOpen, setQuestionWindowOpen] = useState<boolean>(false);
+  const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
+  const [optionSelected, setOptionSelected] = useState<number>(0);
+
   useEffect(() => {
     if (currentStatus === 'Egg') {
       setCurrentlyBusy(true);
@@ -38,13 +43,33 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     if (currentStatus === 'eating') {
       eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentlyBusy);
     } else if (currentStatus === 'training') {
-      trainingFunction('Strength', setCurrentStatus, setCurrentHunger, 
-        setCurrentEnergy, setCurrentStrength, setCurrentDefense, setCurrentlyBusy
-      );
+      // setCurrentQuestionType('training');
     } else if (currentStatus === 'sleeping') {
       sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHappiness, setCurrentlyBusy);
     }
   }, [currentStatus]);
+
+  useEffect(() => {
+    if (currentQuestionType === 'training') {
+      if (optionSelected === 1) {
+        setCurrentStatus('training');
+        trainingFunction(setCurrentStatus, setCurrentHunger, 
+          setCurrentEnergy, setCurrentStrength, setCurrentDefense, setCurrentlyBusy,
+          setCurrentQuestionType, setQuestionWindowOpen, optionSelected
+        );
+        setOptionSelected(0);
+        setCurrentQuestionType('');
+      } else if (optionSelected === 2) {
+        setCurrentStatus('training');
+        trainingFunction(setCurrentStatus, setCurrentHunger, 
+          setCurrentEnergy, setCurrentStrength, setCurrentDefense, setCurrentlyBusy,
+          setCurrentQuestionType, setQuestionWindowOpen, optionSelected
+        );
+        setOptionSelected(0);
+        setCurrentQuestionType('');
+      }
+    }
+  }, [optionSelected]);
 
   useEffect(() => {
     if (currentStatus !== 'Egg') {
@@ -61,14 +86,22 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
+  // FOR TESTING
+  useEffect(() => {
+    console.log('Current Strength: ', currentStrength);
+    console.log('Current Defense: ', currentDefense);
+    console.log('Current Energy: ', currentEnergy);
+  }, [currentStrength, currentDefense]);
+
   return (
     <ImagePreloader>
       <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
+          {/* Status Window that shows creature stats */}
           {
-            showStatusWindow && 
+            showStatusWindow && !questionWindowOpen &&
             <StatusWindow creatureName={creatureName} currentStatus={currentStatus} 
               currentHealth={currentHealth} currentHappiness={currentHappiness} 
               currentMoodIcon={currentMoodIcon} currentHunger={currentHunger} 
@@ -76,8 +109,25 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentDefense={currentDefense} 
             />
           }
+
+          {/* Window for displaying questions to the user */}
           {
-            !showStatusWindow &&
+            questionWindowOpen &&
+            <>
+              {
+                currentQuestionType === 'training' &&
+                <QuestionWindow dialogue='What Type of Training?' responsesArray={['Strength', 'Defense']} />
+              }
+              {
+                currentQuestionType === 'play' &&
+                <QuestionWindow dialogue='' responsesArray={[]} />
+              }
+            </>
+          }
+
+          {/* Main Game Display */}
+          {
+            !showStatusWindow && !questionWindowOpen &&
             <GameDisplay creatureName={creatureName} inCombat={inCombat} 
               currentStatus={currentStatus} currentHealth={currentHealth} 
               currentHappiness={currentHappiness} currentHunger={currentHunger} 
@@ -88,12 +138,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             />
           }
         </div>
+
         <div className='bottom-panel'>
           <Menu 
             inCombat={inCombat} currentStatus={currentStatus} 
             showStatusWindow={showStatusWindow} setInCombat={setInCombat} 
             setCurrentStatus={setCurrentStatus} setShowStatusWindow={setShowStatusWindow}
-            setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy} 
+            setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
+            setOptionSelected={setOptionSelected} setQuestionWindowOpen={setQuestionWindowOpen}
+            questionWindowOpen={questionWindowOpen} setCurrentQuestionType={setCurrentQuestionType}
           />
         </div>
       </div>

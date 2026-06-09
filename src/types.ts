@@ -31,10 +31,14 @@ export interface MenuProps {
     currentStatus: string;
     showStatusWindow: boolean;
     currentlyBusy: boolean;
+    questionWindowOpen: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowStatusWindow: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
+    setOptionSelected: React.Dispatch<React.SetStateAction<number>>;
+    setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface StatusWindowProps {

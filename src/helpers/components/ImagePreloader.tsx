@@ -8,6 +8,7 @@ import petBgDay from '../../graphics/backgrounds/pet-bg-day.png';
 import petBgEvening from '../../graphics/backgrounds/pet-bg-evening.png';
 import petBgNight from '../../graphics/backgrounds/pet-bg-night.png';
 import statusBg from '../../graphics/backgrounds/status-window-bg.png';
+import tracksBg from '../../graphics/backgrounds/tracks-bg.png';
 import chocoboAsleep from '../../graphics/creature_sprites/chocobo_sprites/chocobo-asleep.gif';
 import chocoboEating from '../../graphics/creature_sprites/chocobo_sprites/chocobo-eating.gif';
 import chocoboHappy from '../../graphics/creature_sprites/chocobo_sprites/chocobo-happy.gif';
@@ -43,6 +44,7 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         petBgEvening,
         petBgNight,
         statusBg,
+        tracksBg,
         daySymbol,
         eveningSymbol,
         nightSymbol

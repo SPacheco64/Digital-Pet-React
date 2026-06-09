@@ -53,30 +53,34 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
 }
 
 export const trainingFunction = (
-    trainingType: string,
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
     setCurrentStrength: React.Dispatch<React.SetStateAction<number>>,
     setCurrentDefense: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
+    setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>,
+    setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    optionSelected: number,
 ) => {
     const randomHungerGain = Math.floor(Math.random() * 15);
     const randomEnergyLoss = 20 + Math.floor(Math.random() * 15);
-    const randomStrengthGain = 0.1 + Math.random() * 0.5;
-    const randomDefGain = 0.1 + Math.random() * 0.5;
+    const randomStrengthGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    const randomDefGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
 
     const trainingTimer = setTimeout(() => {
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
         setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
     
-        if (trainingType === 'Strength') {
-            setCurrentStrength(prevStr => Math.min(prevStr + randomStrengthGain, 5));
-        } else if (trainingType === 'Defense') {
-            setCurrentDefense(prevDef => Math.min(prevDef + randomDefGain, 5));
+        if (optionSelected === 1) {
+            setCurrentStrength(prevStr => Math.min(Number((prevStr + randomStrengthGain).toFixed(1)), 5));
+        } else if (optionSelected === 2) {
+            setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 5));
         }
 
+        setCurrentQuestionType('');
+        setQuestionWindowOpen(false);
         setCurrentlyBusy(false);
     }, 10000);
 
