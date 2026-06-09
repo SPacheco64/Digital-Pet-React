@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StatusWindowProps } from './types';
 import '../styles/components/status-window.scss';
-import { determineMood } from './helpers/MoodDeterminer';
+import { determineMood } from './helpers/components/MoodDeterminer';
 
 const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => {
   // Destructure props for ease of access & documentation
@@ -19,6 +19,8 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
 
   const isHappy = (currentHappiness >= 70);
   const isSad = (currentHappiness <=30);
+  const strengthCount = '★'.repeat(currentStrength);
+  const defenseCount = '★'.repeat(currentDefense);
 
   const determineMood = () => {
     if (isHappy) {
@@ -37,26 +39,33 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
         </div>
         <div className='status-details'>
             <div className='status'>
-                Status: {currentStatus}
+                Status: {(currentStatus === 'happy' || currentStatus === 'sad') ? 'normal' : currentStatus}
             </div>
-            <div className='health'>
-                Health: {currentHealth}
-            </div>
-            <div className='happiness'>
-                Mood: {determineMood()}
-            </div>
-            <div className='hunger'>
-                Hunger: {currentHunger}
-            </div> 
-            <div className='energy'>
-                Energy: {currentEnergy}
-            </div>
-            <div className='strength'>
-                Strength: {currentStrength}
-            </div>
-            <div className='defense'>
-                Defense: {currentDefense}
-            </div>
+            {
+                currentStatus !== 'Egg' &&
+                <>
+                    <div className='happiness'>
+                        Mood: {determineMood()}
+                    </div>
+                    <div className='hunger'>
+                        Hunger: {currentHunger}/100
+                    </div> 
+                    <div className='energy'>
+                        Energy: {currentEnergy}/100
+                    </div>
+                    <div className='health'>
+                        Health: {currentHealth}
+                    </div>
+                    <div className='strength'>
+                        <span className='label'>Strength:</span>
+                        <span className='star-value'>{strengthCount}</span>
+                    </div>
+                    <div className='defense'>
+                        <span className='label'>Defense:</span>
+                        <span className='star-value'>{defenseCount}</span>
+                    </div>
+                </>
+            }
         </div>
     </div>
   );

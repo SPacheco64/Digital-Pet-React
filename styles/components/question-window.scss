@@ -1,9 +1,9 @@
-#StatusWindow {
+.question-window {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: url(/src/graphics/backgrounds/status-window-bg.png);
+    background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
     background-color: #cbcaff;
     height: 100%;
@@ -13,26 +13,18 @@
     font-family: "Press Start 2P", system-ui;
     font-style: normal;
 
-    .name {
-        font-size: 1.5rem;
-        font-weight: bold;
-        padding-bottom: 1rem;
-        text-transform: uppercase;
-    }
-
-    .status-details {
+    .responses {
         text-align: left;
         line-height: 1rem;
         gap: 0.5rem;
         text-transform: capitalize;
         width: fit-content;
-        padding: .5rem;
-        font-size: .65rem;
+        padding: 0.5rem;
+        font-size: 0.65rem;
 
-        .star-value {
-            position: relative;
-            bottom: .15rem;
-            font-size: .8rem;
+        .question-container {
+            width: 100%;
+            text-align: left;
         }
     }
 }

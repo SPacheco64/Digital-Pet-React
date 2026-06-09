@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { ColorPickerProps } from '../types';
-import colorPickerIcon from '../graphics/icons/external_ui/color-picker.svg';
+import React, { useState } from 'react';
+import { ColorPickerProps } from '../../types';
+import colorPickerIcon from '../../graphics/icons/external_ui/color-picker.svg';
 
 const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   // Destructure props for ease of access & documentation
@@ -18,7 +18,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
     {colorName: 'pink', circleColor: '#fc62f5'},
     {colorName: 'purple', circleColor: '#7b0bb3'},
     {colorName: 'gray', circleColor: '#9e9d9e'},
-    {colorName: 'yellow', circleColor: '#ebc934'}
+    {colorName: 'yellow', circleColor: '#ffff00'}
   ];
 
   return (

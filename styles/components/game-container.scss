@@ -10,39 +10,32 @@
     justify-content: center;
     
     border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-    background: url('src/graphics/shell_textures/shell-texture-2.png');
+    background: url('/src/graphics/shell_textures/shell-texture-2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: antiquewhite;
+    background-color: #faebd7;
 
     box-shadow: inset 1px 3px 7px rgba(0,0,0,.4);
 
+    &::before {
+        content: '';
+        box-shadow: 3px 4px 11px rgba(0, 0, 0, 0.4);
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+    }
+
     // List of possible Game Shell color classes
-    &.orange {
-        background-color: orange;
-    }
-    &.red {
-        background-color: red;
-    }
-    &.green {
-        background-color: green;
-    }
-    &.blue {
-        background-color: blue;
-    }
-    &.pink {
-        background-color: pink;
-    }
-    &.purple {
-        background-color: purple;
-    }
-    &.gray {
-        background-color: gray;
-    }
-    &.yellow {
-        background-color: yellow;
-    }
+    &.orange { background-color: #ffa500; .menu-btn { background-color: #ff9a27; border-color: #bc7a2e;}}
+    &.red { background-color: #ff0000; .menu-btn { background-color: #7d7d7d; border-color: #727272;}}
+    &.green { background-color: #008000; .menu-btn { background-color: #ffdc2c; border-color: #caae23;}}
+    &.blue { background-color: #0000ff; .menu-btn { background-color: #8d8dff; border-color: #6f6fdb;}}
+    &.pink { background-color: #ffc0cb; .menu-btn { background-color: #ffcdf0; border-color: #d2aac6;}}
+    &.purple { background-color: #800080; .menu-btn { background-color: #ffcdf0; border-color: #d2aac6;}}
+    &.gray { background-color: #808080; .menu-btn { background-color: #7d7d7d; border-color: #727272;}}
+    &.yellow { background-color: #ffcb00; .menu-btn { background-color: #f5f5f5; border-color: #dbcfcf;}}
 
     #GameDisplay {
         flex: auto;
