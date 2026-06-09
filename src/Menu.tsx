@@ -34,11 +34,12 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
+  const [playOpen, setPlayOpen] = useState<boolean>(false);
   
   const normalButtonList = [
     {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating'); setCurrentlyBusy(true);}},
     {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{setCurrentlyBusy(true); setTrainingOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('training');}},
-    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{console.log('Play option clicked')}},
+    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{setCurrentlyBusy(true); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
     {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
     {buttonName: 'Status', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow);}},
   ];
@@ -53,6 +54,14 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Strength', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false);}},
     {buttonName: 'Defense', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false);}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setTrainingOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
+  ];
+
+  const playQuestionButtonList = [
+    {buttonName: 'Rock, Paper, Scissors', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false);}},
+    {buttonName: 'Guess', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false);}},
+    {buttonName: 'Race', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setQuestionWindowOpen(false);}},
+    {buttonName: 'Battle', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setQuestionWindowOpen(false);}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setPlayOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
   ];
 
   return (
@@ -83,7 +92,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
               </span>
               {
                 trainingQuestionButtonList.map((button, index) => (
-                  <span className={`normal-button-${index+1} ? 'disabled' : ''}`}>
+                  <span className={`normal-button-${index+1}`}>
                     <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
                   </span>
                 ))
@@ -91,6 +100,19 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
               <span className='normal-button-4 disabled'>
                 <MenuOption onClick={()=>{}} icon={emptyIcon} optionName={''} />
               </span>
+            </>
+          }
+
+          {
+            playOpen && 
+            <>
+              {
+                playQuestionButtonList.map((button, index) => (
+                  <span className={`normal-button-${index}`}>
+                    <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
+                  </span>
+                ))
+              }
             </>
           }
         </>

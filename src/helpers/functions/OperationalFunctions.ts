@@ -38,7 +38,7 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-    const randomHappinessGain = Math.floor(Math.random() * 10);
+    const randomHappinessGain = 5 + Math.floor(Math.random() * 5);
     const randomEnergyGain = 5 + Math.floor(Math.random() * 10);
     
     const eatingTimer = setTimeout(() => {
@@ -61,9 +61,11 @@ export const trainingFunction = (
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>,
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     optionSelected: number,
 ) => {
-    const randomHungerGain = Math.floor(Math.random() * 15);
+    const randomHungerGain = 5 + Math.floor(Math.random() * 10);
+    const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
     const randomEnergyLoss = 20 + Math.floor(Math.random() * 15);
     const randomStrengthGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
     const randomDefGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
@@ -72,6 +74,7 @@ export const trainingFunction = (
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
         setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
+        setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0))
     
         if (optionSelected === 1) {
             setCurrentStrength(prevStr => Math.min(Number((prevStr + randomStrengthGain).toFixed(1)), 5));

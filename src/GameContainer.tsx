@@ -43,7 +43,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     if (currentStatus === 'eating') {
       eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentlyBusy);
     } else if (currentStatus === 'training') {
-      // setCurrentQuestionType('training');
+      // Training functionality currently handled externally
     } else if (currentStatus === 'sleeping') {
       sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHappiness, setCurrentlyBusy);
     }
@@ -55,7 +55,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setCurrentStatus('training');
         trainingFunction(setCurrentStatus, setCurrentHunger, 
           setCurrentEnergy, setCurrentStrength, setCurrentDefense, setCurrentlyBusy,
-          setCurrentQuestionType, setQuestionWindowOpen, optionSelected
+          setCurrentQuestionType, setQuestionWindowOpen, setCurrentHappiness, optionSelected
         );
         setOptionSelected(0);
         setCurrentQuestionType('');
@@ -63,7 +63,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setCurrentStatus('training');
         trainingFunction(setCurrentStatus, setCurrentHunger, 
           setCurrentEnergy, setCurrentStrength, setCurrentDefense, setCurrentlyBusy,
-          setCurrentQuestionType, setQuestionWindowOpen, optionSelected
+          setCurrentQuestionType, setQuestionWindowOpen, setCurrentHappiness, 
+          optionSelected
         );
         setOptionSelected(0);
         setCurrentQuestionType('');
@@ -86,12 +87,27 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
-  // FOR TESTING
+  // ====================== FOR TESTING ======================
   useEffect(() => {
     console.log('Current Strength: ', currentStrength);
     console.log('Current Defense: ', currentDefense);
-    console.log('Current Energy: ', currentEnergy);
   }, [currentStrength, currentDefense]);
+  useEffect(()=> {
+    console.log('Current Energy: ', currentEnergy, '/100');
+  }, [currentEnergy]);
+  useEffect(() => {
+    console.log('Current Status: ', currentStatus);
+  }, [currentStatus]);
+  useEffect(()=> {
+    console.log('Current Happiness: ', currentHappiness, '/100');
+  }, [currentHappiness]);
+  useEffect(()=> {
+    console.log('Current Hunger: ', currentHunger, '/100');
+  }, [currentHunger]);
+  useEffect(() => {
+    console.log('Current Health: ', currentHealth, '/100');
+  }, [currentHealth]);
+  // ====================== FOR TESTING ======================
 
   return (
     <ImagePreloader>
@@ -120,7 +136,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               }
               {
                 currentQuestionType === 'play' &&
-                <QuestionWindow dialogue='' responsesArray={[]} />
+                <QuestionWindow dialogue='What To Play?' responsesArray={['R.P.S', 'Guessing Game', 'Chocobo Race', 'Battle']} />
               }
             </>
           }
