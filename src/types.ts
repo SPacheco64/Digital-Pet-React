@@ -14,18 +14,24 @@ export interface GameDisplayProps {
     currentDefense: number;
     currentMoodIcon: string;
     currentTime: string;
+    currentlyBusy: boolean;
+    setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface CreatureProps {
     currentStatus: string;
     currentHappiness: number;
     creatureName: string;
+    currentlyBusy: boolean;
+    setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MenuProps {
     inCombat: boolean;
     currentStatus: string;
     showStatusWindow: boolean;
+    currentlyBusy: boolean;
+    setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowStatusWindow: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;

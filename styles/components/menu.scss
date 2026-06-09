@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    z-index: 1;
 
     .normal-button {
         &-1, &-3 {
@@ -53,6 +54,21 @@
                 img {
                     scale: .9;
                 }
+            }
+        }
+    }
+
+    .disabled {
+        .menu-option {
+            filter: grayscale(100%);
+            cursor: not-allowed;
+
+            button {
+                pointer-events: none;
+                background-color: #7f7a7e;
+                border-color: #444;
+                color: #3e3d8d;
+                filter: none;
             }
         }
     }

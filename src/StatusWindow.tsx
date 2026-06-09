@@ -39,28 +39,33 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
         </div>
         <div className='status-details'>
             <div className='status'>
-                Status: {currentStatus}
+                Status: {(currentStatus === 'happy' || currentStatus === 'sad') ? 'normal' : currentStatus}
             </div>
-            <div className='happiness'>
-                Mood: {determineMood()}
-            </div>
-            <div className='hunger'>
-                Hunger: {currentHunger}
-            </div> 
-            <div className='energy'>
-                Energy: {currentEnergy}
-            </div>
-            <div className='health'>
-                Health: {currentHealth}
-            </div>
-            <div className='strength'>
-                <span className='label'>Strength:</span>
-                <span className='star-value'>{strengthCount}</span>
-            </div>
-            <div className='defense'>
-                <span className='label'>Defense:</span>
-                <span className='star-value'>{defenseCount}</span>
-            </div>
+            {
+                currentStatus !== 'Egg' &&
+                <>
+                    <div className='happiness'>
+                        Mood: {determineMood()}
+                    </div>
+                    <div className='hunger'>
+                        Hunger: {currentHunger}/100
+                    </div> 
+                    <div className='energy'>
+                        Energy: {currentEnergy}/100
+                    </div>
+                    <div className='health'>
+                        Health: {currentHealth}
+                    </div>
+                    <div className='strength'>
+                        <span className='label'>Strength:</span>
+                        <span className='star-value'>{strengthCount}</span>
+                    </div>
+                    <div className='defense'>
+                        <span className='label'>Defense:</span>
+                        <span className='star-value'>{defenseCount}</span>
+                    </div>
+                </>
+            }
         </div>
     </div>
   );

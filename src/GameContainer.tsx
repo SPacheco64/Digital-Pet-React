@@ -6,7 +6,7 @@ import '../styles/components/game-container.scss';
 import StatusWindow from './StatusWindow';
 import ImagePreloader from './helpers/components/ImagePreloader';
 import ExternalUI from './ExternalUI';
-import { eatFunction, hatchingEvent, trainingFunction } from './helpers/functions/OperationalFunctions';
+import { eatFunction, hatchingEvent, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -31,24 +31,33 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
 
   useEffect(() => {
-    hatchingEvent(currentStatus, setCreatureName, setCurrentStatus);
-
+    if (currentStatus === 'Egg') {
+      setCurrentlyBusy(true);
+      hatchingEvent(currentStatus, setCreatureName, setCurrentStatus, setCurrentlyBusy);
+    }
     if (currentStatus === 'eating') {
-      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness);
+      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentlyBusy);
     } else if (currentStatus === 'training') {
       trainingFunction('Strength', setCurrentStatus, setCurrentHunger, 
-        setCurrentEnergy, setCurrentStrength, setCurrentDefense
+        setCurrentEnergy, setCurrentStrength, setCurrentDefense, setCurrentlyBusy
       );
+    } else if (currentStatus === 'sleeping') {
+      sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHappiness, setCurrentlyBusy);
     }
   }, [currentStatus]);
 
   useEffect(() => {
-    if (currentHappiness >= 70) {
-      setCurrentMoodIcon('happy');
-    } else if (currentHappiness <= 30) {
-      setCurrentMoodIcon('sad');
-    } else {
-      setCurrentMoodIcon('normal');
+    if (currentStatus !== 'Egg') {
+      if (currentHappiness >= 70) {
+        setCurrentMoodIcon('happy');
+        setCurrentStatus('happy');
+      } else if (currentHappiness <= 30) {
+        setCurrentMoodIcon('sad');
+        setCurrentStatus('sad');
+      } else {
+        setCurrentMoodIcon('normal');
+        setCurrentStatus('normal');
+      }
     }
   }, [currentHappiness]);
 
@@ -74,7 +83,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentHappiness={currentHappiness} currentHunger={currentHunger} 
               currentEnergy={currentEnergy} currentStrength={currentStrength} 
               currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
-              currentTime={currentTime}
+              currentTime={currentTime} 
+              setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
             />
           }
         </div>
@@ -82,7 +92,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           <Menu 
             inCombat={inCombat} currentStatus={currentStatus} 
             showStatusWindow={showStatusWindow} setInCombat={setInCombat} 
-            setCurrentStatus={setCurrentStatus} setShowStatusWindow={setShowStatusWindow} 
+            setCurrentStatus={setCurrentStatus} setShowStatusWindow={setShowStatusWindow}
+            setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy} 
           />
         </div>
       </div>

@@ -19,7 +19,9 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentStrength,
     currentDefense,
     currentMoodIcon,
-    currentTime
+    currentTime,
+    currentlyBusy,
+    setCurrentlyBusy
   } = props;
 
   const determineTimeClass = () => {
@@ -38,7 +40,9 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {/* Displayed game content will go here */}
       <MoodDisplay currentMoodIcon={currentMoodIcon} />
       <StatusDisplay currentStatus={currentStatus} />
-      <Creature currentStatus={currentStatus} currentHappiness={currentHappiness} creatureName={creatureName} />
+      <Creature currentStatus={currentStatus} currentHappiness={currentHappiness} creatureName={creatureName} 
+        setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
+      />
     </div>
   );
 };

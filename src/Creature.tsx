@@ -4,6 +4,7 @@ import chocobo from './graphics/creature_sprites/chocobo_sprites/chocobo-normal.
 import chocoboEat from './graphics/creature_sprites/chocobo_sprites/chocobo-eating.gif';
 import chocoboSleep from './graphics/creature_sprites/chocobo_sprites/chocobo-asleep.gif';
 import chocoboTrain from './graphics/creature_sprites/chocobo_sprites/chocobo-training.gif';
+import chocoboSad from './graphics/creature_sprites/chocobo_sprites/chocobo-upset.gif';
 import eggGif from './graphics/creature_sprites/egg.gif';
 import '../styles/components/creature-graphic.scss';
 import { touchReaction } from './helpers/functions/TouchReaction';
@@ -25,6 +26,8 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
     currentStatus,
     currentHappiness,
     creatureName,
+    currentlyBusy,
+    setCurrentlyBusy
   } = props;
 
   const determinePetState = () => {
@@ -47,6 +50,8 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
         return chocoboTrain;
       // case 'hungry':
       //     return hungryIcon;
+      case 'sad':
+        return chocoboSad;
       default:
         return chocobo;
     }
@@ -59,10 +64,15 @@ const Creature: React.FC<CreatureProps> = (props: CreatureProps) => {
         {
           (currentStatus === 'Egg') ? (
             <img className='egg' src={eggGif} alt={'???'}
-              onClick={() => touchReaction(currentHappiness, event)} />
+              onClick={() => touchReaction(currentHappiness, event, setCurrentlyBusy)} />
           ) : (
             <img src={determinePetState()} alt={creatureName} 
-              onClick={() => touchReaction(currentHappiness, event)} />
+              onClick={() => {
+                if (!currentlyBusy) { 
+                  touchReaction(currentHappiness, event, setCurrentlyBusy); 
+                }
+              }
+            } />
           )
         }
       </div>

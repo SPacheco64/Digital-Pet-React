@@ -1,12 +1,15 @@
 #DigipetRoot {
-    background: #17EB8F;
+    // background: #17EB8F;
+    // background: #9b732a;
+    // background: linear-gradient(314deg, rgba(155, 115, 42, 1) 0%, rgba(199, 178, 87, 1) 50%, rgba(237, 221, 83, 1) 100%);
+    background: #9b752a;
+    background: linear-gradient(314deg, rgba(155, 117, 42, 1) 0%, rgba(252, 217, 61, 1) 50%, rgba(237, 221, 83, 1) 100%);
     background-size: cover;
     background-position: center;
 
-    .disabled {
-        opacity: .8;
-        filter: grayscale(100%);
+    .no-touch {
         pointer-events: none;
+        cursor: not-allowed;
     }
 
     .top-panel, .bottom-panel {
@@ -23,12 +26,13 @@
 
     &.retro {
         background-color: #222222;
+        background-image: none;
 
         #GameContainer {
-            background-image: none;
-            // background-image: url(src/graphics/shell_textures/retro-shell.png);
+            // background-image: none;
+            background-image: url('/src/graphics/backgrounds/tracks-bg.png');
 
-            &.orange { background-color: #faca3c; }
+            &.orange { background-color: #fa953c; }
             &.red { background-color: #fa3c3c; }
             &.green { background-color: #3cfa55; }
             &.blue { background-color: #3c9bfa; }
@@ -46,14 +50,6 @@
 
                 img {
                     filter: brightness(0) saturate(100%) invert(7%) sepia(48%) saturate(4185%) hue-rotate(316deg) brightness(91%) contrast(105%);                  
-                }
-            }
-
-            .disabled {
-                button {
-                    background-color: #7f7a7e;
-                    color: #3e3d8d;
-                    filter: none;
                 }
             }
         }

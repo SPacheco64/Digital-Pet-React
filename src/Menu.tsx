@@ -15,6 +15,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     inCombat,
     currentStatus,
     showStatusWindow,
+    currentlyBusy,
+    setCurrentlyBusy,
     setInCombat,
     setCurrentStatus,
     setShowStatusWindow,
@@ -23,11 +25,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
   
   const normalButtonList = [
-    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating')}},
-    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{setCurrentStatus('training')}},
+    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating'); setCurrentlyBusy(true);}},
+    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{setCurrentStatus('training'); setCurrentlyBusy(true);}},
     {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{console.log('Play option clicked')}},
-    {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{console.log('Sleep option clicked')}},
-    {buttonName: 'Status', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow)}},
+    {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
+    {buttonName: 'Status', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow);}},
   ];
 
   const combatButtonList = [
@@ -44,7 +46,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             normalButtonList.map((button, index) => (
-              <span className={`normal-button-${index}`}>
+              <span className={`normal-button-${index} ${(currentlyBusy && index < 4) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
             ))

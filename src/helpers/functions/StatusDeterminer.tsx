@@ -30,10 +30,14 @@ export const determineStatus = (status: string) => {
       return tiredIcon;
     case 'training':
       return trainingIcon;
-    case 'normal':
-        return normalIcon;
     case 'hungry':
         return hungryIcon;
+    case 'happy':
+      return normalIcon;
+    case 'sad':
+      return normalIcon;
+    case 'normal':
+      return normalIcon;
     default:
       return eggIcon;
   }
