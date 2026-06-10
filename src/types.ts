@@ -32,7 +32,9 @@ export interface MenuProps {
     showStatusWindow: boolean;
     currentlyBusy: boolean;
     questionWindowOpen: boolean;
+    showMenuScreen: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setShowStatusWindow: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;

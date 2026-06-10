@@ -8,6 +8,7 @@ import ImagePreloader from './helpers/components/ImagePreloader';
 import ExternalUI from './ExternalUI';
 import { eatFunction, hatchingEvent, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
 import QuestionWindow from './helpers/components/QuestionWindow';
+import MenuScreen from './MenuScreen';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -27,13 +28,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentEnergy, setCurrentEnergy] = useState<number>(100);
   const [currentStrength, setCurrentStrength] = useState<number>(1);
   const [currentDefense, setCurrentDefense] = useState<number>(1);
-  const [showStatusWindow, setShowStatusWindow] = useState<boolean>(false);
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
 
   const [questionWindowOpen, setQuestionWindowOpen] = useState<boolean>(false);
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
   const [optionSelected, setOptionSelected] = useState<number>(0);
+
+  const [showMenuScreen, setShowMenuScreen] = useState<boolean>(false);
+  const [showStatusWindow, setShowStatusWindow] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
@@ -107,6 +110,18 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   useEffect(() => {
     console.log('Current Health: ', currentHealth, '/100');
   }, [currentHealth]);
+  useEffect(() => {
+    console.log('Current Question Type: ', currentQuestionType);
+  }, [currentQuestionType]);
+  useEffect(() => {
+    console.log('Currently Busy?: ', currentlyBusy);
+  }, [currentlyBusy]);
+  useEffect(() => {
+    console.log('Show Menu Screen?: ', showMenuScreen);
+  }, [showMenuScreen]);
+    useEffect(() => {
+    console.log('Show Status Screen?: ', showStatusWindow);
+  }, [showStatusWindow]);
   // ====================== FOR TESTING ======================
 
   return (
@@ -116,6 +131,16 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
           {/* Status Window that shows creature stats */}
+          {
+            showMenuScreen && !questionWindowOpen && !showStatusWindow &&
+              <MenuScreen creatureName={creatureName} currentStatus={currentStatus} 
+                currentHealth={currentHealth} currentHappiness={currentHappiness} 
+                currentMoodIcon={currentMoodIcon} currentHunger={currentHunger} 
+                currentEnergy={currentEnergy} currentStrength={currentStrength} 
+                currentDefense={currentDefense} 
+              />
+          }
+
           {
             showStatusWindow && !questionWindowOpen &&
             <StatusWindow creatureName={creatureName} currentStatus={currentStatus} 
@@ -143,7 +168,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
           {/* Main Game Display */}
           {
-            !showStatusWindow && !questionWindowOpen &&
+            !showMenuScreen && !questionWindowOpen &&
             <GameDisplay creatureName={creatureName} inCombat={inCombat} 
               currentStatus={currentStatus} currentHealth={currentHealth} 
               currentHappiness={currentHappiness} currentHunger={currentHunger} 
@@ -163,6 +188,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
             setOptionSelected={setOptionSelected} setQuestionWindowOpen={setQuestionWindowOpen}
             questionWindowOpen={questionWindowOpen} setCurrentQuestionType={setCurrentQuestionType}
+            setShowMenuScreen={setShowMenuScreen} showMenuScreen={showMenuScreen}
           />
         </div>
       </div>

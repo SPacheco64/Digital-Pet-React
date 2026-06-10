@@ -6,14 +6,17 @@ import feedIcon from './graphics/icons/game_buttons/normal/feed.svg';
 import trainIcon from './graphics/icons/game_buttons/normal/train.svg';
 import playIcon from './graphics/icons/game_buttons/normal/play.svg';
 import sleepIcon from './graphics/icons/game_buttons/normal/sleep.svg';
-import statusIcon from './graphics/icons/game_buttons/normal/status.svg';
 import backIcon from './graphics/icons/game_buttons/normal/back.svg';
 import emptyIcon from './graphics/icons/game_buttons/normal/empty.svg';
 import oneIcon from './graphics/icons/game_buttons/normal/one.svg';
 import twoIcon from './graphics/icons/game_buttons/normal/two.svg';
 import threeIcon from './graphics/icons/game_buttons/normal/three.svg';
 import fourIcon from './graphics/icons/game_buttons/normal/four.svg';
-import QuestionWindow from './helpers/components/QuestionWindow';
+import menuIcon from './graphics/icons/game_buttons/normal/menu.svg';
+import statusIcon from './graphics/icons/game_buttons/menu/feather.svg';
+import infoIcon from './graphics/icons/game_buttons/menu/info.svg';
+import shopIcon from './graphics/icons/game_buttons/menu/shop.svg';
+import achievementIcon from './graphics/icons/game_buttons/menu/achievement.svg';
 
 const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
@@ -23,9 +26,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     showStatusWindow,
     currentlyBusy,
     questionWindowOpen,
+    showMenuScreen,
     setCurrentlyBusy,
     setInCombat,
     setCurrentStatus,
+    setShowMenuScreen,
     setShowStatusWindow,
     setOptionSelected,
     setQuestionWindowOpen,
@@ -41,7 +46,15 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{setCurrentlyBusy(true); setTrainingOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('training');}},
     {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{setCurrentlyBusy(true); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
     {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
-    {buttonName: 'Status', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow);}},
+    {buttonName: 'Menu', buttonIcon: menuIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
+  ];
+
+  const menuScreenButtonList = [
+    {buttonName: 'Info', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow);}},
+    {buttonName: 'Shop', buttonIcon: shopIcon, buttonFunction: ()=>{}},
+    {buttonName: 'Achievements', buttonIcon: achievementIcon, buttonFunction: ()=>{}},
+    {buttonName: 'Info', buttonIcon: infoIcon, buttonFunction: ()=>{}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
   ];
 
   const combatButtonList = [
@@ -68,7 +81,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     <div id='Menu'>
       {
         // Normal Menu Options
-        !inCombat && !questionWindowOpen && (
+        !inCombat && !questionWindowOpen && !showMenuScreen && (
         <>
           {
             normalButtonList.map((button, index) => (
@@ -79,6 +92,19 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
           }
         </>
         )
+      }
+
+      {
+        showMenuScreen &&
+        <>
+          {
+            menuScreenButtonList.map((button, index) => (
+              <span className={`normal-button-${index} ${(showStatusWindow && index > 0) ? 'disabled' : ''}`}>
+                <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
+              </span>
+            ))
+          }
+        </>
       }
 
       {
