@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../../styles/components/question-window.scss';
+import chocoIcon from '../../graphics/creature_sprites/small_choco/choco-looking-away.png'
 
 interface QuestionWindowProps {
   dialogue: string;
@@ -22,6 +23,10 @@ const QuestionWindow: React.FC<QuestionWindowProps> = ({ dialogue, responsesArra
             </div>
           ))
         }
+      </div>
+
+      <div className='choco-icon'>
+          <img src={chocoIcon} />
       </div>
     </div>
   );

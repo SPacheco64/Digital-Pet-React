@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { StatusWindowProps } from './types';
-import '../styles/components/status-window.scss';
-import { determineMood } from './helpers/components/MoodDeterminer';
+import { StatusScreenProps } from '../types';
+import '../../styles/components/status-window.scss';
+import eggIcon from '../graphics/creature_sprites/egg.gif';
+import chocoIcon from '../graphics/creature_sprites/small_choco/choco-icon-run-2.gif';
 
-const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => {
+const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => {
   // Destructure props for ease of access & documentation
   const {
     creatureName,
@@ -13,13 +14,13 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
     currentMoodIcon,
     currentHunger,
     currentEnergy,
-    currentStrength,
+    currentPower,
     currentDefense
   } = props;
 
   const isHappy = (currentHappiness >= 70);
   const isSad = (currentHappiness <=30);
-  const strengthCount = '★'.repeat(currentStrength);
+  const powerCount = '★'.repeat(currentPower);
   const defenseCount = '★'.repeat(currentDefense);
 
   const determineMood = () => {
@@ -33,7 +34,7 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
   };
 
   return (
-    <div id='StatusWindow'>
+    <div id='StatusScreen'>
         <div className='name'>
             {creatureName}
         </div>
@@ -56,9 +57,9 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
                     <div className='health'>
                         Health: {currentHealth}
                     </div>
-                    <div className='strength'>
-                        <span className='label'>Strength:</span>
-                        <span className='star-value'>{strengthCount}</span>
+                    <div className='power'>
+                        <span className='label'>Power:</span>
+                        <span className='star-value'>{powerCount}</span>
                     </div>
                     <div className='defense'>
                         <span className='label'>Defense:</span>
@@ -66,9 +67,12 @@ const StatusWindow: React.FC<StatusWindowProps> = (props: StatusWindowProps) => 
                     </div>
                 </>
             }
+            <div className='choco-icon'>
+                <img src={currentStatus === 'Egg' ? eggIcon : chocoIcon} />
+            </div>
         </div>
     </div>
   );
 };
 
-export default StatusWindow;
+export default StatusScreen;

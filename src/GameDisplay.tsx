@@ -16,7 +16,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentHappiness,
     currentHunger,
     currentEnergy,
-    currentStrength,
+    currentPower,
     currentDefense,
     currentMoodIcon,
     currentTime,

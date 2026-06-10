@@ -10,7 +10,7 @@ export interface GameDisplayProps {
     currentHappiness: number;
     currentHunger: number;
     currentEnergy: number;
-    currentStrength: number;
+    currentPower: number;
     currentDefense: number;
     currentMoodIcon: string;
     currentTime: string;
@@ -29,13 +29,15 @@ export interface CreatureProps {
 export interface MenuProps {
     inCombat: boolean;
     currentStatus: string;
-    showStatusWindow: boolean;
     currentlyBusy: boolean;
     questionWindowOpen: boolean;
     showMenuScreen: boolean;
+    showStatusScreen: boolean;
+    showAchievementsScreen: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowStatusWindow: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowStatusScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowAchievementsScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
     setOptionSelected: React.Dispatch<React.SetStateAction<number>>;
@@ -43,7 +45,11 @@ export interface MenuProps {
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface StatusWindowProps {
+export interface MenuScreenProps {
+    currentStatus: string;
+}
+
+export interface StatusScreenProps {
     creatureName: string;
     currentStatus: string;
     currentHealth: number;
@@ -51,8 +57,18 @@ export interface StatusWindowProps {
     currentMoodIcon: string;
     currentHunger: number;
     currentEnergy: number;
-    currentStrength: number;
+    currentPower: number;
     currentDefense: number;
+}
+
+export interface AchievementScreenProps {
+    currentStatus: string;
+    currentPower: number;
+    currentDefense: number;
+    currentSpeed: number;
+    currentEndurance: number;
+    battlesWon: number;
+    racesWon: number;
 }
 
 export interface MoodProps {

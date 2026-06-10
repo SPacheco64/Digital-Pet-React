@@ -61,7 +61,7 @@
             overflow: hidden;
         }
 
-        #GameDisplay, #StatusWindow {
+        #GameDisplay, #StatusScreen, #MenuScreen, .question-window {
             filter: opacity(.7) grayscale(100%);
             border: none;
 

@@ -20,6 +20,11 @@ import chocoboHeadshake from '../../graphics/creature_sprites/chocobo_sprites/ch
 import daySymbol from '../../graphics/time_of_day/sun.png'
 import eveningSymbol from '../../graphics/time_of_day/sun-cloud.png'
 import nightSymbol from '../../graphics/time_of_day/moon.png'
+import miniChocoEat from '../../graphics/creature_sprites/small_choco/choco-icon-eat.gif'
+import miniChocoRun from '../../graphics/creature_sprites/small_choco/choco-icon-run.gif'
+import miniChocoRun2 from '../../graphics/creature_sprites/small_choco/choco-icon-run-2.gif'
+import miniChocoRun3 from '../../graphics/creature_sprites/small_choco/choco-running-top.gif'
+import miniChocoUp from '../../graphics/creature_sprites/small_choco/choco-looking-away.png'
 
 interface ImagePreloaderProps {
   children: ReactNode;
@@ -47,7 +52,12 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         tracksBg,
         daySymbol,
         eveningSymbol,
-        nightSymbol
+        nightSymbol,
+        miniChocoEat,
+        miniChocoRun,
+        miniChocoRun2,
+        miniChocoRun3,
+        miniChocoUp
       ];
 
       imagePaths.forEach((imagePath) => {

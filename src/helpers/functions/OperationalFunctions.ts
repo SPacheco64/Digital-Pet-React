@@ -56,7 +56,7 @@ export const trainingFunction = (
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
-    setCurrentStrength: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentPower: React.Dispatch<React.SetStateAction<number>>,
     setCurrentDefense: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>,
@@ -67,7 +67,7 @@ export const trainingFunction = (
     const randomHungerGain = 5 + Math.floor(Math.random() * 10);
     const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
     const randomEnergyLoss = 20 + Math.floor(Math.random() * 15);
-    const randomStrengthGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    const randomPowerGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
     const randomDefGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
 
     const trainingTimer = setTimeout(() => {
@@ -77,7 +77,7 @@ export const trainingFunction = (
         setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0))
     
         if (optionSelected === 1) {
-            setCurrentStrength(prevStr => Math.min(Number((prevStr + randomStrengthGain).toFixed(1)), 5));
+            setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), 5));
         } else if (optionSelected === 2) {
             setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 5));
         }

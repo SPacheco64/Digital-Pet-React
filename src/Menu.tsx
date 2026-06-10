@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuProps } from './types';
 import '../styles/components/menu.scss';
 import MenuOption from './helpers/components/MenuOption';
@@ -23,23 +23,36 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const {
     inCombat,
     currentStatus,
-    showStatusWindow,
     currentlyBusy,
     questionWindowOpen,
     showMenuScreen,
+    showStatusScreen,
+    showAchievementsScreen,
     setCurrentlyBusy,
     setInCombat,
     setCurrentStatus,
     setShowMenuScreen,
-    setShowStatusWindow,
+    setShowStatusScreen,
+    setShowAchievementsScreen,
     setOptionSelected,
     setQuestionWindowOpen,
     setCurrentQuestionType,
   } = props;
 
+  const checkIfDisabled = (index: number) => {
+    return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2); 
+  };
+
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
   const [playOpen, setPlayOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log('IS TRAINING OPEN?: ', trainingOpen);
+  }, [trainingOpen]);
+  useEffect(() => {
+    console.log('IS PLAY OPEN?: ', playOpen);
+  }, [playOpen]);
   
   const normalButtonList = [
     {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating'); setCurrentlyBusy(true);}},
@@ -50,9 +63,9 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   ];
 
   const menuScreenButtonList = [
-    {buttonName: 'Info', buttonIcon: (showStatusWindow ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusWindow(!showStatusWindow);}},
+    {buttonName: 'Info', buttonIcon: (showStatusScreen ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusScreen(!showStatusScreen);}},
     {buttonName: 'Shop', buttonIcon: shopIcon, buttonFunction: ()=>{}},
-    {buttonName: 'Achievements', buttonIcon: achievementIcon, buttonFunction: ()=>{}},
+    {buttonName: 'Achievements', buttonIcon: (showAchievementsScreen ? backIcon : achievementIcon), buttonFunction: ()=>{setShowAchievementsScreen(!showAchievementsScreen)}},
     {buttonName: 'Info', buttonIcon: infoIcon, buttonFunction: ()=>{}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
   ];
@@ -64,8 +77,10 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   ];
 
   const trainingQuestionButtonList = [
-    {buttonName: 'Strength', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false);}},
-    {buttonName: 'Defense', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false);}},
+    {buttonName: 'Power', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false); setTrainingOpen(false);}},
+    {buttonName: 'Defense', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false); setTrainingOpen(false);}},
+    {buttonName: 'Defense', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setQuestionWindowOpen(false); setTrainingOpen(false);}},
+    {buttonName: 'Defense', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setQuestionWindowOpen(false); setTrainingOpen(false);}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setTrainingOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
   ];
 
@@ -99,7 +114,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             menuScreenButtonList.map((button, index) => (
-              <span className={`normal-button-${index} ${(showStatusWindow && index > 0) ? 'disabled' : ''}`}>
+              <span className={`normal-button-${index} ${checkIfDisabled(index) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
             ))
@@ -113,19 +128,13 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
           {
             trainingOpen && 
             <>
-              <span className='normal-button-0 disabled'>
-                <MenuOption onClick={()=>{}} icon={emptyIcon} optionName={''} />
-              </span>
               {
                 trainingQuestionButtonList.map((button, index) => (
-                  <span className={`normal-button-${index+1}`}>
+                  <span className={`normal-button-${index}`}>
                     <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
                   </span>
                 ))
               }
-              <span className='normal-button-4 disabled'>
-                <MenuOption onClick={()=>{}} icon={emptyIcon} optionName={''} />
-              </span>
             </>
           }
 
