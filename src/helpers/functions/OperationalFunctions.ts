@@ -134,6 +134,8 @@ export const battleEndFunction = (
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     setCurrentMoney: React.Dispatch<React.SetStateAction<number>>,
     setTotalBattlesWon: React.Dispatch<React.SetStateAction<number>>,
+    setMaxHealth: React.Dispatch<React.SetStateAction<number>>,
+    setMaxEnergy: React.Dispatch<React.SetStateAction<number>>,
     difficultyLevel: number, // 1-5 difficulty
     victory: boolean,
 ) => {
@@ -144,16 +146,18 @@ export const battleEndFunction = (
     const randomDefGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
     const randomSpeedGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
     const randomEnduranceGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
-    // setCurrentStatus('---');
+    const hpGain = difficultyLevel * Math.floor((Math.random() * 4) + 1);
+    const energyGain = difficultyLevel * Math.floor((Math.random() * 4) + 1);
 
-    const trainingTimer = setTimeout(() => {
-        setCurrentStatus('normal');
-        setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
-        setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
-        // setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0));
-    
-        setCurrentlyBusy(false);
-    }, 10000);
+    setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
+    setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
 
-    return () => clearTimeout(trainingTimer);
+    if (victory) {
+        setMaxHealth(prevMaxHealth => Math.min(prevMaxHealth + hpGain, 200));
+        setMaxEnergy(prevMaxEnergy => Math.min(prevMaxEnergy + energyGain, 200));
+        setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), 10));
+        setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 10));
+        setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), 10));
+        setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), 10));
+    }
 }

@@ -41,6 +41,7 @@
         top: .25rem;
         left: .25rem;
         background-color: #fff;
+        pointer-events: none;
         .mood-icon, img {
             height: 1rem;
         }
@@ -54,6 +55,7 @@
         top: .25rem;
         right: .25rem;
         background-color: #fff;
+        pointer-events: none;
         .status-icon, img {
             height: 1rem;
         }

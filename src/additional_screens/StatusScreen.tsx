@@ -59,7 +59,7 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
                             Energy: {currentEnergy}/100
                         </div>
                         <div className='health'>
-                            Health: {currentHealth}
+                            Health: {currentHealth}/100
                         </div>
                         <div className='power'>
                             <span className='label'>POW:</span>

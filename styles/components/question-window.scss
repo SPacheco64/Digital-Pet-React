@@ -17,11 +17,16 @@
     .responses {
         text-align: left;
         line-height: 1rem;
-        gap: 0.5rem;
         text-transform: capitalize;
         width: fit-content;
         padding: 0.5rem;
         font-size: 0.65rem;
+
+        // FOR FF Style Menu
+        border: 0.1rem solid;
+        margin: 0.5rem 0;
+        color: #fff;
+        background: #00008f;
 
         .question-container {
             width: 100%;

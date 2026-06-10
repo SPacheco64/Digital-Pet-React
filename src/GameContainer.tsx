@@ -19,34 +19,37 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   } = props;
 
-  // State variables for game status and creature attributes
+  // State variables for game status
   const [currentTime, setCurrentTime] = useState<string>('Day');
-  const [creatureName, setCreatureName] = useState<string>('???');
-  const [inCombat, setInCombat] = useState<boolean>(false);
-  const [currentStatus, setCurrentStatus] = useState<string>('Egg');
-  const [currentHealth, setCurrentHealth] = useState<number>(100);
-  const [currentHappiness, setCurrentHappiness] = useState<number>(50);
-  const [currentMoodIcon, setCurrentMoodIcon] = useState<string>('Normal');
-  const [currentHunger, setCurrentHunger] = useState<number>(50);
-  const [currentEnergy, setCurrentEnergy] = useState<number>(100);
-  const [currentPower, setCurrentPower] = useState<number>(1);
-  const [currentDefense, setCurrentDefense] = useState<number>(1);
-  const [currentSpeed, setCurrentSpeed] = useState<number>(1);
-  const [currentEndurance, setCurrentEndurance] = useState<number>(1);
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
-  const [battlesWon, setBattlesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
-  const [racesWon, setRacesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
-
   const [questionWindowOpen, setQuestionWindowOpen] = useState<boolean>(false);
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
   const [optionSelected, setOptionSelected] = useState<number>(0);
-
   const [showMenuScreen, setShowMenuScreen] = useState<boolean>(false);
   const [showStatusScreen, setShowStatusScreen] = useState<boolean>(false);
   const [showShopScreen, setShowShopScreen] = useState<boolean>(false);
   const [showAchievementsScreen, setShowAchievementsScreen] = useState<boolean>(false);
   const [showInfoScreen, setShowInfoScreen] = useState<boolean>(false);
+  const [inCombat, setInCombat] = useState<boolean>(false); // TO BE IMPLEMENTED LATER
+  const [inPlay, setInPlay] = useState<boolean>(false); // TO BE IMPLEMENTED LATER
+  const [battlesWon, setBattlesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
+  const [racesWon, setRacesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
+
+  // State Values for Creature Information
+  const [creatureName, setCreatureName] = useState<string>('???');
+  const [currentStatus, setCurrentStatus] = useState<string>('Egg');
+  const [currentHealth, setCurrentHealth] = useState<number>(100);
+  const [maxHealth, setMaxHealth] = useState<number>(100);
+  const [currentEnergy, setCurrentEnergy] = useState<number>(100);
+  const [maxEnergy, setMaxEnergy] = useState<number>(100);
+  const [currentHappiness, setCurrentHappiness] = useState<number>(50);
+  const [currentHunger, setCurrentHunger] = useState<number>(50);
+  const [currentPower, setCurrentPower] = useState<number>(1);
+  const [currentDefense, setCurrentDefense] = useState<number>(1);
+  const [currentSpeed, setCurrentSpeed] = useState<number>(1);
+  const [currentEndurance, setCurrentEndurance] = useState<number>(1);
+  const [currentMoodIcon, setCurrentMoodIcon] = useState<string>('Normal');
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
