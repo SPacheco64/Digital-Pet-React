@@ -16,10 +16,10 @@ const AchievementScreen: React.FC<AchievementScreenProps> = (props: AchievementS
     racesWon
   } = props;
 
-  const hitMaxPower = (currentPower === 5);
-  const hitMaxDefense = (currentDefense === 5);
-  const hitMaxSpeed = (currentSpeed === 5);
-  const hitMaxEndurance = (currentEndurance === 5);
+  const hitMaxPower = (currentPower === 10);
+  const hitMaxDefense = (currentDefense === 10);
+  const hitMaxSpeed = (currentSpeed === 10);
+  const hitMaxEndurance = (currentEndurance === 10);
 
   return (
     <div id='AchievementScreen' className='game-screen additional-screen'>

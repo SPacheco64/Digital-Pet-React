@@ -5,6 +5,7 @@ import negativeReaction from '../../graphics/creature_sprites/chocobo_sprites/ch
 export const touchReaction = (currentHappiness: number, ele: any, setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>) => {
     const isHappy = (currentHappiness >= 70);
     const isSad = (currentHappiness <= 30);
+    setCurrentlyBusy(true);
     const ogSource = ele.target.src;
     
     ele.target.classList.add('no-touch');
@@ -24,6 +25,7 @@ export const touchReaction = (currentHappiness: number, ele: any, setCurrentlyBu
             ele.target.src = ogSource;
             ele.target.classList.remove('shake');
             ele.target.classList.remove('no-touch');
+            setCurrentlyBusy(false);
         }, 2000);
 
         return () => clearTimeout(waitToChangeBack);

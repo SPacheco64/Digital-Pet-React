@@ -37,9 +37,9 @@ const InfoScreen: React.FC<InfoScreenProps> = (props: InfoScreenProps) => {
             </div>
         </div>
 
-        <div className='choco-icon'>
+        {/* <div className='choco-icon'>
             <img src={currentStatus === 'Egg' ? eggIcon : chocoIcon} />
-        </div>
+        </div> */}
     </div>
   );
 };

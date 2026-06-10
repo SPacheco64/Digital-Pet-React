@@ -31,8 +31,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentEnergy, setCurrentEnergy] = useState<number>(100);
   const [currentPower, setCurrentPower] = useState<number>(1);
   const [currentDefense, setCurrentDefense] = useState<number>(1);
-  const [currentSpeed, setCurrentSpeed] = useState<number>(1); // TO BE IMPLEMENTED LATER
-  const [currentEndurance, setCurrentEndurance] = useState<number>(1); // TO BE IMPLEMENTED LATER
+  const [currentSpeed, setCurrentSpeed] = useState<number>(1);
+  const [currentEndurance, setCurrentEndurance] = useState<number>(1);
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
   const [battlesWon, setBattlesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
@@ -64,24 +64,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   useEffect(() => {
     if (currentQuestionType === 'training') {
-      if (optionSelected === 1) {
-        setCurrentStatus('training');
         trainingFunction(setCurrentStatus, setCurrentHunger, 
-          setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentlyBusy,
-          setCurrentQuestionType, setQuestionWindowOpen, setCurrentHappiness, optionSelected
+          setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
+          setCurrentEndurance, setCurrentlyBusy, setCurrentQuestionType, setQuestionWindowOpen,
+          setCurrentHappiness, optionSelected
         );
         setOptionSelected(0);
         setCurrentQuestionType('');
-      } else if (optionSelected === 2) {
-        setCurrentStatus('training');
-        trainingFunction(setCurrentStatus, setCurrentHunger, 
-          setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentlyBusy,
-          setCurrentQuestionType, setQuestionWindowOpen, setCurrentHappiness, 
-          optionSelected
-        );
-        setOptionSelected(0);
-        setCurrentQuestionType('');
-      }
     }
   }, [optionSelected]);
 
@@ -102,9 +91,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   // ====================== FOR TESTING ======================
   useEffect(() => {
-    console.log('Current Power: ', currentPower);
-    console.log('Current Defense: ', currentDefense);
-  }, [currentPower, currentDefense]);
+    console.log('Current Power: ', currentPower, '/10');
+    console.log('Current Defense: ', currentDefense, '/10');
+    console.log('Current Speed: ', currentSpeed, '/10');
+    console.log('Current Endurance: ', currentEndurance, '/10');
+  }, [currentPower, currentDefense, currentSpeed, currentEndurance]);
   useEffect(()=> {
     console.log('Current Energy: ', currentEnergy, '/100');
   }, [currentEnergy]);
@@ -166,7 +157,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentHealth={currentHealth} currentHappiness={currentHappiness} 
               currentMoodIcon={currentMoodIcon} currentHunger={currentHunger} 
               currentEnergy={currentEnergy} currentPower={currentPower} 
-              currentDefense={currentDefense} 
+              currentDefense={currentDefense} currentSpeed={currentSpeed}
+              currentEndurance={currentEndurance}
             />
           }
           {/* Shop Screen with in-game items */}

@@ -17,7 +17,7 @@
     .name {
         font-size: 1.5rem;
         font-weight: bold;
-        padding-bottom: .5rem;
+        // padding-bottom: .5rem;
         text-transform: uppercase;
     }
 
@@ -29,6 +29,12 @@
         width: fit-content;
         padding: .5rem;
         font-size: .65rem;
+
+        // FOR FF Style Menu
+        border: 0.1rem solid;
+        margin: 0.5rem 0;
+        color: #fff;
+        background: #00008f;
 
         .star-value {
             position: relative;
@@ -43,8 +49,8 @@
         right: 0;
 
         img {
-            height: 3rem;
-            width: 3rem;
+            height: 2.5rem;
+            width: 2.5rem;
             transform: scaleX(-1);
         }
     }

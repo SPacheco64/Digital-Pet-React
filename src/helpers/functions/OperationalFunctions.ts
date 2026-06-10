@@ -58,6 +58,8 @@ export const trainingFunction = (
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
     setCurrentPower: React.Dispatch<React.SetStateAction<number>>,
     setCurrentDefense: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentSpeed: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentEndurance: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>,
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -67,19 +69,26 @@ export const trainingFunction = (
     const randomHungerGain = 5 + Math.floor(Math.random() * 10);
     const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
     const randomEnergyLoss = 20 + Math.floor(Math.random() * 15);
-    const randomPowerGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    const randomPowerGain = Number((0.1 + Math.random() * 0.3).toFixed(1));
     const randomDefGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    const randomSpeedGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    const randomEnduranceGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    setCurrentStatus('training');
 
     const trainingTimer = setTimeout(() => {
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
         setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
-        setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0))
+        setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0));
     
         if (optionSelected === 1) {
-            setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), 5));
+            setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), 10));
         } else if (optionSelected === 2) {
-            setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 5));
+            setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 10));
+        } else if (optionSelected === 3) {
+            setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), 10));
+        } else {
+            setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), 10));
         }
 
         setCurrentQuestionType('');
@@ -97,9 +106,8 @@ export const sleepingFunction = (
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     ) => {
-
     const randomHungerGain = 5 + Math.floor(Math.random() * 15);
-    const randomEnergyGain = 30 + Math.floor(Math.random() * 10);
+    const randomEnergyGain = 20 + Math.floor(Math.random() * 10);
     const randomHappinessGain = 5 + Math.floor(Math.random() * 10);
 
     const sleepingTimer = setTimeout(() => {
@@ -111,4 +119,41 @@ export const sleepingFunction = (
     }, 60000);
 
     return () => clearTimeout(sleepingTimer);
+}
+
+export const battleEndFunction = (
+    setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
+    setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
+    setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentPower: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentDefense: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentSpeed: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentEndurance: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
+    setBattleEndScreen: React.Dispatch<React.SetStateAction<boolean>>,
+    setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentMoney: React.Dispatch<React.SetStateAction<number>>,
+    setTotalBattlesWon: React.Dispatch<React.SetStateAction<number>>,
+    difficultyLevel: number, // 1-5 difficulty
+    victory: boolean,
+) => {
+    const randomHungerGain = (3*difficultyLevel) + Math.floor(Math.random() * 5);
+    const randomHappinessChange = (3*difficultyLevel) + Math.floor(Math.random() * 5);
+    const randomEnergyLoss = (5*difficultyLevel) + Math.floor(Math.random() * 10);
+    const randomPowerGain = Number(((0.1*difficultyLevel) + Math.random() * 0.3).toFixed(1));
+    const randomDefGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
+    const randomSpeedGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
+    const randomEnduranceGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
+    // setCurrentStatus('---');
+
+    const trainingTimer = setTimeout(() => {
+        setCurrentStatus('normal');
+        setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
+        setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
+        // setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0));
+    
+        setCurrentlyBusy(false);
+    }, 10000);
+
+    return () => clearTimeout(trainingTimer);
 }

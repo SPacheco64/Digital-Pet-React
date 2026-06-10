@@ -16,90 +16,47 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
     currentMoney,
   } = props;
 
+  const shopList = [
+    {cost: '50', image: gysahlGreens, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
+    {cost: '50', image: gysahlGreens, label: 'Cushy Pillow', description: 'Permanently increases the effectiveness of Sleeping.'},
+    {cost: '100', image: gysahlGreens, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
+    {cost: '100', image: gysahlGreens, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
+    {cost: '100', image: gysahlGreens, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
+    {cost: '100', image: gysahlGreens, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
+    {cost: '200', image: gysahlGreens, label: 'Choco Bangle', description: 'Increases POW in battles.'},
+    {cost: '200', image: gysahlGreens, label: 'Choco Guard', description: 'Increases DEF in battles.'}
+  ];
+
   return (
     <div id='ShopScreen' className='game-screen additional-screen'>
         <div className='title'>
             Shop
         </div>
         <div className='current-money'>
-            $ {currentMoney}
+            {currentMoney} <span className='currency-symbol'>G</span>
         </div>
 
         <div className='shop-list'>
-            <div className='shop-item'>
-                <div className='cost'>
-                    $50
-                </div>
+            {
+                shopList.map((item, index) => (
+                    <>
+                        <div className='shop-item' key={index}>
+                            <div className='cost'>
+                                {item.cost}<span className='currency-symbol'>G</span>
+                            </div>
 
-                <div className='item-top'>
-                    <span className='item-image'><img src={gysahlGreens} alt='Gysahl Greens' /></span>
-                    <span className='label'>Gysahl Greens</span>
-                </div>
+                            <div className='item-top'>
+                                <span className='item-image'><img src={item.image} alt={item.label} /></span>
+                                <span className='label'>{item.label}</span>
+                            </div>
 
-                <div className='item-descriptions'>
-                    Permanently increases the effectiveness of Feeding.
-                </div>
-            </div>
-
-            <div className='shop-item'>
-                <div className='cost'>
-                    $100
-                </div>
-
-                <div className='item-top'>
-                    <span className='item-image'><img src={gysahlGreens} alt='Power Charm' /></span>
-                    <span className='label'>Power Charm</span>
-                </div>
-
-                <div className='item-descriptions'>
-                    Permanently increases the effectiveness of Power training.
-                </div>
-            </div>
-
-            <div className='shop-item'>
-                <div className='cost'>
-                    $100
-                </div>
-
-                <div className='item-top'>
-                    <span className='item-image'><img src={gysahlGreens} alt='Defense Charm' /></span>
-                    <span className='label'>Defense Charm</span>
-                </div>
-
-                <div className='item-descriptions'>
-                    Permanently increases the effectiveness of Defense training.
-                </div>
-            </div>
-
-            <div className='shop-item'>
-                <div className='cost'>
-                    $100
-                </div>
-
-                <div className='item-top'>
-                    <span className='item-image'><img src={gysahlGreens} alt='Speed Bangle' /></span>
-                    <span className='label'>Speed Bangle</span>
-                </div>
-
-                <div className='item-descriptions'>
-                    Permanently increases the effectiveness of Speed training.
-                </div>
-            </div>
-
-            <div className='shop-item'>
-                <div className='cost'>
-                    $100
-                </div>
-
-                <div className='item-top'>
-                    <span className='item-image'><img src={gysahlGreens} alt='Endure Bangle' /></span>
-                    <span className='label'>Endure Bangle</span>
-                </div>
-
-                <div className='item-descriptions'>
-                    Permanently increases the effectiveness of Endurance training.
-                </div>
-            </div>
+                            <div className='item-descriptions'>
+                                {item.description}
+                            </div>
+                        </div>
+                    </>
+                ))
+            }
         </div>
 
         {/* <div className='choco-icon'>

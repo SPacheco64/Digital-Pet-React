@@ -63,6 +63,8 @@ export interface StatusScreenProps {
     currentEnergy: number;
     currentPower: number;
     currentDefense: number;
+    currentSpeed: number;
+    currentEndurance: number;
 }
 
 export interface ShopScreenProps {
