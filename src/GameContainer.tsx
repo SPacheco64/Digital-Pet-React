@@ -10,6 +10,8 @@ import QuestionWindow from './helpers/components/QuestionWindow';
 import MenuScreen from './additional_screens/MenuScreen';
 import StatusScreen from './additional_screens/StatusScreen';
 import AchievementScreen from './additional_screens/AchievementScreen';
+import InfoScreen from './additional_screens/InfoScreen';
+import ShopScreen from './additional_screens/ShopScreen';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -42,8 +44,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   const [showMenuScreen, setShowMenuScreen] = useState<boolean>(false);
   const [showStatusScreen, setShowStatusScreen] = useState<boolean>(false);
+  const [showShopScreen, setShowShopScreen] = useState<boolean>(false);
   const [showAchievementsScreen, setShowAchievementsScreen] = useState<boolean>(false);
-  const [showInfoScreen, setInfoScreen] = useState<boolean>(false);
+  const [showInfoScreen, setShowInfoScreen] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
@@ -137,12 +140,26 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
-          {/* Status Window that shows creature stats */}
+          {/* Main Game Display */}
           {
-            showMenuScreen && !questionWindowOpen && !showStatusScreen && !showAchievementsScreen &&
-              <MenuScreen currentStatus={currentStatus} />
+            !showMenuScreen && !questionWindowOpen &&
+            <GameDisplay creatureName={creatureName} inCombat={inCombat} 
+              currentStatus={currentStatus} currentHealth={currentHealth} 
+              currentHappiness={currentHappiness} currentHunger={currentHunger} 
+              currentEnergy={currentEnergy} currentPower={currentPower} 
+              currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
+              currentTime={currentTime} 
+              setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
+            />
           }
 
+          {/* Menu Screen w/several options (status, shop, achievements, info & tips) */}
+          {
+            showMenuScreen && !questionWindowOpen && !showStatusScreen && !showAchievementsScreen 
+            && !showInfoScreen && !showShopScreen &&
+              <MenuScreen currentStatus={currentStatus} />
+          }
+          {/* Status Screen that shows creature info */}
           {
             showStatusScreen && !questionWindowOpen &&
             <StatusScreen creatureName={creatureName} currentStatus={currentStatus} 
@@ -152,7 +169,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentDefense={currentDefense} 
             />
           }
-
+          {/* Shop Screen with in-game items */}
+          {
+            showShopScreen && !questionWindowOpen &&
+            <ShopScreen currentStatus={currentStatus} currentMoney={0} />
+          }
+          {/* Achievements Screen that shows user's game accomplishments */}
           {
             showAchievementsScreen && !questionWindowOpen &&
             <AchievementScreen currentStatus={currentStatus} currentPower={currentPower} 
@@ -161,7 +183,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               racesWon={racesWon}
             />
           }
-
+          {/* Info Screen that explains the game and gives tips */}
+          {
+            showInfoScreen && !questionWindowOpen &&
+            <InfoScreen currentStatus={currentStatus} />
+          }
           {/* Window for displaying questions to the user */}
           {
             questionWindowOpen &&
@@ -176,32 +202,21 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               }
             </>
           }
-
-          {/* Main Game Display */}
-          {
-            !showMenuScreen && !questionWindowOpen &&
-            <GameDisplay creatureName={creatureName} inCombat={inCombat} 
-              currentStatus={currentStatus} currentHealth={currentHealth} 
-              currentHappiness={currentHappiness} currentHunger={currentHunger} 
-              currentEnergy={currentEnergy} currentPower={currentPower} 
-              currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
-              currentTime={currentTime} 
-              setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
-            />
-          }
         </div>
 
         <div className='bottom-panel'>
           <Menu 
             inCombat={inCombat} currentStatus={currentStatus} 
-            showStatusScreen={showStatusScreen} setInCombat={setInCombat} 
             setCurrentStatus={setCurrentStatus} setShowStatusScreen={setShowStatusScreen}
             setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
             setOptionSelected={setOptionSelected} setQuestionWindowOpen={setQuestionWindowOpen}
             questionWindowOpen={questionWindowOpen} setCurrentQuestionType={setCurrentQuestionType}
             setShowMenuScreen={setShowMenuScreen} showMenuScreen={showMenuScreen}
+            showStatusScreen={showStatusScreen} setInCombat={setInCombat} 
+            showShopScreen={showShopScreen} setShowShopScreen={setShowShopScreen}
             showAchievementsScreen={showAchievementsScreen} 
             setShowAchievementsScreen={setShowAchievementsScreen}
+            showInfoScreen={showInfoScreen} setShowInfoScreen={setShowInfoScreen}
           />
         </div>
       </div>

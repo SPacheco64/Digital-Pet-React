@@ -15,7 +15,7 @@ const MenuScreen: React.FC<MenuScreenProps> = (props: MenuScreenProps) => {
   } = props;
 
   return (
-    <div id='MenuScreen'>
+    <div id='MenuScreen' className='game-screen additional-screen'>
         <div className='title'>
             Menu
         </div>

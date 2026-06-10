@@ -22,7 +22,7 @@ const AchievementScreen: React.FC<AchievementScreenProps> = (props: AchievementS
   const hitMaxEndurance = (currentEndurance === 5);
 
   return (
-    <div id='AchievementScreen'>
+    <div id='AchievementScreen' className='game-screen additional-screen'>
         <div className='title'>
             Achievements
         </div>

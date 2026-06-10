@@ -27,20 +27,25 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     questionWindowOpen,
     showMenuScreen,
     showStatusScreen,
+    showShopScreen,
     showAchievementsScreen,
+    showInfoScreen,
     setCurrentlyBusy,
     setInCombat,
     setCurrentStatus,
     setShowMenuScreen,
     setShowStatusScreen,
+    setShowShopScreen,
     setShowAchievementsScreen,
+    setShowInfoScreen,
     setOptionSelected,
     setQuestionWindowOpen,
     setCurrentQuestionType,
   } = props;
 
   const checkIfDisabled = (index: number) => {
-    return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2); 
+    return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2)
+      || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1);
   };
 
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
@@ -63,10 +68,10 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   ];
 
   const menuScreenButtonList = [
-    {buttonName: 'Info', buttonIcon: (showStatusScreen ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusScreen(!showStatusScreen);}},
-    {buttonName: 'Shop', buttonIcon: shopIcon, buttonFunction: ()=>{}},
+    {buttonName: 'Status', buttonIcon: (showStatusScreen ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusScreen(!showStatusScreen);}},
+    {buttonName: 'Shop', buttonIcon: (showShopScreen ? backIcon : shopIcon), buttonFunction: ()=>{setShowShopScreen(!showShopScreen)}},
     {buttonName: 'Achievements', buttonIcon: (showAchievementsScreen ? backIcon : achievementIcon), buttonFunction: ()=>{setShowAchievementsScreen(!showAchievementsScreen)}},
-    {buttonName: 'Info', buttonIcon: infoIcon, buttonFunction: ()=>{}},
+    {buttonName: 'Info', buttonIcon: (showInfoScreen ? backIcon : infoIcon), buttonFunction: ()=>{setShowInfoScreen(!showInfoScreen)}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
   ];
 

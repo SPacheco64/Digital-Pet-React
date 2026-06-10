@@ -36,8 +36,8 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   }
 
   return (
-    <div id='GameDisplay' className={determineTimeClass()}>
-      {/* Displayed game content will go here */}
+    <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
+      {/* Displayed game content */}
       <MoodDisplay currentMoodIcon={currentMoodIcon} />
       <StatusDisplay currentStatus={currentStatus} />
       <Creature currentStatus={currentStatus} currentHappiness={currentHappiness} creatureName={creatureName} 

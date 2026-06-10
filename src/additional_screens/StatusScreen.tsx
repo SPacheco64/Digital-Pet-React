@@ -34,7 +34,7 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
   };
 
   return (
-    <div id='StatusScreen'>
+    <div id='StatusScreen' className='game-screen additional-screen'>
         <div className='name'>
             {creatureName}
         </div>

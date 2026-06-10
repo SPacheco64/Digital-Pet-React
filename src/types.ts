@@ -33,11 +33,15 @@ export interface MenuProps {
     questionWindowOpen: boolean;
     showMenuScreen: boolean;
     showStatusScreen: boolean;
+    showShopScreen: boolean;
     showAchievementsScreen: boolean;
+    showInfoScreen: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setShowStatusScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowShopScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setShowAchievementsScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowInfoScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
     setOptionSelected: React.Dispatch<React.SetStateAction<number>>;
@@ -61,6 +65,11 @@ export interface StatusScreenProps {
     currentDefense: number;
 }
 
+export interface ShopScreenProps {
+    currentStatus: string;
+    currentMoney: number;
+}
+
 export interface AchievementScreenProps {
     currentStatus: string;
     currentPower: number;
@@ -69,6 +78,10 @@ export interface AchievementScreenProps {
     currentEndurance: number;
     battlesWon: number;
     racesWon: number;
+}
+
+export interface InfoScreenProps {
+    currentStatus: string;
 }
 
 export interface MoodProps {

@@ -9,7 +9,7 @@ interface QuestionWindowProps {
 
 const QuestionWindow: React.FC<QuestionWindowProps> = ({ dialogue, responsesArray }) => {
   return (
-    <div className='question-window'>
+    <div className='question-window game-screen additional-screen'>
       <div className='dialogue'>
         {dialogue}
       </div>
