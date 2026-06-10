@@ -24,7 +24,7 @@ export const touchReaction = (currentHappiness: number, ele: any, setCurrentlyBu
             ele.target.src = ogSource;
             ele.target.classList.remove('shake');
             ele.target.classList.remove('no-touch');
-        }, 1000);
+        }, 2000);
 
         return () => clearTimeout(waitToChangeBack);
     }
