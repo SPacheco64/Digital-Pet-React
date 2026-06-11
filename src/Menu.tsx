@@ -51,13 +51,6 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
   const [playOpen, setPlayOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log('IS TRAINING OPEN?: ', trainingOpen);
-  }, [trainingOpen]);
-  useEffect(() => {
-    console.log('IS PLAY OPEN?: ', playOpen);
-  }, [playOpen]);
   
   const normalButtonList = [
     {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating'); setCurrentlyBusy(true);}},
@@ -105,7 +98,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             normalButtonList.map((button, index) => (
-              <span className={`normal-button-${index} ${(currentlyBusy && index < 4) ? 'disabled' : ''}`}>
+              <span key={index} className={`normal-button-${index} ${(currentlyBusy && index < 4) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
             ))
@@ -119,7 +112,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             menuScreenButtonList.map((button, index) => (
-              <span className={`normal-button-${index} ${checkIfDisabled(index) ? 'disabled' : ''}`}>
+              <span key={index} className={`normal-button-${index} ${checkIfDisabled(index) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
             ))
@@ -135,7 +128,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
             <>
               {
                 trainingQuestionButtonList.map((button, index) => (
-                  <span className={`normal-button-${index}`}>
+                  <span key={index} className={`normal-button-${index}`}>
                     <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
                   </span>
                 ))
@@ -148,7 +141,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
             <>
               {
                 playQuestionButtonList.map((button, index) => (
-                  <span className={`normal-button-${index}`}>
+                  <span key={index} className={`normal-button-${index}`}>
                     <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
                   </span>
                 ))

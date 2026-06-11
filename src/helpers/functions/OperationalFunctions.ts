@@ -17,6 +17,7 @@ export const infoFunction = () => {
 };
 
 // Game-Based Action Functions
+// Handles initial creature hatching
 export const hatchingEvent = (currentStatus: string, 
     setCreatureName: React.Dispatch<React.SetStateAction<string>>,
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>,
@@ -32,6 +33,7 @@ export const hatchingEvent = (currentStatus: string,
     return () => clearTimeout(hatchingTimeout);
 }
 
+// Handles feeding of creature
 export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
@@ -52,6 +54,7 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     return () => clearTimeout(eatingTimer);
 }
 
+// Handles training of creature
 export const trainingFunction = (
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
@@ -99,6 +102,7 @@ export const trainingFunction = (
     return () => clearTimeout(trainingTimer);
 }
 
+// Handles creature sleeping
 export const sleepingFunction = (
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
@@ -121,6 +125,7 @@ export const sleepingFunction = (
     return () => clearTimeout(sleepingTimer);
 }
 
+// Implements the results of a finished battle (victory vs. loss)
 export const battleEndFunction = (
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 

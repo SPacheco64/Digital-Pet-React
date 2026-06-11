@@ -12,6 +12,7 @@ import StatusScreen from './additional_screens/StatusScreen';
 import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
+import { PetGameCanvas } from './helpers/canvas/petCanvas';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -35,6 +36,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [inPlay, setInPlay] = useState<boolean>(false); // TO BE IMPLEMENTED LATER
   const [battlesWon, setBattlesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
   const [racesWon, setRacesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
+  const [currentMoney, setCurrentMoney] = useState<number>(0);
+  const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
 
   // State Values for Creature Information
   const [creatureName, setCreatureName] = useState<string>('???');
@@ -94,42 +97,19 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   // ====================== FOR TESTING ======================
   useEffect(() => {
+    console.log('Current HP: ', currentHealth, '/', maxHealth);
+    console.log('Current Energy: ', currentEnergy, '/', maxEnergy);
     console.log('Current Power: ', currentPower, '/10');
     console.log('Current Defense: ', currentDefense, '/10');
     console.log('Current Speed: ', currentSpeed, '/10');
     console.log('Current Endurance: ', currentEndurance, '/10');
-  }, [currentPower, currentDefense, currentSpeed, currentEndurance]);
-  useEffect(()=> {
-    console.log('Current Energy: ', currentEnergy, '/100');
-  }, [currentEnergy]);
-  useEffect(() => {
-    console.log('Current Status: ', currentStatus);
-  }, [currentStatus]);
-  useEffect(()=> {
-    console.log('Current Happiness: ', currentHappiness, '/100');
-  }, [currentHappiness]);
-  useEffect(()=> {
-    console.log('Current Hunger: ', currentHunger, '/100');
-  }, [currentHunger]);
-  useEffect(() => {
-    console.log('Current Health: ', currentHealth, '/100');
-  }, [currentHealth]);
-  useEffect(() => {
-    console.log('Current Question Type: ', currentQuestionType);
-  }, [currentQuestionType]);
-  useEffect(() => {
-    console.log('Currently Busy?: ', currentlyBusy);
-  }, [currentlyBusy]);
-  useEffect(() => {
-    console.log('Show Menu Screen?: ', showMenuScreen);
-  }, [showMenuScreen]);
-    useEffect(() => {
-    console.log('Show Status Screen?: ', showStatusScreen);
-  }, [showStatusScreen]);
+  }, [currentPower, currentDefense, currentSpeed, currentEndurance, currentHealth, maxHealth, currentEnergy, maxEnergy]);
   // ====================== FOR TESTING ======================
 
   return (
     <ImagePreloader>
+      {/* <PetGameCanvas /> */}
+      
       <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
 
       <div id='GameContainer' className={currentShellColor}>
@@ -167,7 +147,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Shop Screen with in-game items */}
           {
             showShopScreen && !questionWindowOpen &&
-            <ShopScreen currentStatus={currentStatus} currentMoney={0} />
+            <ShopScreen currentStatus={currentStatus} currentMoney={currentMoney} 
+              alreadyPurchased={alreadyPurchased} setCurrentMoney={setCurrentMoney} 
+              setAlreadyPurchased={setAlreadyPurchased}  
+            />
           }
           {/* Achievements Screen that shows user's game accomplishments */}
           {

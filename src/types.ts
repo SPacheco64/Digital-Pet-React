@@ -70,6 +70,9 @@ export interface StatusScreenProps {
 export interface ShopScreenProps {
     currentStatus: string;
     currentMoney: number;
+    alreadyPurchased: Array<number>;
+    setCurrentMoney: React.Dispatch<React.SetStateAction<number>>;
+    setAlreadyPurchased: React.Dispatch<React.SetStateAction<Array<number>>>
 }
 
 export interface AchievementScreenProps {

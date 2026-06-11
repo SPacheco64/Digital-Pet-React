@@ -56,10 +56,15 @@
                 color: #fff;
             }
 
+            &.already-purchased {
+                pointer-events: none;
+                opacity: .5;
+            }
+
             .cost {
                 position: absolute;
                 right: 0.25rem;
-                background: red;
+                background: #ff0000;
                 color: #fff;
                 padding: .1rem;
 

@@ -17,7 +17,7 @@ const QuestionWindow: React.FC<QuestionWindowProps> = ({ dialogue, responsesArra
       <div className='responses'>
         {
           responsesArray.map((response, index) => (
-            <div className={`question-container reponse-option-${index+1}`}>
+            <div key={index} className={`question-container reponse-option-${index+1}`}>
               <span className='question-num'>{index+1}.</span> 
               <span className='question-text'>{response}</span>
             </div>
