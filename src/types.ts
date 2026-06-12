@@ -113,3 +113,8 @@ export interface ExternalUIProps {
     setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
     setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
 }
+
+export interface GameScreenProps {
+    currentStatus: string;
+    timeClass: string;
+}

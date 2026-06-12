@@ -2,30 +2,15 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import { preload } from 'react-dom';
 import '../../../styles/components/loading-screen.scss';
 
-// Import all images for preloading
-// import eggGif from '../../graphics/creature_sprites/egg.gif';
-// import petBgDay from '../../graphics/backgrounds/pet-bg-day.png';
-// import petBgEvening from '../../graphics/backgrounds/pet-bg-evening.png';
-// import petBgNight from '../../graphics/backgrounds/pet-bg-night.png';
-// import statusBg from '../../graphics/backgrounds/status-window-bg.png';
-// import tracksBg from '../../graphics/backgrounds/tracks-bg.png';
-// import chocoboAsleep from '../../graphics/creature_sprites/chocobo_sprites/chocobo-asleep.gif';
-// import chocoboEating from '../../graphics/creature_sprites/chocobo_sprites/chocobo-eating.gif';
-// import chocoboHappy from '../../graphics/creature_sprites/chocobo_sprites/chocobo-happy.gif';
-// import chocoboNormal from '../../graphics/creature_sprites/chocobo_sprites/chocobo-normal.gif';
-// import chocoboTraining from '../../graphics/creature_sprites/chocobo_sprites/chocobo-training.gif';
-// import chocoboUpset from '../../graphics/creature_sprites/chocobo_sprites/chocobo-upset.gif';
-// import chocoboThinking from '../../graphics/creature_sprites/chocobo_sprites/chocobo-thinking.gif'
-// import chocoboHeadshake from '../../graphics/creature_sprites/chocobo_sprites/chocobo-headshake.gif'
-// import daySymbol from '../../graphics/time_of_day/sun.png'
-// import eveningSymbol from '../../graphics/time_of_day/sun-cloud.png'
-// import nightSymbol from '../../graphics/time_of_day/moon.png'
-// import miniChocoEat from '../../graphics/creature_sprites/small_choco/choco-icon-eat.gif'
-// import miniChocoRun from '../../graphics/creature_sprites/small_choco/choco-icon-run.gif'
-// import miniChocoRun2 from '../../graphics/creature_sprites/small_choco/choco-icon-run-2.gif'
-// import miniChocoRun3 from '../../graphics/creature_sprites/small_choco/choco-running-top.gif'
-// import miniChocoUp from '../../graphics/creature_sprites/small_choco/choco-looking-away.png'
-// import gysahlGreens from '../../graphics/icons/shop/gysahl_greens.png'
+// Import needed images for preloading
+import statusBg from '../../graphics/backgrounds/status-window-bg.png';
+import tracksBg from '../../graphics/backgrounds/tracks-bg.png';
+import miniChocoRun from '../../graphics/creature_sprites/small_choco/choco-icon-run.gif'
+import miniChocoRun2 from '../../graphics/creature_sprites/small_choco/choco-icon-run-2.gif'
+import miniChocoRun3 from '../../graphics/creature_sprites/small_choco/choco-running-top.gif'
+import miniChocoUp from '../../graphics/creature_sprites/small_choco/choco-looking-away.png'
+import gysahlGreens from '../../graphics/icons/shop/gysahl_greens.png'
+import shellTexture from '../../graphics/shell_textures/shell-texture-2.png'
 
 interface ImagePreloaderProps {
   children: ReactNode;
@@ -37,34 +22,19 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   const preloadImages = () => {
     try {
       const imagePaths = [
-        // chocoboAsleep,
-        // chocoboEating,
-        // chocoboHappy,
-        // chocoboNormal,
-        // chocoboTraining,
-        // chocoboUpset,
-        // chocoboThinking,
-        // chocoboHeadshake,
-        // eggGif,
-        // petBgDay,
-        // petBgEvening,
-        // petBgNight,
-        // statusBg,
-        // tracksBg,
-        // daySymbol,
-        // eveningSymbol,
-        // nightSymbol,
-        // miniChocoEat,
-        // miniChocoRun,
-        // miniChocoRun2,
-        // miniChocoRun3,
-        // miniChocoUp,
-        // gysahlGreens
+        shellTexture,
+        statusBg,
+        tracksBg,
+        miniChocoRun,
+        miniChocoRun2,
+        miniChocoRun3,
+        miniChocoUp,
+        gysahlGreens
       ];
 
-      // imagePaths.forEach((imagePath) => {
-      //   preload(imagePath, { as: "image" });
-      // });
+      imagePaths.forEach((imagePath) => {
+        preload(imagePath, { as: "image" });
+      });
 
       // setIsLoading(false);
       setTimeout(() => { 

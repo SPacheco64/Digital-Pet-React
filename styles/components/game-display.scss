@@ -12,6 +12,7 @@
     padding-bottom: 5%;
     border-radius: 1rem;
     position: relative;
+    overflow: hidden;
 
     // Determines which game bg to show based on time of day
     &.day-bg {

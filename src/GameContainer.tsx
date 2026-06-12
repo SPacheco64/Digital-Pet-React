@@ -12,7 +12,6 @@ import StatusScreen from './additional_screens/StatusScreen';
 import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
-import { PetGameCanvas } from './helpers/canvas/petCanvas';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -95,6 +94,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
+  useEffect(() => {
+  }, []);
+
   // ====================== FOR TESTING ======================
   useEffect(() => {
     console.log('Current HP: ', currentHealth, '/', maxHealth);
@@ -108,8 +110,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      {/* <PetGameCanvas /> */}
-      
       <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
 
       <div id='GameContainer' className={currentShellColor}>
