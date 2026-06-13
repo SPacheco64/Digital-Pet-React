@@ -28,8 +28,8 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
   const mainAnimationAttrs = [
     {x: 227, y: 213, anim: 'eggbounce', frameRate: 7, scale: .3}, // Egg
     {x: 220, y: 206, anim: 'miniChocoWalk', frameRate: 5, scale: .45}, // Menu Choco Walk
-    {x: 220, y: 206, anim: 'miniChocoEat', frameRate: 3, scale: .45}, // Menu Choco Eat
-    {x: 118, y: 190, anim: 'miniChocoTurned', frameRate: 3, scale: .6}, // Menu Choco Turned
+    {x: 220, y: 206, anim: 'miniChocoEat', frameRate: 5, scale: .45}, // Menu Choco Eat
+    {x: 118, y: 190, anim: 'miniChocoTurned', frameRate: 1, scale: .6}, // Menu Choco Turned
   ];
 
   const animations = {

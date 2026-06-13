@@ -3,8 +3,6 @@ import { Stage, Layer, Sprite} from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { GameCanvasProps } from '../../types';
-import { SpriteConfig } from 'konva/lib/shapes/Sprite';
-import { StageConfig } from 'konva/lib/Stage';
 
 type AnimAttr = {
   x: number;
@@ -18,7 +16,25 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
+    // setIsCurrentlyBusy // Gonna need to prevent overlap of actions
   } = props;
+
+  const touchReaction = () => {
+    console.log('Screen Clicked');
+    const previousState = attrToUse;
+
+    if (currentStatus === 'happy') {
+      setAttrToUse(mainAnimationAttrs[6]);
+    } else if (currentStatus === 'sad') {
+      setAttrToUse(mainAnimationAttrs[7]);
+    } else {
+      setAttrToUse(mainAnimationAttrs[5]);
+    }
+
+    setTimeout(() => {
+      setAttrToUse(previousState);
+    }, 2000);
+  };
 
   const stageRef = useRef<any>(null);
   const spriteRef = useRef<any>(null);
@@ -32,6 +48,9 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     {x: 85, y: 95, anim: 'training', frameRate: 7, scale: 1.6}, // Training
     {x: 75, y: 25, anim: 'sleeping', frameRate: 3, scale: 1.6}, // Sleeping
     {x: 90, y: 115, anim: 'eggbounce', frameRate: 7, scale: 1.3}, // Egg
+    {x: 66, y: 124.5, anim: 'think', frameRate: 5, scale: 1.6}, // Neutral Touch React
+    {x: 72, y: 100, anim: 'happy', frameRate: 7, scale: 1.6}, // Happy Touch React
+    {x: 90, y: 115, anim: 'upset', frameRate: 7, scale: 1.6}, // Upset Touch React
   ];
 
   useEffect(() => {
@@ -79,11 +98,32 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
       501, 268, 80, 80,    // frame 3
       411, 268, 80, 80,    // frame 4
     ],
-    miniChocoEat: [
-      321, 400, 80, 80,      // frame 1
-      411, 400, 80, 80,     // frame 2
-      501, 400, 80, 80,    // frame 3
-      411, 400, 80, 80,    // frame 4
+    think: [
+      0, 788, 66, 80,       // frame 1
+      0, 788, 66, 80,       // frame 2
+      0, 788, 66, 80,       // frame 3
+      90, 788, 66, 80,      // frame 4
+      180, 788, 66, 80,    // frame 5
+    ],
+    happy: [
+      0, 404, 81, 85,     // frame 1
+      90, 404, 81, 85,     // frame 2
+      192, 404, 81, 85,     // frame 3
+      90, 404, 81, 85,     // frame 4
+      0, 503, 81, 85,     // frame 5
+      90, 503, 81, 85,     // frame 6
+      192, 503, 81, 85,     // frame 7
+      90, 503, 81, 85,     // frame 8
+    ],
+    upset: [
+      0, 652, 80, 80,       // frame 1
+      90, 652, 80, 80,      // frame 2
+      180, 652, 80, 80,      // frame 3
+      90, 652, 80, 80,      // frame 4
+      0, 652, 80, 80,      // frame 5
+      270, 652, 80, 80,      // frame 6
+      360, 652, 80, 80,      // frame 7
+      270, 652, 80, 80,      // frame 8
     ],
   };
 
@@ -97,7 +137,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
 
   return (
     <>
-      <Stage id='GameStage' className='game-canvas' height={248} width={256} ref={stageRef}>
+      <Stage id='GameStage' className='game-canvas' height={248} width={256} ref={stageRef} onClick={touchReaction}>
         <Layer id='GameLayer'>
           <Sprite
             ref={spriteRef}
