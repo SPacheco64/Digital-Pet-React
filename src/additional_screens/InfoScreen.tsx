@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InfoScreenProps } from '../types';
 import '../../styles/components/info-screen.scss';
-import chocoIcon from '../graphics/creature_sprites/small_choco/choco-icon-run-2.gif';
-import eggIcon from '../graphics/creature_sprites/egg.gif'
-import statusIcon from '../graphics/icons/game_buttons/menu/feather.svg';
-import infoIcon from '../graphics/icons/game_buttons/menu/info.svg';
-import shopIcon from '../graphics/icons/game_buttons/menu/shop.svg';
-import achievementIcon from '../graphics/icons/game_buttons/menu/achievement.svg';
 
 const InfoScreen: React.FC<InfoScreenProps> = (props: InfoScreenProps) => {
   // Destructure props for ease of access & documentation

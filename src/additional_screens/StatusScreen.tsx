@@ -3,6 +3,7 @@ import { StatusScreenProps } from '../types';
 import '../../styles/components/status-window.scss';
 import eggIcon from '../graphics/creature_sprites/egg.gif';
 import chocoIcon from '../graphics/creature_sprites/small_choco/choco-icon-run-2.gif';
+import MenuCanvas from '../helpers/canvas/MenuCanvas';
 
 const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => {
   // Destructure props for ease of access & documentation
@@ -46,6 +47,7 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
                 <div className='status'>
                     Status: {(currentStatus === 'happy' || currentStatus === 'sad') ? 'normal' : currentStatus}
                 </div>
+
                 {
                     currentStatus !== 'Egg' &&
                     <>
@@ -79,10 +81,9 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
                         </div>
                     </>
                 }
-                <div className='choco-icon'>
-                    <img src={currentStatus === 'Egg' ? eggIcon : chocoIcon} />
-                </div>
             </div>
+
+            <MenuCanvas currentStatus={currentStatus} iconToUse={1} />
         </div>
     );
 };

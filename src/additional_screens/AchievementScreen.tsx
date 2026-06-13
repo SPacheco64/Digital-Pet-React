@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AchievementScreenProps } from '../types';
 import '../../styles/components/achievement-screen.scss';
-import eggIcon from '../graphics/creature_sprites/egg.gif';
-import chocoIcon from '../graphics/creature_sprites/small_choco/choco-icon-run-2.gif';
+import MenuCanvas from '../helpers/canvas/MenuCanvas';
 
 const AchievementScreen: React.FC<AchievementScreenProps> = (props: AchievementScreenProps) => {
   // Destructure props for ease of access & documentation
@@ -88,11 +87,7 @@ const AchievementScreen: React.FC<AchievementScreenProps> = (props: AchievementS
             </div>
         </div>
 
-        <div className='status-details'>
-            <div className='choco-icon'>
-                <img src={currentStatus === 'Egg' ? eggIcon : chocoIcon} />
-            </div>
-        </div>
+        <MenuCanvas currentStatus={currentStatus} iconToUse={1} />
     </div>
   );
 };

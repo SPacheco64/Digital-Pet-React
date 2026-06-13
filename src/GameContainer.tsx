@@ -12,6 +12,7 @@ import StatusScreen from './additional_screens/StatusScreen';
 import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
+import MenuCanvas from './helpers/canvas/MenuCanvas';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -94,20 +95,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
-  useEffect(() => {
-  }, []);
-
-  // ====================== FOR TESTING ======================
-  useEffect(() => {
-    console.log('Current HP: ', currentHealth, '/', maxHealth);
-    console.log('Current Energy: ', currentEnergy, '/', maxEnergy);
-    console.log('Current Power: ', currentPower, '/10');
-    console.log('Current Defense: ', currentDefense, '/10');
-    console.log('Current Speed: ', currentSpeed, '/10');
-    console.log('Current Endurance: ', currentEndurance, '/10');
-  }, [currentPower, currentDefense, currentSpeed, currentEndurance, currentHealth, maxHealth, currentEnergy, maxEnergy]);
-  // ====================== FOR TESTING ======================
-
   return (
     <ImagePreloader>
       <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
@@ -122,8 +109,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentHappiness={currentHappiness} currentHunger={currentHunger} 
               currentEnergy={currentEnergy} currentPower={currentPower} 
               currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
-              currentTime={currentTime} 
-              setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
+              currentTime={currentTime} currentlyBusy={currentlyBusy}
+              showMenuScreen={showMenuScreen} setCurrentlyBusy={setCurrentlyBusy}
             />
           }
 

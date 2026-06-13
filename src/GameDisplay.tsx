@@ -5,7 +5,7 @@ import blueberries from './graphics/food_sprites/blueberries.png';
 import '../styles/components/game-display.scss';
 import MoodDisplay from './MoodDisplay';
 import StatusDisplay from './StatusDisplay';
-import GameScreen from './helpers/canvas/GameScreen';
+import GameCanvas from './helpers/canvas/GameCanvas';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -21,6 +21,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentDefense,
     currentMoodIcon,
     currentTime,
+    showMenuScreen,
     currentlyBusy,
     setCurrentlyBusy
   } = props;
@@ -38,10 +39,16 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
 
   return (
     <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
-      <GameScreen currentStatus={currentStatus} timeClass={determineTimeClass()} />
+      {
+        !showMenuScreen &&
+        <>
+          <GameCanvas currentStatus={currentStatus} />
+          <MoodDisplay currentMoodIcon={currentMoodIcon} />
+          <StatusDisplay currentStatus={currentStatus} />
+        </>
+      }
+      
       {/* Displayed game content */}
-      <MoodDisplay currentMoodIcon={currentMoodIcon} />
-      <StatusDisplay currentStatus={currentStatus} />
       {/* <Creature currentStatus={currentStatus} currentHappiness={currentHappiness} creatureName={creatureName} 
         setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
       /> */}

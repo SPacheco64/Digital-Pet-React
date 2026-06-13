@@ -7,6 +7,7 @@ import statusIcon from '../graphics/icons/game_buttons/menu/feather.svg';
 import infoIcon from '../graphics/icons/game_buttons/menu/info.svg';
 import shopIcon from '../graphics/icons/game_buttons/menu/shop.svg';
 import achievementIcon from '../graphics/icons/game_buttons/menu/achievement.svg';
+import MenuCanvas from '../helpers/canvas/MenuCanvas';
 
 const MenuScreen: React.FC<MenuScreenProps> = (props: MenuScreenProps) => {
   // Destructure props for ease of access & documentation
@@ -37,9 +38,8 @@ const MenuScreen: React.FC<MenuScreenProps> = (props: MenuScreenProps) => {
                 Info & Tips
             </div>
         </div>
-        <div className='choco-icon'>
-            <img src={currentStatus === 'Egg' ? eggIcon : chocoIcon} />
-        </div>
+
+        <MenuCanvas currentStatus={currentStatus} iconToUse={2} />
     </div>
   );
 };

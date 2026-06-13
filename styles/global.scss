@@ -25,7 +25,14 @@
 
 .game-canvas {
     z-index: 0;
-    background: #333;
+    background: transparent;
+    position: absolute;
+    top: 0;
+}
+
+.menu-canvas {
+    z-index: 1;
+    background: transparent;
     position: absolute;
     top: 0;
 }

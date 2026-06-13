@@ -15,6 +15,7 @@ export interface GameDisplayProps {
     currentMoodIcon: string;
     currentTime: string;
     currentlyBusy: boolean;
+    showMenuScreen: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -114,7 +115,11 @@ export interface ExternalUIProps {
     setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface GameScreenProps {
+export interface GameCanvasProps {
     currentStatus: string;
-    timeClass: string;
+}
+
+export interface MenuCanvasProps {
+    currentStatus: string;
+    iconToUse: number;
 }

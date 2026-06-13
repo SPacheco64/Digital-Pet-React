@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
-import chocoIcon from '../graphics/creature_sprites/small_choco/choco-icon-run-2.gif';
-import eggIcon from '../graphics/creature_sprites/egg.gif'
-import statusIcon from '../graphics/icons/game_buttons/menu/feather.svg';
-import infoIcon from '../graphics/icons/game_buttons/menu/info.svg';
-import shopIcon from '../graphics/icons/game_buttons/menu/shop.svg';
-import achievementIcon from '../graphics/icons/game_buttons/menu/achievement.svg';
 import gysahlGreens from '../graphics/icons/shop/gysahl_greens.png';
 
 const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
@@ -78,10 +72,6 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                 ))
             }
         </div>
-
-        {/* <div className='choco-icon'>
-            <img src={currentStatus === 'Egg' ? eggIcon : chocoIcon} />
-        </div> */}
     </div>
   );
 };

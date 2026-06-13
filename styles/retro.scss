@@ -36,6 +36,9 @@
             overflow: hidden;
         }
 
+        .menu-canvas {
+            z-index: 0;
+        }
         .game-screen {
             filter: opacity(.7) grayscale(100%);
             border: none;

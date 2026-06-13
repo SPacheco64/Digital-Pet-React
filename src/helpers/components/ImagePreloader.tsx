@@ -5,12 +5,8 @@ import '../../../styles/components/loading-screen.scss';
 // Import needed images for preloading
 import statusBg from '../../graphics/backgrounds/status-window-bg.png';
 import tracksBg from '../../graphics/backgrounds/tracks-bg.png';
-import miniChocoRun from '../../graphics/creature_sprites/small_choco/choco-icon-run.gif'
-import miniChocoRun2 from '../../graphics/creature_sprites/small_choco/choco-icon-run-2.gif'
-import miniChocoRun3 from '../../graphics/creature_sprites/small_choco/choco-running-top.gif'
-import miniChocoUp from '../../graphics/creature_sprites/small_choco/choco-looking-away.png'
-import gysahlGreens from '../../graphics/icons/shop/gysahl_greens.png'
 import shellTexture from '../../graphics/shell_textures/shell-texture-2.png'
+import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png'
 
 interface ImagePreloaderProps {
   children: ReactNode;
@@ -25,11 +21,7 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         shellTexture,
         statusBg,
         tracksBg,
-        miniChocoRun,
-        miniChocoRun2,
-        miniChocoRun3,
-        miniChocoUp,
-        gysahlGreens
+        chocoSheet
       ];
 
       imagePaths.forEach((imagePath) => {
