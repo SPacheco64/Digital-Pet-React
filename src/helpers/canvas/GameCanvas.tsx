@@ -20,14 +20,13 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   } = props;
 
   const touchReaction = () => {
-    console.log('Screen Clicked');
     const previousState = attrToUse;
 
     if (currentStatus === 'happy') {
       setAttrToUse(mainAnimationAttrs[6]);
     } else if (currentStatus === 'sad') {
       setAttrToUse(mainAnimationAttrs[7]);
-    } else {
+    } else if (currentStatus === 'normal') {
       setAttrToUse(mainAnimationAttrs[5]);
     }
 
