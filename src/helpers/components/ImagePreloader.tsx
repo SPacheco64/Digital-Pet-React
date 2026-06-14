@@ -5,7 +5,7 @@ import '../../../styles/components/loading-screen.scss';
 // Import needed images for preloading
 import statusBg from '../../graphics/backgrounds/status-window-bg.png';
 import tracksBg from '../../graphics/backgrounds/tracks-bg.png';
-import shellTexture from '../../graphics/shell_textures/shell-texture-2.png'
+import shellTexture from '../../graphics/shell_textures/shell-texture.png'
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png'
 
 interface ImagePreloaderProps {
