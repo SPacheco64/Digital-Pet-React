@@ -3,6 +3,7 @@ import { Stage, Layer, Sprite} from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { GameCanvasProps } from '../../types';
+import '../../../styles/components/game-canvas.scss';
 
 type AnimAttr = {
   x: number;
@@ -19,6 +20,8 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     setCurrentlyBusy
   } = props;
 
+  // This function changes the Chocobo animation shown briefly
+  // on user click of the game screen. Result based on Chocobo's mood.
   const touchReaction = () => {
     const previousState = attrToUse;
 
@@ -34,8 +37,10 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     }
 
     setTimeout(() => {
-      setAttrToUse(previousState);
-      setCurrentlyBusy(false);
+      if (currentStatus !== 'Egg') {
+        setAttrToUse(previousState);
+        setCurrentlyBusy(false);
+      }
     }, 2000);
   };
 
@@ -45,6 +50,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   const [chocoSheetImg] = useImage(chocoSheet);
   const [attrToUse, setAttrToUse] = useState<AnimAttr>({x: 90, y: 110, anim: 'idle', frameRate: 5, scale: 1.6});
 
+  // All animation settings for each animation shown in this canvas
   const mainAnimationAttrs = [
     {x: 90, y: 110, anim: 'idle', frameRate: 5, scale: 1.6}, // Idle
     {x: 80, y: 110, anim: 'eating', frameRate: 5, scale: 1.6}, // Eating
@@ -52,10 +58,11 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     {x: 75, y: 25, anim: 'sleeping', frameRate: 3, scale: 1.6}, // Sleeping
     {x: 90, y: 115, anim: 'eggbounce', frameRate: 7, scale: 1.3}, // Egg
     {x: 66, y: 124.5, anim: 'think', frameRate: 5, scale: 1.6}, // Neutral Touch React
-    {x: 72, y: 100, anim: 'happy', frameRate: 7, scale: 1.6}, // Happy Touch React
+    {x: 68, y: 100, anim: 'happy', frameRate: 7, scale: 1.6}, // Happy Touch React
     {x: 90, y: 115, anim: 'upset', frameRate: 7, scale: 1.6}, // Upset Touch React
   ];
 
+  // Sets shown animation based on the chocobo's currentStatus value
   useEffect(() => {
     if (currentStatus === 'eating') {
       setAttrToUse(mainAnimationAttrs[1]);
@@ -70,6 +77,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     }
   }, [currentStatus]);
 
+  // The actual animations used pulled from the Chocobo Spritesheet
   const animations = {
     idle: [
       0, 0, 69, 72,      // frame 1
@@ -130,6 +138,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     ],
   };
 
+  // Starts animation whenever currentStatus changes
   useEffect(() => {
     const spriteNode = spriteRef.current;
 

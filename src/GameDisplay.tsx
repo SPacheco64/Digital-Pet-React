@@ -1,7 +1,5 @@
 import React from 'react';
 import { GameDisplayProps } from './types';
-import Creature from './Creature';
-import blueberries from './graphics/food_sprites/blueberries.png';
 import '../styles/components/game-display.scss';
 import MoodDisplay from './MoodDisplay';
 import StatusDisplay from './StatusDisplay';
@@ -39,6 +37,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
 
   return (
     <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
+      {/* Displayed game content */}
       {
         !showMenuScreen &&
         <>
@@ -47,11 +46,6 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           <StatusDisplay currentStatus={currentStatus} />
         </>
       }
-      
-      {/* Displayed game content */}
-      {/* <Creature currentStatus={currentStatus} currentHappiness={currentHappiness} creatureName={creatureName} 
-        setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
-      /> */}
     </div>
   );
 };

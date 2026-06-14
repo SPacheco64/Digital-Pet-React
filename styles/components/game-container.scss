@@ -8,14 +8,12 @@
     padding: 2rem;
     align-items: center;
     justify-content: center;
-    
     border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-    background: url('/src/graphics/shell_textures/shell-texture-2.png');
+    background: url('/src/graphics/shell_textures/shell-texture.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-color: #faebd7;
-
     box-shadow: inset 1px 3px 7px rgba(0,0,0,.4);
 
     &::before {

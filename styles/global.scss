@@ -1,5 +1,4 @@
 #DigipetRoot {
-    // background: #17EB8F;
     background: #9b752a;
     background: linear-gradient(314deg, rgba(155, 117, 42, 1) 0%, rgba(252, 217, 61, 1) 50%, rgba(237, 221, 83, 1) 100%);
     background-size: cover;
@@ -21,21 +20,6 @@
         width: 16rem;
         margin: 1.5rem 0 .5rem 0;
     }
-}
-
-.game-canvas {
-    z-index: 0;
-    background: transparent;
-    position: absolute;
-    top: 0;
-    cursor: pointer;
-}
-
-.menu-canvas {
-    z-index: 1;
-    background: transparent;
-    position: absolute;
-    top: 0;
 }
 
 html, body {

@@ -4,7 +4,6 @@
         background-image: none;
 
         #GameContainer {
-            // background-image: none;
             background-image: url('/src/graphics/backgrounds/tracks-bg.png');
 
             &.orange { background-color: #fa953c; }
@@ -39,6 +38,7 @@
         .menu-canvas {
             z-index: 0;
         }
+        
         .game-screen {
             filter: opacity(.7) grayscale(100%);
             border: none;

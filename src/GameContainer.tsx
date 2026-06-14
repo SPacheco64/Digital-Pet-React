@@ -12,7 +12,6 @@ import StatusScreen from './additional_screens/StatusScreen';
 import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
-import MenuCanvas from './helpers/canvas/MenuCanvas';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -120,6 +119,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             && !showInfoScreen && !showShopScreen &&
               <MenuScreen currentStatus={currentStatus} />
           }
+
           {/* Status Screen that shows creature info */}
           {
             showStatusScreen && !questionWindowOpen &&
@@ -131,6 +131,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentEndurance={currentEndurance}
             />
           }
+
           {/* Shop Screen with in-game items */}
           {
             showShopScreen && !questionWindowOpen &&
@@ -139,6 +140,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               setAlreadyPurchased={setAlreadyPurchased}  
             />
           }
+
           {/* Achievements Screen that shows user's game accomplishments */}
           {
             showAchievementsScreen && !questionWindowOpen &&
@@ -148,11 +150,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               racesWon={racesWon}
             />
           }
+
           {/* Info Screen that explains the game and gives tips */}
           {
             showInfoScreen && !questionWindowOpen &&
             <InfoScreen currentStatus={currentStatus} />
           }
+          
           {/* Window for displaying questions to the user */}
           {
             questionWindowOpen &&

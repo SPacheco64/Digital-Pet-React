@@ -3,6 +3,7 @@ import { Stage, Layer, Sprite} from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { MenuCanvasProps } from '../../types';
+import '../../../styles/components/menu-canvas.scss';
 
 type AnimAttr = {
   x: number;
