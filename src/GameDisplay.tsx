@@ -42,7 +42,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {
         !showMenuScreen &&
         <>
-          <GameCanvas currentStatus={currentStatus} />
+          <GameCanvas currentStatus={currentStatus} setCurrentlyBusy={setCurrentlyBusy} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
           <StatusDisplay currentStatus={currentStatus} />
         </>

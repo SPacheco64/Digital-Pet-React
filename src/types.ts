@@ -117,6 +117,7 @@ export interface ExternalUIProps {
 
 export interface GameCanvasProps {
     currentStatus: string;
+    setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MenuCanvasProps {

@@ -16,22 +16,26 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
-    // setIsCurrentlyBusy // Gonna need to prevent overlap of actions
+    setCurrentlyBusy
   } = props;
 
   const touchReaction = () => {
     const previousState = attrToUse;
 
     if (currentStatus === 'happy') {
+      setCurrentlyBusy(true);
       setAttrToUse(mainAnimationAttrs[6]);
     } else if (currentStatus === 'sad') {
+      setCurrentlyBusy(true);
       setAttrToUse(mainAnimationAttrs[7]);
     } else if (currentStatus === 'normal') {
+      setCurrentlyBusy(true);
       setAttrToUse(mainAnimationAttrs[5]);
     }
 
     setTimeout(() => {
       setAttrToUse(previousState);
+      setCurrentlyBusy(false);
     }, 2000);
   };
 
