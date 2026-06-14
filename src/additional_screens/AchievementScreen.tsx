@@ -20,6 +20,18 @@ const AchievementScreen: React.FC<AchievementScreenProps> = (props: AchievementS
   const hitMaxSpeed = (currentSpeed === 10);
   const hitMaxEndurance = (currentEndurance === 10);
 
+  const achievementArray = [
+    {label: 'Battles Won:', value: battlesWon},
+    {label: 'Races Won:', value: racesWon},
+  ];
+
+  const hiddenAchievementArray = [
+    {label: 'Hit Max Power!', value: hitMaxPower},
+    {label: 'Hit Max Defense!', value: hitMaxDefense},
+    {label: 'Hit Max Speed!', value: hitMaxSpeed},
+    {label: 'Hit Max Endurance!', value: hitMaxEndurance},
+  ];
+
   return (
     <div id='AchievementScreen' className='game-screen additional-screen'>
         <div className='title'>
@@ -27,64 +39,33 @@ const AchievementScreen: React.FC<AchievementScreenProps> = (props: AchievementS
         </div>
 
         <div className='achievement-list'>
-            <div className='achievement'>
-                Battles Won: {battlesWon}
-            </div>
-            <div className='achievement'>
-                Races Won: {racesWon}
-            </div>
-            <div className='achievement'>
-                {
-                    hitMaxPower ? (
-                        <>
-                            Hit Max Power!
-                        </>
-                    ) : (
-                        <>
-                            ???
-                        </>
-                    )
-                }
-            </div>
-            <div className='achievement'>
-                {
-                    hitMaxDefense ? (
-                        <>
-                            Hit Max Defense!
-                        </>
-                    ) : (
-                        <>
-                            ???
-                        </>
-                    )
-                }
-            </div>
-            <div className='achievement'>
-                {
-                    hitMaxSpeed ? (
-                        <>
-                            Hit Max Speed!
-                        </>
-                    ) : (
-                        <>
-                            ???
-                        </>
-                    )
-                }
-            </div>
-            <div className='achievement'>
-                {
-                    hitMaxEndurance ? (
-                        <>
-                            Hit Max Endurance!
-                        </>
-                    ) : (
-                        <>
-                            ???
-                        </>
-                    )
-                }
-            </div>
+            {
+                achievementArray.map((achievement, index) => ( 
+                    <>
+                        <div className='achievement' key={index}>
+                            {achievement.label} {achievement.value}
+                        </div>
+                    </>
+                ))
+            }
+
+            {
+                hiddenAchievementArray.map((achievement, index) => ( 
+                    <>
+                        <div className='achievement' key={index}>
+                            {
+                                (achievement.value) ? 
+                                <>
+                                    {achievement.label}
+                                </> :
+                                <>
+                                    ???
+                                </>
+                            }
+                        </div>
+                    </>
+                ))
+            }
         </div>
 
         <MenuCanvas currentStatus={currentStatus} iconToUse={1} />

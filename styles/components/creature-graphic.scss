@@ -1,0 +1,65 @@
+#Creature {
+    width: 100%;
+    height: auto;
+        
+    .creature-graphic {
+        height: 100%;
+        width: 100%;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            filter: sepia(.2);
+
+            &.color {
+                &-normal {
+                    filter: hue-rotate(0deg);
+                }
+
+                &-green {
+                    filter: hue-rotate(44deg);
+                }
+
+                &-blue {
+                    filter: hue-rotate(140deg);
+                }
+
+                &-purple {
+                    filter: hue-rotate(220deg);
+                }
+
+                &-pink {
+                    filter: hue-rotate(290deg);
+                }
+
+                &-tinted {
+                    filter: hue-rotate(315deg);
+                }
+
+                &-gray {
+                    filter: hue-rotate(256deg) saturate(19%);
+                }
+
+                &-sepia {
+                    filter: sepia(1);
+                }
+            }
+
+        }
+
+        .egg {
+            &.shake {
+                animation: tiltshaking 0.5s infinite;
+            }
+        }
+    }
+}
+
+@keyframes tiltshaking {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+}

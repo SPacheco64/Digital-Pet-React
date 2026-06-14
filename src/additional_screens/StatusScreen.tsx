@@ -12,7 +12,6 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
     currentStatus,
     currentHealth,
     currentHappiness,
-    currentMoodIcon,
     currentHunger,
     currentEnergy,
     currentPower,
@@ -38,6 +37,17 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
         }
     };
 
+    const statsArray = [
+        {isStar: false, label: 'Mood: ', value: determineMood()},
+        {isStar: false, label: 'Hunger: ', value: `${currentHunger}/100`},
+        {isStar: false, label: 'Energy: ', value: `${currentEnergy}/100`},
+        {isStar: false, label: 'Health: ', value: `${currentHealth}/100`},
+        {isStar: true, label: 'POW:', value: powerCount},
+        {isStar: true, label: 'DEF:', value: defenseCount},
+        {isStar: true, label: 'SPD:', value: speedCount},
+        {isStar: true, label: 'END:', value: enduranceCount},
+    ];
+
     return (
         <div id='StatusScreen' className='game-screen additional-screen'>
             <div className='name'>
@@ -47,38 +57,25 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
                 <div className='status'>
                     Status: {(currentStatus === 'happy' || currentStatus === 'sad') ? 'normal' : currentStatus}
                 </div>
-
                 {
-                    currentStatus !== 'Egg' &&
+                    // If not currently an Egg, show the chocobo's stats
+                    // Maps through stats array to show all values
+                    (currentStatus !== 'Egg') &&
                     <>
-                        <div className='happiness'>
-                            Mood: {determineMood()}
-                        </div>
-                        <div className='hunger'>
-                            Hunger: {currentHunger}/100
-                        </div> 
-                        <div className='energy'>
-                            Energy: {currentEnergy}/100
-                        </div>
-                        <div className='health'>
-                            Health: {currentHealth}/100
-                        </div>
-                        <div className='power'>
-                            <span className='label'>POW:</span>
-                            <span className='star-value'>{powerCount}</span>
-                        </div>
-                        <div className='defense'>
-                            <span className='label'>DEF:</span>
-                            <span className='star-value'>{defenseCount}</span>
-                        </div>
-                        <div className='speed'>
-                            <span className='label'>SPD:</span>
-                            <span className='star-value'>{speedCount}</span>
-                        </div>
-                        <div className='endurance'>
-                            <span className='label'>END:</span>
-                            <span className='star-value'>{enduranceCount}</span>
-                        </div>
+                        {
+                            statsArray.map((stat, index) => (
+                                <>
+                                    <div key={index}>
+                                        <span>
+                                            {stat.label}
+                                        </span>
+                                        <span className={`${stat.isStar ? 'star-value' : ''}`}>
+                                            {stat.value}
+                                        </span>
+                                    </div>
+                                </>
+                            ))
+                        }
                     </>
                 }
             </div>

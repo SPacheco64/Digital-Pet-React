@@ -6,7 +6,6 @@ import gysahlGreens from '../graphics/icons/shop/gysahl_greens.png';
 const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   // Destructure props for ease of access & documentation
   const {
-    currentStatus,
     currentMoney,
     alreadyPurchased,
     setCurrentMoney,
@@ -25,6 +24,7 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   const shopList = [
     {cost: 50, image: gysahlGreens, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
     {cost: 50, image: gysahlGreens, label: 'Cushy Pillow', description: 'Permanently increases the effectiveness of Sleeping.'},
+    {cost: 50, image: gysahlGreens, label: 'Soft Down', description: 'Permanently increases the speed of Sleeping.'},
     {cost: 100, image: gysahlGreens, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
     {cost: 100, image: gysahlGreens, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
     {cost: 100, image: gysahlGreens, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
@@ -39,6 +39,7 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
         <div className='title'>
             Shop
         </div>
+
         <div className='current-money'>
             {currentMoney} <span className='currency-symbol'>G</span>
         </div>
