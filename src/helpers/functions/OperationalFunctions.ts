@@ -19,13 +19,11 @@ export const infoFunction = () => {
 // Game-Based Action Functions
 // Handles initial creature hatching
 export const hatchingEvent = (currentStatus: string, 
-    setCreatureName: React.Dispatch<React.SetStateAction<string>>,
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
 
     const hatchingTimeout = setTimeout(() => {
-        setCreatureName('Choco');
         setCurrentStatus('normal');
         setCurrentlyBusy(false);
     }, 13000);

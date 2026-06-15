@@ -12,6 +12,7 @@ import StatusScreen from './additional_screens/StatusScreen';
 import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
+import WelcomeForm from './helpers/components/WelcomeForm';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -19,7 +20,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   } = props;
 
+  // User & Chocobo Names
+  const [playerName, setPlayerName] = useState<string>('');
+  const [chocoboName, setChocoboName] = useState<string>('');
+
   // State variables for game status
+  const [dataExists, setDataExists] = useState<boolean>(false);
+  const [hideWelcome, setHideWelcome] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
@@ -39,8 +46,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
 
   // State Values for Creature Information
-  const [creatureName, setCreatureName] = useState<string>('???');
-  const [currentStatus, setCurrentStatus] = useState<string>('Egg');
+  const [currentStatus, setCurrentStatus] = useState<string>('');
   const [currentHealth, setCurrentHealth] = useState<number>(100);
   const [maxHealth, setMaxHealth] = useState<number>(100);
   const [currentEnergy, setCurrentEnergy] = useState<number>(100);
@@ -56,7 +62,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   useEffect(() => {
     if (currentStatus === 'Egg') {
       setCurrentlyBusy(true);
-      hatchingEvent(currentStatus, setCreatureName, setCurrentStatus, setCurrentlyBusy);
+      hatchingEvent(currentStatus, setCurrentStatus, setCurrentlyBusy);
     }
     if (currentStatus === 'eating') {
       eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentlyBusy);
@@ -94,16 +100,31 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
+  useEffect(() => {
+    if (hideWelcome && !dataExists) {
+      setCurrentStatus('Egg');
+    }
+  }, [hideWelcome, dataExists]);
+
   return (
     <ImagePreloader>
       <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
+          {/* Welcome Form for when no game data present in storage */}
+          {
+            !hideWelcome &&
+            <WelcomeForm welcomeMessage='Welcome! Are you ready to raise your very own Chocobo?' 
+              question1='First, what is your name?' question2='What do you want to name your Chocobo?'
+              val1={playerName} val2={chocoboName} setVal1={setPlayerName} setVal2={setChocoboName} 
+              buttonTxt='OK' hideWelcomeForm={setHideWelcome}/>
+          }
+
           {/* Main Game Display */}
           {
-            !showMenuScreen && !questionWindowOpen &&
-            <GameDisplay creatureName={creatureName} inCombat={inCombat} 
+            !showMenuScreen && !questionWindowOpen && hideWelcome &&
+            <GameDisplay creatureName={chocoboName} inCombat={inCombat} 
               currentStatus={currentStatus} currentHealth={currentHealth} 
               currentHappiness={currentHappiness} currentHunger={currentHunger} 
               currentEnergy={currentEnergy} currentPower={currentPower} 
@@ -123,7 +144,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Status Screen that shows creature info */}
           {
             showStatusScreen && !questionWindowOpen &&
-            <StatusScreen creatureName={creatureName} currentStatus={currentStatus} 
+            <StatusScreen creatureName={chocoboName} currentStatus={currentStatus} 
               currentHealth={currentHealth} currentHappiness={currentHappiness} 
               currentMoodIcon={currentMoodIcon} currentHunger={currentHunger} 
               currentEnergy={currentEnergy} currentPower={currentPower} 
@@ -186,6 +207,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             showAchievementsScreen={showAchievementsScreen} 
             setShowAchievementsScreen={setShowAchievementsScreen}
             showInfoScreen={showInfoScreen} setShowInfoScreen={setShowInfoScreen}
+            welcomeFormHidden={hideWelcome}
           />
         </div>
       </div>

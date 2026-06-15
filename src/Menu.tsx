@@ -30,6 +30,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     showShopScreen,
     showAchievementsScreen,
     showInfoScreen,
+    welcomeFormHidden,
     setCurrentlyBusy,
     setInCombat,
     setCurrentStatus,
@@ -48,7 +49,6 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
       || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1);
   };
 
-  const [specialsOpen, setSpecialsOpen] = useState<boolean>(false);
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
   const [playOpen, setPlayOpen] = useState<boolean>(false);
   
@@ -98,7 +98,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             normalButtonList.map((button, index) => (
-              <span key={index} className={`normal-button-${index} ${(currentlyBusy && index < 4) ? 'disabled' : ''}`}>
+              <span key={index} className={`normal-button-${index} ${((currentlyBusy && index < 4) || !welcomeFormHidden) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
             ))

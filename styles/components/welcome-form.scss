@@ -1,0 +1,26 @@
+#WelcomeForm {
+    padding: 5%;
+    height: 100%;
+    line-height: 1rem;
+    font-size: .5rem;
+    
+    .welcome-message { font-size: .75rem; margin-bottom: 1rem; }
+    
+    input { margin-bottom: .5rem; }
+
+    button {
+        cursor: pointer;
+        font-size: inherit;
+        font-family: inherit;
+        border: 0.1rem solid;
+        color: #fff;
+        background: #00008f;
+        padding: .25rem; 
+        width: 4rem; 
+
+        &.disabled {
+            opacity: .7;
+            cursor: not-allowed;
+        }
+    }
+}

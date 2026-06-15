@@ -37,6 +37,7 @@ export interface MenuProps {
     showShopScreen: boolean;
     showAchievementsScreen: boolean;
     showInfoScreen: boolean;
+    welcomeFormHidden: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setShowStatusScreen: React.Dispatch<React.SetStateAction<boolean>>;
