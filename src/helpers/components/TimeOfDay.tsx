@@ -37,7 +37,6 @@ const TimeOfDay: React.FC<TimeOfDayProps> = (props: TimeOfDayProps) => {
     useEffect(() => {
         const now = new Date();
         const hour = now.getHours();
-        console.log(`The hour is: ${hour}`);
 
         determineSymbol(hour);
     }, []);

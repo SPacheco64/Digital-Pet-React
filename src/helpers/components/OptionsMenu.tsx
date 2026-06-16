@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { OptionsMenuProps } from '../../types';
-import { saveFunction, resetFunction, githubFunction, retroFunction, infoFunction } from '../functions/OperationalFunctions';
+import { saveFunction, resetFunction, githubFunction, retroFunction, websiteFunction } from '../functions/OperationalFunctions';
 import closedMenuIcon from '../../graphics/icons/external_ui/closed-menu.svg';
 import openedMenuIcon from '../../graphics/icons/external_ui/opened-menu.svg';
 import saveIcon from '../../graphics/icons/external_ui/save.svg';
 import resetIcon from '../../graphics/icons/external_ui/reset.svg';
 import retroIcon from '../../graphics/icons/external_ui/retro.svg';
 import githubIcon from '../../graphics/icons/external_ui/github.svg';
-import infoIcon from '../../graphics/icons/external_ui/info-i.svg';
+import webIcon from '../../graphics/icons/external_ui/website-icon.svg'
 
 const OptionsMenu: React.FC<OptionsMenuProps> = (props: OptionsMenuProps) => {
   // Destructure props for ease of access & documentation
@@ -21,8 +21,8 @@ const OptionsMenu: React.FC<OptionsMenuProps> = (props: OptionsMenuProps) => {
     {optionName: 'Save', function: saveFunction, icon: saveIcon},
     {optionName: 'Reset', function: resetFunction, icon: resetIcon},
     {optionName: 'Retro', function: retroFunction, icon: retroIcon},
-    {optionName: 'Portfolio', function: githubFunction, icon: githubIcon},
-    {optionName: 'Info', function: infoFunction, icon: infoIcon}
+    {optionName: 'Repo', function: githubFunction, icon: githubIcon},
+    {optionName: 'Portfolio', function: websiteFunction, icon: webIcon}
   ];
 
   return (

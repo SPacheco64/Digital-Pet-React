@@ -3,6 +3,7 @@
     background: linear-gradient(314deg, rgba(155, 117, 42, 1) 0%, rgba(252, 217, 61, 1) 50%, rgba(237, 221, 83, 1) 100%);
     background-size: cover;
     background-position: center;
+    font-family: "Press Start 2P", system-ui;
 
     .no-touch {
         pointer-events: none;
@@ -19,6 +20,7 @@
         height: 15.5rem;
         width: 16rem;
         margin: 1.5rem 0 .5rem 0;
+        background-color: #333;
     }
 }
 

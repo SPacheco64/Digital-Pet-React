@@ -13,7 +13,7 @@
             &.pink { background-color: #eb9de8; }
             &.purple { background-color: #ae6afc; }
             &.gray { background-color: #c8c4cc; }
-            &.yellow { background-color: #feff7a; }
+            &.yellow { background-color: #f8e33d; }
         }
 
         #Menu {
@@ -33,6 +33,7 @@
             border-radius: 1.25rem;
             border: .25rem solid #555;
             overflow: hidden;
+            filter: blur(.03rem);
         }
 
         .menu-canvas {

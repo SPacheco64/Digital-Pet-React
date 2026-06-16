@@ -6,14 +6,13 @@ export const resetFunction = () => {
     console.log('GAME RESET! BYE BYE');
 };
 export const retroFunction = () => {
-    console.log('GOING RETRO MODE!');
     document.getElementById('DigipetRoot')?.classList.toggle('retro');
 }
 export const githubFunction = () => {
-    window.open('https://spacheco64.github.io', '_blank');
+    window.open('https://github.com/SPacheco64/Digital-Pet-React', '_blank');
 };
-export const infoFunction = () => {
-    
+export const websiteFunction = () => {
+    window.open('https://spacheco64.github.io', '_blank');
 };
 
 // Game-Based Action Functions
