@@ -27,7 +27,7 @@ const determineBg = (hour: number) => {
 }
 
 const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [imagesLoading, setImagesLoading] = useState<boolean>(true);
 
   const now = new Date();
   const hour = now.getHours();
@@ -50,11 +50,11 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
 
       // setIsLoading(false);
       setTimeout(() => { 
-        setIsLoading(false);
+        setImagesLoading(false);
       }, 2000); // Simulate loading time
     } catch (error) {
       console.error('Error preloading images:', error);
-      setIsLoading(false);
+      setImagesLoading(false);
     }
   }
 
@@ -65,7 +65,7 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   return (
     <>
       {
-        isLoading &&
+        imagesLoading &&
         <>
           <div className='loading-screen'>
             <div className='loading-text'>Loading</div>
@@ -74,7 +74,7 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
         </>
       }
       {
-        !isLoading && children
+        !imagesLoading && children
       }
     </>
   );

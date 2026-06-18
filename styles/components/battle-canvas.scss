@@ -1,0 +1,12 @@
+.battle-canvas {
+    z-index: 0;
+    background: transparent;
+    position: absolute;
+    top: 0;
+
+    #Enemy {
+        &.hit {
+            filter: grayscale(100%);
+        }
+    }
+}

@@ -16,7 +16,15 @@ export interface GameDisplayProps {
     currentTime: string;
     currentlyBusy: boolean;
     showMenuScreen: boolean;
+    showBattleScreen: boolean;
+    isLoading: boolean;
+    playerAttack: boolean;
+    enemyAttack: boolean; 
+    playerSpecial: boolean; 
+    enemySpecial: boolean; 
+    playerRunning: boolean; 
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface CreatureProps {
@@ -37,6 +45,7 @@ export interface MenuProps {
     showShopScreen: boolean;
     showAchievementsScreen: boolean;
     showInfoScreen: boolean;
+    showBattleScreen: boolean;
     welcomeFormHidden: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,6 +58,12 @@ export interface MenuProps {
     setOptionSelected: React.Dispatch<React.SetStateAction<number>>;
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>;
+    setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    setPlayerAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setPlayerSpecial: React.Dispatch<React.SetStateAction<boolean>>;
+    setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
+    setPlayerRunning: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MenuScreenProps {
@@ -124,4 +139,25 @@ export interface GameCanvasProps {
 export interface MenuCanvasProps {
     currentStatus: string;
     iconToUse: number;
+}
+
+export interface BattleCanvasProps {
+    selectedEnemyLevel: number;
+    isLoading: boolean;
+    playerAttack: boolean;
+    enemyAttack: boolean; 
+    playerSpecial: boolean; 
+    enemySpecial: boolean; 
+    playerRunning: boolean; 
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface BattleScreenProps {
+    isLoading: boolean;
+    playerAttack: boolean;
+    enemyAttack: boolean; 
+    playerSpecial: boolean; 
+    enemySpecial: boolean; 
+    playerRunning: boolean; 
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -28,6 +28,13 @@
     }
 }
 
+#BattleScreen {
+    .loading-screen {
+        background: url(../../src/graphics/backgrounds/status-window-bg.png);
+        z-index: 5;
+    }
+}
+
 @keyframes rotation {
     0% {
         transform: rotate(0deg);

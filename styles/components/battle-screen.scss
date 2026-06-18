@@ -1,0 +1,44 @@
+#BattleScreen {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    display: flex;
+    justify-content: center;
+
+    .battle-display {
+        width: 95%;
+        color: #fff;
+        background: #00008f;
+        height: 4rem;
+        position: absolute;
+        bottom: 1%;
+        display: flex;
+
+        .message-box {
+            border: 0.1rem solid;
+            width: 65%;
+            font-size: .5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .choco-info {
+            border: .1rem solid;
+            border-left: none;
+            width: 35%;
+            font-size: .45rem;
+            text-align: left;
+            padding: .3rem;
+
+            .health, .power {
+                padding-bottom: .25rem;
+            }
+
+            .power, .defense {
+                line-height: .4rem;
+            }
+        }
+    }
+}

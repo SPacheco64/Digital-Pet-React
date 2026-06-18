@@ -17,11 +17,14 @@ import statusIcon from './graphics/icons/game_buttons/menu/feather.svg';
 import infoIcon from './graphics/icons/game_buttons/menu/info.svg';
 import shopIcon from './graphics/icons/game_buttons/menu/shop.svg';
 import achievementIcon from './graphics/icons/game_buttons/menu/achievement.svg';
+import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
+import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
+import runIcon from './graphics/icons/game_buttons/combat/run.svg';
+import { attackFunction, escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
 
 const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
   const {
-    inCombat,
     currentStatus,
     currentlyBusy,
     questionWindowOpen,
@@ -30,9 +33,10 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     showShopScreen,
     showAchievementsScreen,
     showInfoScreen,
+    showBattleScreen,
     welcomeFormHidden,
     setCurrentlyBusy,
-    setInCombat,
+    setShowBattleScreen,
     setCurrentStatus,
     setShowMenuScreen,
     setShowStatusScreen,
@@ -42,11 +46,20 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setOptionSelected,
     setQuestionWindowOpen,
     setCurrentQuestionType,
+
+    // Props for battle & race functions:
+    setPlayerAttack,
+    setEnemyAttack,
+    setPlayerSpecial,
+    setEnemySpecial,
+    setPlayerRunning
+
   } = props;
 
   const checkIfDisabled = (index: number) => {
     return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2)
-      || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1);
+      || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) ||
+      (showBattleScreen && index === 0) || (showBattleScreen && index === 4);
   };
 
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
@@ -69,9 +82,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   ];
 
   const combatButtonList = [
-    {buttonName: 'Attack', buttonIcon: '', buttonFunction: ()=>{}},
-    {buttonName: 'Special', buttonIcon: '', buttonFunction: ()=>{}},
-    {buttonName: 'Run', buttonIcon: '', buttonFunction: ()=>{}},
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+    {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: ()=>{setPlayerAttack(true); attackFunction(setPlayerAttack);}},
+    {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: ()=>{setPlayerSpecial(true); specialFunction()}},
+    {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction()}},
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ];
 
   const trainingQuestionButtonList = [
@@ -86,7 +101,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Rock, Paper, Scissors', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false);}},
     {buttonName: 'Guess', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false);}},
     {buttonName: 'Race', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setQuestionWindowOpen(false);}},
-    {buttonName: 'Battle', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setQuestionWindowOpen(false);}},
+    {buttonName: 'Battle', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setQuestionWindowOpen(false); setShowBattleScreen(true)}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setPlayOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
   ];
 
@@ -94,7 +109,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     <div id='Menu'>
       {
         // Normal Menu Options
-        !inCombat && !questionWindowOpen && !showMenuScreen && (
+        !showBattleScreen && !questionWindowOpen && !showMenuScreen && (
         <>
           {
             normalButtonList.map((button, index) => (
@@ -147,6 +162,19 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
                 ))
               }
             </>
+          }
+        </>
+      }
+
+      {
+        showBattleScreen &&
+        <>
+          {
+            combatButtonList.map((button, index) => (
+              <span key={index} className={`normal-button-${index} ${checkIfDisabled(index) ? 'disabled' : ''}`}>
+                <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
+              </span>
+            ))
           }
         </>
       }

@@ -4,6 +4,7 @@ import '../styles/components/game-display.scss';
 import MoodDisplay from './MoodDisplay';
 import StatusDisplay from './StatusDisplay';
 import GameCanvas from './helpers/canvas/GameCanvas';
+import BattleScreen from './additional_screens/BattleScreen';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -20,8 +21,18 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentMoodIcon,
     currentTime,
     showMenuScreen,
+    showBattleScreen,
     currentlyBusy,
-    setCurrentlyBusy
+    isLoading,
+    setCurrentlyBusy,
+    setIsLoading,
+
+    // Props for battle & race functions:
+    playerAttack,
+    enemyAttack,
+    playerSpecial,
+    enemySpecial,
+    playerRunning
   } = props;
 
   const determineTimeClass = () => {
@@ -39,12 +50,22 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
       {/* Displayed game content */}
       {
-        !showMenuScreen &&
+        !showMenuScreen && !showBattleScreen &&
         <>
           <GameCanvas currentStatus={currentStatus} setCurrentlyBusy={setCurrentlyBusy} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
           <StatusDisplay currentStatus={currentStatus} />
         </>
+      }
+
+      {/* Displayed battle content */}
+      {
+        !showMenuScreen && showBattleScreen &&
+        <BattleScreen isLoading={isLoading} setIsLoading={setIsLoading} 
+          playerAttack={playerAttack} enemyAttack={enemyAttack} 
+          playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
+          playerRunning={playerRunning} 
+        />
       }
     </div>
   );

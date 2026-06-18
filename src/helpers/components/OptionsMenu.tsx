@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { OptionsMenuProps } from '../../types';
-import { saveFunction, resetFunction, githubFunction, retroFunction, websiteFunction } from '../functions/OperationalFunctions';
+import { saveFunction, resetFunction, githubFunction, retroFunction, websiteFunction, lightOrDarkFunction } from '../functions/OperationalFunctions';
 import closedMenuIcon from '../../graphics/icons/external_ui/closed-menu.svg';
 import openedMenuIcon from '../../graphics/icons/external_ui/opened-menu.svg';
 import saveIcon from '../../graphics/icons/external_ui/save.svg';
@@ -20,6 +20,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = (props: OptionsMenuProps) => {
   const optionsArray = [
     {optionName: 'Save', function: saveFunction, icon: saveIcon},
     {optionName: 'Reset', function: resetFunction, icon: resetIcon},
+    // {optionName: 'Dark Mode', function: lightOrDarkFunction, icon: retroIcon},
     {optionName: 'Retro', function: retroFunction, icon: retroIcon},
     {optionName: 'Repo', function: githubFunction, icon: githubIcon},
     {optionName: 'Portfolio', function: websiteFunction, icon: webIcon}

@@ -34,6 +34,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
   const [optionSelected, setOptionSelected] = useState<number>(0);
   const [showMenuScreen, setShowMenuScreen] = useState<boolean>(false);
+  const [showBattleScreen, setShowBattleScreen] = useState<boolean>(false);
   const [showStatusScreen, setShowStatusScreen] = useState<boolean>(false);
   const [showShopScreen, setShowShopScreen] = useState<boolean>(false);
   const [showAchievementsScreen, setShowAchievementsScreen] = useState<boolean>(false);
@@ -44,6 +45,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [racesWon, setRacesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
   const [currentMoney, setCurrentMoney] = useState<number>(0);
   const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // State Values for Creature Information
   const [currentStatus, setCurrentStatus] = useState<string>('');
@@ -58,6 +60,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentSpeed, setCurrentSpeed] = useState<number>(1);
   const [currentEndurance, setCurrentEndurance] = useState<number>(1);
   const [currentMoodIcon, setCurrentMoodIcon] = useState<string>('Normal');
+
+  // Battle State Values
+  const [playerAttack, setPlayerAttack] = useState<boolean>(false);
+  const [enemyAttack, setEnemyAttack] = useState<boolean>(false);
+  const [playerSpecial, setPlayerSpecial] = useState<boolean>(false);
+  const [enemySpecial, setEnemySpecial] = useState<boolean>(false);
+  const [playerRunning, setPlayerRunning] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
@@ -124,13 +133,18 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Main Game Display */}
           {
             !showMenuScreen && !questionWindowOpen && hideWelcome &&
-            <GameDisplay creatureName={chocoboName} inCombat={inCombat} 
-              currentStatus={currentStatus} currentHealth={currentHealth} 
-              currentHappiness={currentHappiness} currentHunger={currentHunger} 
-              currentEnergy={currentEnergy} currentPower={currentPower} 
-              currentDefense={currentDefense} currentMoodIcon={currentMoodIcon} 
-              currentTime={currentTime} currentlyBusy={currentlyBusy}
-              showMenuScreen={showMenuScreen} setCurrentlyBusy={setCurrentlyBusy}
+            <GameDisplay creatureName={chocoboName} inCombat={inCombat}
+            currentStatus={currentStatus} currentHealth={currentHealth}
+            currentHappiness={currentHappiness} currentHunger={currentHunger}
+            currentEnergy={currentEnergy} currentPower={currentPower}
+            currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
+            currentTime={currentTime} currentlyBusy={currentlyBusy}
+            showMenuScreen={showMenuScreen} showBattleScreen={showBattleScreen}
+            isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
+            setIsLoading={setIsLoading} 
+            playerAttack={playerAttack} enemyAttack={enemyAttack} 
+            playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
+            playerRunning={playerRunning}            
             />
           }
 
@@ -196,18 +210,22 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
         <div className='bottom-panel'>
           <Menu 
-            inCombat={inCombat} currentStatus={currentStatus} 
+            inCombat={inCombat} currentStatus={currentStatus}
             setCurrentStatus={setCurrentStatus} setShowStatusScreen={setShowStatusScreen}
             setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
             setOptionSelected={setOptionSelected} setQuestionWindowOpen={setQuestionWindowOpen}
             questionWindowOpen={questionWindowOpen} setCurrentQuestionType={setCurrentQuestionType}
             setShowMenuScreen={setShowMenuScreen} showMenuScreen={showMenuScreen}
-            showStatusScreen={showStatusScreen} setInCombat={setInCombat} 
+            showStatusScreen={showStatusScreen} setInCombat={setInCombat}
             showShopScreen={showShopScreen} setShowShopScreen={setShowShopScreen}
-            showAchievementsScreen={showAchievementsScreen} 
+            showAchievementsScreen={showAchievementsScreen}
             setShowAchievementsScreen={setShowAchievementsScreen}
             showInfoScreen={showInfoScreen} setShowInfoScreen={setShowInfoScreen}
             welcomeFormHidden={hideWelcome}
+            showBattleScreen={showBattleScreen} setShowBattleScreen={setShowBattleScreen} 
+            setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 
+            setPlayerSpecial={setPlayerSpecial} setEnemySpecial={setEnemySpecial} 
+            setPlayerRunning={setPlayerRunning}            
           />
         </div>
       </div>
