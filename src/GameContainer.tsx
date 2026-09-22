@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GameContainerProps } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
@@ -13,6 +13,17 @@ import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
+import FishingMinigame from './helpers/components/FishingMinigame';
+import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
+import TestingPanel from './helpers/components/TestingPanel';
+
+const getPlayEnergyCost = () => 5 + Math.floor(Math.random() * 11);
+const getPlayHungerGain = () => 3 + Math.floor(Math.random() * 8);
+const getFishingReward = (caughtCount: number) => (
+  Array.from({ length: caughtCount }, () => 3 + Math.floor(Math.random() * 3))
+    .reduce((totalReward, reward) => totalReward + reward, 0)
+);
+const getRpsReward = () => 5 + Math.floor(Math.random() * 6);
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -46,6 +57,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentMoney, setCurrentMoney] = useState<number>(0);
   const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [fishingOpen, setFishingOpen] = useState<boolean>(false);
+  const [fishingComplete, setFishingComplete] = useState<boolean>(false);
+  const [fishingInput, setFishingInput] = useState<number>(0);
+  const [rpsOpen, setRpsOpen] = useState<boolean>(false);
+  const [rpsInput, setRpsInput] = useState<number>(0);
 
   // State Values for Creature Information
   const [currentStatus, setCurrentStatus] = useState<string>('');
@@ -60,6 +76,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentSpeed, setCurrentSpeed] = useState<number>(1);
   const [currentEndurance, setCurrentEndurance] = useState<number>(1);
   const [currentMoodIcon, setCurrentMoodIcon] = useState<string>('Normal');
+  const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
+  const previousEnergy = useRef<number>(currentEnergy);
 
   // Battle State Values
   const [playerAttack, setPlayerAttack] = useState<boolean>(false);
@@ -93,6 +111,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setCurrentQuestionType('');
     }
   }, [optionSelected]);
+
+  useEffect(() => {
+    if (previousEnergy.current > 0 && currentEnergy === 0) {
+      const happinessLoss = 3 + Math.floor(Math.random() * 8);
+      setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, 0));
+    }
+
+    previousEnergy.current = currentEnergy;
+  }, [currentEnergy]);
 
   useEffect(() => {
     if (currentStatus !== 'Egg') {
@@ -133,12 +160,14 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Main Game Display */}
           {
             !showMenuScreen && !questionWindowOpen && hideWelcome &&
+            !fishingOpen && !rpsOpen &&
             <GameDisplay creatureName={chocoboName} inCombat={inCombat}
             currentStatus={currentStatus} currentHealth={currentHealth}
             currentHappiness={currentHappiness} currentHunger={currentHunger}
             currentEnergy={currentEnergy} currentPower={currentPower}
             currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
             currentTime={currentTime} currentlyBusy={currentlyBusy}
+            actionFailureTrigger={actionFailureTrigger}
             showMenuScreen={showMenuScreen} showBattleScreen={showBattleScreen}
             isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
             setIsLoading={setIsLoading} 
@@ -146,6 +175,43 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
             playerRunning={playerRunning}            
             />
+          }
+
+          {
+            fishingOpen &&
+            <FishingMinigame inputTrigger={fishingInput}
+              onComplete={(caughtCount) => {
+                const happinessChange = (caughtCount > 0) ? caughtCount * (3 + Math.floor(Math.random() * 6)) : -(5 + Math.floor(Math.random() * 6));
+                console.log('happinessChange: ', happinessChange);
+
+                setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
+                setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
+                setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
+                setCurrentMoney(prevMoney => prevMoney + getFishingReward(caughtCount));
+                setFishingComplete(true);
+              }} />
+          }
+
+          {
+            rpsOpen &&
+            <RockPaperScissorsMinigame inputTrigger={rpsInput}
+              onComplete={(result) => {
+                const happinessChange = result === 'win'
+                  ? 10 + Math.floor(Math.random() * 6)
+                  : result === 'tie'
+                    ? 5 + Math.floor(Math.random() * 4)
+                    : 2 + Math.floor(Math.random() * 4);
+
+                setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
+                setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
+                setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
+                if (result === 'win') {
+                  setCurrentMoney(prevMoney => prevMoney + getRpsReward());
+                }
+                setRpsOpen(false);
+                setRpsInput(0);
+                setCurrentlyBusy(false);
+              }} />
           }
 
           {/* Menu Screen w/several options (status, shop, achievements, info & tips) */}
@@ -210,11 +276,20 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
         <div className='bottom-panel'>
           <Menu 
-            inCombat={inCombat} currentStatus={currentStatus}
+            inCombat={inCombat} currentStatus={currentStatus} currentEnergy={currentEnergy} currentHunger={currentHunger}
             setCurrentStatus={setCurrentStatus} setShowStatusScreen={setShowStatusScreen}
+            setActionFailureTrigger={setActionFailureTrigger}
             setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
             setOptionSelected={setOptionSelected} setQuestionWindowOpen={setQuestionWindowOpen}
             questionWindowOpen={questionWindowOpen} setCurrentQuestionType={setCurrentQuestionType}
+            setFishingOpen={setFishingOpen}
+            setFishingComplete={setFishingComplete}
+            setFishingInput={setFishingInput}
+            fishingOpen={fishingOpen}
+            fishingComplete={fishingComplete}
+            setRpsOpen={setRpsOpen}
+            setRpsInput={setRpsInput}
+            rpsOpen={rpsOpen}
             setShowMenuScreen={setShowMenuScreen} showMenuScreen={showMenuScreen}
             showStatusScreen={showStatusScreen} setInCombat={setInCombat}
             showShopScreen={showShopScreen} setShowShopScreen={setShowShopScreen}
@@ -228,6 +303,35 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setPlayerRunning={setPlayerRunning}            
           />
         </div>
+
+        <TestingPanel
+          chocoboName={chocoboName}
+          currentStatus={currentStatus}
+          currentMoney={currentMoney}
+          currentHealth={currentHealth}
+          maxHealth={maxHealth}
+          currentEnergy={currentEnergy}
+          maxEnergy={maxEnergy}
+          currentHappiness={currentHappiness}
+          currentHunger={currentHunger}
+          currentPower={currentPower}
+          currentDefense={currentDefense}
+          currentSpeed={currentSpeed}
+          currentEndurance={currentEndurance}
+          setChocoboName={setChocoboName}
+          setCurrentStatus={setCurrentStatus}
+          setCurrentMoney={setCurrentMoney}
+          setCurrentHealth={setCurrentHealth}
+          setMaxHealth={setMaxHealth}
+          setCurrentEnergy={setCurrentEnergy}
+          setMaxEnergy={setMaxEnergy}
+          setCurrentHappiness={setCurrentHappiness}
+          setCurrentHunger={setCurrentHunger}
+          setCurrentPower={setCurrentPower}
+          setCurrentDefense={setCurrentDefense}
+          setCurrentSpeed={setCurrentSpeed}
+          setCurrentEndurance={setCurrentEndurance}
+        />
       </div>
     </ImagePreloader>
   );

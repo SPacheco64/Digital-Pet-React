@@ -17,20 +17,21 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
-    setCurrentlyBusy
+    setCurrentlyBusy,
+    actionFailureTrigger
   } = props;
 
   // This function changes the Chocobo animation shown briefly
   // on user click of the game screen. Result based on Chocobo's mood.
-  const touchReaction = () => {
+  const touchReaction = (forceSadReaction = false) => {
     const previousState = attrToUse;
 
-    if (currentStatus === 'happy') {
-      setCurrentlyBusy(true);
-      setAttrToUse(mainAnimationAttrs[6]);
-    } else if (currentStatus === 'sad') {
+    if (forceSadReaction || currentStatus === 'sad') {
       setCurrentlyBusy(true);
       setAttrToUse(mainAnimationAttrs[7]);
+    } else if (currentStatus === 'happy') {
+      setCurrentlyBusy(true);
+      setAttrToUse(mainAnimationAttrs[6]);
     } else if (currentStatus === 'normal') {
       setCurrentlyBusy(true);
       setAttrToUse(mainAnimationAttrs[5]);
@@ -49,6 +50,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
 
   const [chocoSheetImg] = useImage(chocoSheet);
   const [attrToUse, setAttrToUse] = useState<AnimAttr>({x: 90, y: 110, anim: 'idle', frameRate: 5, scale: 1.6});
+  const lastActionFailureTrigger = useRef<number>(actionFailureTrigger);
 
   // All animation settings for each animation shown in this canvas
   const mainAnimationAttrs = [
@@ -147,9 +149,16 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     }
   }, [currentStatus]);
 
+  useEffect(() => {
+    if (actionFailureTrigger !== lastActionFailureTrigger.current) {
+      lastActionFailureTrigger.current = actionFailureTrigger;
+      touchReaction(true);
+    }
+  }, [actionFailureTrigger]);
+
   return (
     <>
-      <Stage id='GameStage' className='game-canvas' height={248} width={256} ref={stageRef} onClick={touchReaction}>
+      <Stage id='GameStage' className='game-canvas' height={248} width={256} ref={stageRef} onClick={() => touchReaction()}>
         <Layer id='GameLayer'>
           <Sprite
             ref={spriteRef}

@@ -1,0 +1,66 @@
+.rps-minigame {
+    width: 100%;
+    padding: 1rem;
+    color: #fff;
+    background-color: rgba(20, 52, 72, 0.9);
+    border: 0.2rem solid #a9e5ff;
+    border-radius: 0.5rem;
+    height: 100%;
+    cursor: pointer;
+    position: inherit;
+    z-index: 2;
+
+    h2 {
+        margin: 0 0 .5rem;
+        color: #ffe27a;
+        font-size: 1.25rem;
+    }
+
+    p {
+        margin: .5rem 0;
+        font-size: .75rem;
+    }
+
+    .rps-choices {
+        display: flex;
+        gap: .5rem;
+        margin: 1rem 0 .75rem;
+
+        button {
+            flex: 1;
+            min-height: 3rem;
+            padding: .5rem .25rem;
+            color: #143448;
+            background-color: #ffe27a;
+            border: .15rem solid #fff;
+            border-radius: .2rem;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+
+            img {
+                display: block;
+                width: 2rem;
+                height: 2rem;
+                margin: 0 auto;
+            }
+        }
+
+        button:hover,
+        button:focus-visible {
+            background-color: #52ba5c;
+        }
+    }
+
+    .rps-hint {
+        color: #ffe27a;
+        font-weight: bold;
+    }
+
+    .rps-result {
+        margin: 1.25rem 0;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+}

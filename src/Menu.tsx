@@ -12,6 +12,9 @@ import oneIcon from './graphics/icons/game_buttons/normal/one.svg';
 import twoIcon from './graphics/icons/game_buttons/normal/two.svg';
 import threeIcon from './graphics/icons/game_buttons/normal/three.svg';
 import fourIcon from './graphics/icons/game_buttons/normal/four.svg';
+import rockIcon from './graphics/icons/game_buttons/normal/rock.svg';
+import paperIcon from './graphics/icons/game_buttons/normal/paper.svg';
+import scissorsIcon from './graphics/icons/game_buttons/normal/scissors.svg';
 import menuIcon from './graphics/icons/game_buttons/normal/menu.svg';
 import statusIcon from './graphics/icons/game_buttons/menu/feather.svg';
 import infoIcon from './graphics/icons/game_buttons/menu/info.svg';
@@ -22,10 +25,16 @@ import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import { attackFunction, escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
 
+const MIN_PLAY_ENERGY = 3;
+const MIN_TRAINING_ENERGY = 20;
+const HIGH_HUNGER_THRESHOLD = 80;
+
 const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
+    currentEnergy,
+    currentHunger,
     currentlyBusy,
     questionWindowOpen,
     showMenuScreen,
@@ -34,10 +43,14 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     showAchievementsScreen,
     showInfoScreen,
     showBattleScreen,
+    fishingOpen,
+    fishingComplete,
+    rpsOpen,
     welcomeFormHidden,
     setCurrentlyBusy,
     setShowBattleScreen,
     setCurrentStatus,
+    setActionFailureTrigger,
     setShowMenuScreen,
     setShowStatusScreen,
     setShowShopScreen,
@@ -46,6 +59,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setOptionSelected,
     setQuestionWindowOpen,
     setCurrentQuestionType,
+    setFishingOpen,
+    setFishingComplete,
+    setFishingInput,
+    setRpsOpen,
+    setRpsInput,
 
     // Props for battle & race functions:
     setPlayerAttack,
@@ -64,12 +82,20 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
   const [playOpen, setPlayOpen] = useState<boolean>(false);
-  
+
+  const actionFailsWhileSad = () => currentStatus === 'sad' && Math.random() < 0.25;
+  const actionFailsWhileHungry = () => currentHunger >= HIGH_HUNGER_THRESHOLD && Math.random() < 0.25;
+
+  const actionFails = () => {
+    console.log('Action failed due to sadness!');
+    setActionFailureTrigger(trigger => trigger + 1);
+  };
+
   const normalButtonList = [
-    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{setCurrentStatus('eating'); setCurrentlyBusy(true);}},
-    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{setCurrentlyBusy(true); setTrainingOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('training');}},
-    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{setCurrentlyBusy(true); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
-    {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
+    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentStatus('eating'); setCurrentlyBusy(true);}},
+    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setPlayOpen(false); setTrainingOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('training');}},
+    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setTrainingOpen(false); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
+    {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
     {buttonName: 'Menu', buttonIcon: menuIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
   ];
 
@@ -89,6 +115,27 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ];
 
+  const fishingButtonList = [
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
+      setFishingOpen(false);
+      setFishingComplete(false);
+      setFishingInput(0);
+      setCurrentlyBusy(false);
+    }},
+    {buttonName: 'Fish', buttonIcon: twoIcon, buttonFunction: ()=>{setFishingInput(input => input + 1);}},
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+  ];
+
+  const rpsButtonList = [
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+    {buttonName: 'Rock', buttonIcon: rockIcon, buttonFunction: ()=>{setRpsInput(1);}},
+    {buttonName: 'Paper', buttonIcon: paperIcon, buttonFunction: ()=>{setRpsInput(2);}},
+    {buttonName: 'Scissors', buttonIcon: scissorsIcon, buttonFunction: ()=>{setRpsInput(3);}},
+    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+  ];
+
   const trainingQuestionButtonList = [
     {buttonName: 'Power', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false); setTrainingOpen(false);}},
     {buttonName: 'Defense', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false); setTrainingOpen(false);}},
@@ -98,10 +145,10 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   ];
 
   const playQuestionButtonList = [
-    {buttonName: 'Rock, Paper, Scissors', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setQuestionWindowOpen(false);}},
-    {buttonName: 'Fishing', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false);}},
-    {buttonName: 'Race', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setQuestionWindowOpen(false);}},
-    {buttonName: 'Battle', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setQuestionWindowOpen(false); setShowBattleScreen(true)}},
+    {buttonName: 'Rock, Paper, Scissors', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setPlayOpen(false); setRpsInput(0); setRpsOpen(true); setQuestionWindowOpen(false);}},
+    {buttonName: 'Fishing', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setPlayOpen(false); setFishingComplete(false); setFishingInput(0); setFishingOpen(true); setQuestionWindowOpen(false);}},
+    {buttonName: 'Race', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setPlayOpen(false); setQuestionWindowOpen(false);}},
+    {buttonName: 'Battle', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setPlayOpen(false); setQuestionWindowOpen(false); setShowBattleScreen(true)}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setPlayOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
   ];
 
@@ -109,11 +156,16 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     <div id='Menu'>
       {
         // Normal Menu Options
-        !showBattleScreen && !questionWindowOpen && !showMenuScreen && (
+        !showBattleScreen && !questionWindowOpen && !showMenuScreen && !fishingOpen && !rpsOpen && (
         <>
           {
             normalButtonList.map((button, index) => (
-              <span key={index} className={`normal-button-${index} ${((currentlyBusy && index < 4) || !welcomeFormHidden) ? 'disabled' : ''}`}>
+              <span key={index} className={`normal-button-${index} ${(
+                (currentlyBusy && index < 4) ||
+                !welcomeFormHidden ||
+                (index === 1 && currentEnergy < MIN_TRAINING_ENERGY) ||
+                (index === 2 && currentEnergy < MIN_PLAY_ENERGY)
+              ) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
             ))
@@ -173,6 +225,32 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
             combatButtonList.map((button, index) => (
               <span key={index} className={`normal-button-${index} ${checkIfDisabled(index) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
+              </span>
+            ))
+          }
+        </>
+      }
+
+      {
+        fishingOpen &&
+        <>
+          {
+            fishingButtonList.map((button, index) => (
+                <span key={index} className={`normal-button-${index} ${(!fishingComplete && index === 2) || (fishingComplete && index === 1) ? '' : 'disabled'}`}>
+                <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName || 'Inactive'} />
+              </span>
+            ))
+          }
+        </>
+      }
+
+      {
+        rpsOpen &&
+        <>
+          {
+            rpsButtonList.map((button, index) => (
+              <span key={index} className={`normal-button-${index} ${index === 0 || index === 4 ? 'disabled' : ''}`}>
+                <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName || 'Inactive'} />
               </span>
             ))
           }

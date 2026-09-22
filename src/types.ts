@@ -14,6 +14,7 @@ export interface GameDisplayProps {
     currentDefense: number;
     currentMoodIcon: string;
     currentTime: string;
+    actionFailureTrigger: number;
     currentlyBusy: boolean;
     showMenuScreen: boolean;
     showBattleScreen: boolean;
@@ -38,6 +39,8 @@ export interface CreatureProps {
 export interface MenuProps {
     inCombat: boolean;
     currentStatus: string;
+    currentEnergy: number;
+    currentHunger: number;
     currentlyBusy: boolean;
     questionWindowOpen: boolean;
     showMenuScreen: boolean;
@@ -46,6 +49,9 @@ export interface MenuProps {
     showAchievementsScreen: boolean;
     showInfoScreen: boolean;
     showBattleScreen: boolean;
+    fishingOpen: boolean;
+    fishingComplete: boolean;
+    rpsOpen: boolean;
     welcomeFormHidden: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,9 +61,15 @@ export interface MenuProps {
     setShowInfoScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
+    setActionFailureTrigger: React.Dispatch<React.SetStateAction<number>>;
     setOptionSelected: React.Dispatch<React.SetStateAction<number>>;
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>;
+    setFishingOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setFishingComplete: React.Dispatch<React.SetStateAction<boolean>>;
+    setFishingInput: React.Dispatch<React.SetStateAction<number>>;
+    setRpsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setRpsInput: React.Dispatch<React.SetStateAction<number>>;
     setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerAttack: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
@@ -134,6 +146,7 @@ export interface ExternalUIProps {
 export interface GameCanvasProps {
     currentStatus: string;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
+    actionFailureTrigger: number;
 }
 
 export interface MenuCanvasProps {
