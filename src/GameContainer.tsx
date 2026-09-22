@@ -202,7 +202,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               }
               {
                 currentQuestionType === 'play' &&
-                <QuestionWindow dialogue='What To Play?' responsesArray={['R.P.S', 'Guessing Game', 'Chocobo Race', 'Battle']} />
+                <QuestionWindow dialogue='What To Play?' responsesArray={['R.P.S', 'Fishing', 'Chocobo Race', 'Battle']} />
               }
             </>
           }
