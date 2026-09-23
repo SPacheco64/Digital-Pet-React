@@ -220,7 +220,9 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
             <>
               {
                 playQuestionButtonList.map((button, index) => (
-                  <span key={index} className={`normal-button-${index}`}>
+                  <span key={index} className={`normal-button-${index} ${(
+                    (index === 2 || index === 3) && currentEnergy < MIN_TRAINING_ENERGY
+                  ) ? 'disabled' : ''}`}>
                     <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
                   </span>
                 ))
