@@ -4,7 +4,7 @@
         background-image: none;
 
         #GameContainer {
-            background-image: url('/src/graphics/backgrounds/tracks-bg.png');
+            background-image: url('../src/graphics/backgrounds/tracks-bg.png');
 
             &.orange { background-color: #fa953c; }
             &.red { background-color: #fa3c3c; }

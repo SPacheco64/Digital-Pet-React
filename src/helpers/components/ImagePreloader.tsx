@@ -1,29 +1,29 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import '../../../styles/components/loading-screen.scss';
 
-// Import for images to preload
-import statusBg from '../../graphics/backgrounds/status-window-bg.png';
-import shellTexture from '../../graphics/shell_textures/shell-texture.png'
-import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png'
-import dayBg from '../../graphics/backgrounds/pet-bg-day.png';
-import eveningBg from '../../graphics/backgrounds/pet-bg-evening.png';
-import nightBg from '../../graphics/backgrounds/pet-bg-night.png';
-
 interface ImagePreloaderProps {
   children: ReactNode;
 }
 
-// Used to determine the bgImg that needs to actually be preloaded
-// (Avoids preloading unnecessary images)
+import statusBg from '../../graphics/backgrounds/status-window-bg.png';
+import shellTexture from '../../graphics/shell_textures/shell-texture.png';
+import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
+import dayBg from '../../graphics/backgrounds/pet-bg-day.png';
+import eveningBg from '../../graphics/backgrounds/pet-bg-evening.png';
+import nightBg from '../../graphics/backgrounds/pet-bg-night.png';
+
+// Only preloads the background image that corresponds with the current time of day.
 const determineBg = (hour: number) => {
   if (hour >= 6 && hour < 18) {
     return dayBg;
-  } else if (hour >= 18 && hour < 21) {
-    return eveningBg;
-  } else {
-    return nightBg;
   }
-}
+
+  if (hour >= 18 && hour < 21) {
+    return eveningBg;
+  }
+
+  return nightBg;
+};
 
 // Preloads an image and returns a Promise that completes when loading finishes.
 const loadImage = (imagePath: string) => new Promise<void>((resolve, reject) => {
@@ -45,24 +45,13 @@ const MINIMUM_LOADING_TIME = 2000;
 const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   const [imagesLoading, setImagesLoading] = useState<boolean>(true);
 
-  const now = new Date();
-  const hour = now.getHours();
-  let bgToPreload;
-
-  // Only preload the necessary day/evening/night background based on the current time.
-  // This helps avoid preloading unnecessary images.
-  bgToPreload = determineBg(hour);
+  const bgToPreload = determineBg(new Date().getHours());
 
   useEffect(() => {
     let isMounted = true;
     let finishTimeout: ReturnType<typeof setTimeout> | undefined;
     const loadingStartedAt = Date.now();
-    const imagePaths = [
-      shellTexture,
-      statusBg,
-      chocoSheet,
-      bgToPreload,
-    ];
+    const imagePaths = [shellTexture, chocoSheet, bgToPreload, statusBg];
 
     const finishLoading = () => {
       const remainingTime = Math.max(

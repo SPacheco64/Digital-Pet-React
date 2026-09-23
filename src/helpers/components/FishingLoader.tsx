@@ -28,7 +28,7 @@ const FishingLoader: React.FC<FishingLoaderProps> = ({ children }) => {
   }, []);
 
   return isLoading ? (
-    <div className='loading-screen'>
+    <div className='minigame-loading-screen'>
       <div className='loading-text'>Loading</div>
       <span className='loader'></span>
     </div>

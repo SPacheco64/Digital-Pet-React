@@ -167,9 +167,9 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, 
   }, [handleInput, inputTrigger]);
 
   return (
-    <div id='FishingScreen' className='game-screen additional-screen'
-      style={{ backgroundImage: `url(${currentBackground})` }}>
-      <FishingLoader>
+    <FishingLoader>
+      <div id='FishingScreen' className='game-screen additional-screen'
+        style={{ backgroundImage: `url(${currentBackground})` }}>
         <section
         className='fishing-minigame game-screen additional-screen'
         aria-live='polite'
@@ -208,8 +208,8 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, 
           </>
         )}
         </section>
-      </FishingLoader>
-    </div>
+      </div>
+    </FishingLoader>
   );
 };
 
