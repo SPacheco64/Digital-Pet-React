@@ -76,6 +76,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentSpeed, setCurrentSpeed] = useState<number>(1);
   const [currentEndurance, setCurrentEndurance] = useState<number>(1);
   const [currentMoodIcon, setCurrentMoodIcon] = useState<string>('Normal');
+  const [previewAnimation, setPreviewAnimation] = useState<string>('auto');
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
 
@@ -168,6 +169,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
             currentTime={currentTime} currentlyBusy={currentlyBusy}
             actionFailureTrigger={actionFailureTrigger}
+            previewAnimation={previewAnimation}
             showMenuScreen={showMenuScreen} showBattleScreen={showBattleScreen}
             isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
             setIsLoading={setIsLoading} 
@@ -189,7 +191,14 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
                 setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
                 setCurrentMoney(prevMoney => prevMoney + getFishingReward(caughtCount));
                 setFishingComplete(true);
-              }} />
+              }}
+              onClose={() => {
+                setFishingOpen(false);
+                setFishingComplete(false);
+                setFishingInput(0);
+                setCurrentlyBusy(false);
+              }}
+            />
           }
 
           {
@@ -319,6 +328,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           currentDefense={currentDefense}
           currentSpeed={currentSpeed}
           currentEndurance={currentEndurance}
+          previewAnimation={previewAnimation}
           setChocoboName={setChocoboName}
           setCurrentStatus={setCurrentStatus}
           setCurrentMoney={setCurrentMoney}
@@ -333,6 +343,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           setCurrentDefense={setCurrentDefense}
           setCurrentSpeed={setCurrentSpeed}
           setCurrentEndurance={setCurrentEndurance}
+          setPreviewAnimation={setPreviewAnimation}
         />
       </div>
     </ImagePreloader>

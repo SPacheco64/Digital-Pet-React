@@ -24,6 +24,7 @@ export interface GameDisplayProps {
     playerSpecial: boolean; 
     enemySpecial: boolean; 
     playerRunning: boolean; 
+    previewAnimation: string;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -147,6 +148,7 @@ export interface ExternalUIProps {
 
 export interface GameCanvasProps {
     currentStatus: string;
+    previewAnimation: string;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     actionFailureTrigger: number;
 }

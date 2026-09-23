@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import '../../../styles/components/fishing-minigame.scss';
 import fishIcon from '../../graphics/icons/game_buttons/normal/fish.svg';
+import fishingBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg.avif';
+import fishingSuccessBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg-success.avif';
+import fishingFailBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg-fail.avif';
 
 interface FishingMinigameProps {
   onComplete: (caughtCount: number) => void;
+  onClose: () => void;
   inputTrigger: number;
 }
 
@@ -12,7 +16,7 @@ const MIN_BOBBER_SPEED = 0.1;
 const MAX_BOBBER_SPEED = 0.15;
 const TOTAL_CATCHES = 3;
 
-const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, inputTrigger }) => {
+const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger }) => {
   const [markerPosition, setMarkerPosition] = useState<number>(0);
   const [gameState, setGameState] = useState<'fishing' | 'caught' | 'missed' | 'complete'>('fishing');
   const [catchCount, setCatchCount] = useState<number>(0);
@@ -24,7 +28,36 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, inputTrig
   const animationFrame = useRef<number | null>(null);
   const lastInputTrigger = useRef<number>(inputTrigger);
 
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  const currentBackground = (() => {
+    if (gameState === 'fishing') {
+      return fishingBg;
+    }
+
+    if (gameState === 'complete') {
+      return caughtCount > 0 ? fishingSuccessBg : fishingFailBg;
+    }
+
+    if (gameState === 'caught') {
+      return fishingSuccessBg;
+    }
+
+    if (gameState === 'missed') {
+      return fishingFailBg;
+    }
+
+    return fishingBg;
+  })();
+
   const handleInput = useCallback(() => {
+    if (gameState === 'complete') {
+      handleClose();
+      return;
+    }
+
     if (gameState === 'fishing') {
       const markerCenter = markerPosition + MARKER_WIDTH / 2;
       const caught = markerCenter >= 39 && markerCenter <= 61;
@@ -46,7 +79,7 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, inputTrig
         setGameState('fishing');
       }
     }
-  }, [catchCount, caughtCount, gameState, markerPosition, onComplete]);
+  }, [catchCount, caughtCount, gameState, handleClose, markerPosition, onComplete]);
 
   useEffect(() => {
     let lastFrameTime = performance.now();
@@ -87,12 +120,18 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, inputTrig
       }
 
       event.preventDefault();
+
+      if (gameState === 'complete') {
+        handleClose();
+        return;
+      }
+
       handleInput();
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleInput]);
+  }, [gameState, handleClose, handleInput]);
 
   useEffect(() => {
     if (inputTrigger !== lastInputTrigger.current) {
@@ -102,30 +141,33 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, inputTrig
   }, [handleInput, inputTrigger]);
 
   return (
-    <section className='fishing-minigame game-screen additional-screen' aria-live='polite' onClick={handleInput}>
-      <h2>Fishing</h2>
+    <section
+      className='fishing-minigame game-screen additional-screen'
+      aria-live='polite'
+      onClick={handleInput}
+      style={{ backgroundImage: `url(${currentBackground})` }}
+    >
       {gameState === 'fishing' ? (
         <>
-          <p>Catch {catchCount + 1} of {TOTAL_CATCHES}. Click or press SPACE when the bobber reaches the green water.</p>
           <div className='fishing-meter' aria-label='Fishing timing meter'>
             <span className='fishing-target'>
               <img src={fishIcon} alt='Fish target' />
             </span>
             <span className='fishing-marker' style={{ left: `${markerPosition}%` }} />
           </div>
-          <p className='fishing-hint'>Click or press SPACE to reel in</p>
+          <p className='fishing-hint'>Press BUTTON or SPACE to reel in!</p>
         </>
       ) : gameState === 'complete' ? (
         <>
           <p className='fishing-result'>You caught {caughtCount} of {TOTAL_CATCHES} fish!</p>
-          <p className='fishing-hint'>Use the back arrow to return</p>
+          <p className='fishing-hint'>Press BACK BUTTON or SPACE to return!</p>
         </>
       ) : (
         <>
           <p className='fishing-result'>
             {gameState === 'caught' ? 'You caught a fish!' : 'The fish got away!'}
           </p>
-          <p className='fishing-hint'>Click or press SPACE to return</p>
+          <p className='fishing-hint'>Press BUTTON or SPACE to continue!</p>
         </>
       )}
     </section>

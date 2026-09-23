@@ -16,6 +16,7 @@ interface TestingPanelProps {
   currentDefense: number;
   currentSpeed: number;
   currentEndurance: number;
+  previewAnimation: string;
   setChocoboName: React.Dispatch<React.SetStateAction<string>>;
   setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
   setCurrentMoney: React.Dispatch<React.SetStateAction<number>>;
@@ -30,6 +31,7 @@ interface TestingPanelProps {
   setCurrentDefense: React.Dispatch<React.SetStateAction<number>>;
   setCurrentSpeed: React.Dispatch<React.SetStateAction<number>>;
   setCurrentEndurance: React.Dispatch<React.SetStateAction<number>>;
+  setPreviewAnimation: React.Dispatch<React.SetStateAction<string>>;
 }
 
 type NumberSetter = React.Dispatch<React.SetStateAction<number>>;
@@ -53,6 +55,7 @@ const TestingPanel: React.FC<TestingPanelProps> = ({
   currentDefense,
   currentSpeed,
   currentEndurance,
+  previewAnimation,
   setChocoboName,
   setCurrentStatus,
   setCurrentMoney,
@@ -67,6 +70,7 @@ const TestingPanel: React.FC<TestingPanelProps> = ({
   setCurrentDefense,
   setCurrentSpeed,
   setCurrentEndurance,
+  setPreviewAnimation,
 }) => (
   <aside className='testing-panel' aria-label='Chocobo testing controls'>
     <h2>Test Controls</h2>
@@ -89,6 +93,21 @@ const TestingPanel: React.FC<TestingPanelProps> = ({
           <option value='Day'>Day</option>
           <option value='Evening'>Evening</option>
           <option value='Night'>Night</option>
+        </select>
+      </label>
+      <label>
+        Preview animation
+        <select value={previewAnimation} onChange={(event) => setPreviewAnimation(event.target.value)}>
+          <option value='auto'>Auto</option>
+          <option value='idle'>Idle</option>
+          <option value='eating'>Eating</option>
+          <option value='training'>Training</option>
+          <option value='sleeping'>Sleeping</option>
+          <option value='eggbounce'>Egg</option>
+          <option value='think'>Think</option>
+          <option value='happy'>Happy</option>
+          <option value='upset'>Upset</option>
+          <option value='fishing'>Fishing</option>
         </select>
       </label>
       <label>

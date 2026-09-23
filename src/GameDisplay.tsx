@@ -25,6 +25,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     showBattleScreen,
     currentlyBusy,
     isLoading,
+    previewAnimation,
     setCurrentlyBusy,
     setIsLoading,
 
@@ -53,7 +54,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {
         !showMenuScreen && !showBattleScreen &&
         <>
-          <GameCanvas currentStatus={currentStatus} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
+          <GameCanvas currentStatus={currentStatus} previewAnimation={previewAnimation} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
           <StatusDisplay currentStatus={currentStatus} />
         </>
