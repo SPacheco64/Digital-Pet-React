@@ -1,9 +1,22 @@
+import { ChocoboSaveData } from '../../types';
+
 // External UI Functions
-export const saveFunction = () => {
-    console.log('DATA SAVED! WOOHOO!');
+export const saveFunction = (saveData: ChocoboSaveData) => {
+    console.log('Saving data: ', saveData);
+    localStorage.setItem('digitalPetSave', JSON.stringify(saveData));
 };
 export const resetFunction = () => {
-    console.log('GAME RESET! BYE BYE');
+    const confirmed = window.confirm(
+        'Are you sure you want to reset the game? All existing game data will be deleted.'
+    );
+
+    if (!confirmed) {
+        return false;
+    }
+
+    console.log('resetting data...');
+    localStorage.removeItem('digitalPetSave');
+    return true;
 };
 export const lightOrDarkFunction = () => {
     document.getElementById('DigipetRoot')?.classList.toggle('dark-mode');

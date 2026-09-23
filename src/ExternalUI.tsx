@@ -10,14 +10,19 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
   const {
         setCurrentShellColor,
         currentTime,
-        setCurrentTime
+        setCurrentTime,
+        onSave,
+        onReset,
+        autosaveEnabled,
+        setAutosaveEnabled,
   } = props;
 
   return (
     <div id='ExternalUI'>
       <div className='ui-container'>
         <ColorPicker setCurrentShellColor={setCurrentShellColor} />
-        <OptionsMenu />
+        <OptionsMenu onSave={onSave} onReset={onReset}
+          autosaveEnabled={autosaveEnabled} setAutosaveEnabled={setAutosaveEnabled} />
         <TimeOfDay currentTime={currentTime} setCurrentTime={setCurrentTime} />
       </div>
     </div>

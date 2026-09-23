@@ -2,6 +2,27 @@ export interface GameContainerProps {
     
 }
 
+export interface ChocoboSaveData {
+    playerName: string;
+    chocoboName: string;
+    currentShellColor: string;
+    currentHealth: number;
+    maxHealth: number;
+    currentEnergy: number;
+    maxEnergy: number;
+    currentHappiness: number;
+    currentHunger: number;
+    currentPower: number;
+    currentDefense: number;
+    currentSpeed: number;
+    currentEndurance: number;
+    currentMoodIcon: string;
+    currentMoney: number;
+    alreadyPurchased: number[];
+    battlesWon: number;
+    racesWon: number;
+}
+
 export interface GameDisplayProps {
     inCombat: boolean;
     creatureName: string;
@@ -136,7 +157,10 @@ export interface StatusDisplayProps {
 }
 
 export interface OptionsMenuProps {
-
+    onSave: () => void;
+    onReset: () => void;
+    autosaveEnabled: boolean;
+    setAutosaveEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ColorPickerProps {
@@ -152,6 +176,10 @@ export interface ExternalUIProps {
     setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
     currentTime: string;
     setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
+    onSave: () => void;
+    onReset: () => void;
+    autosaveEnabled: boolean;
+    setAutosaveEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface GameCanvasProps {

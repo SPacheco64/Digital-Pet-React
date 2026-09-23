@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GameContainerProps } from './types';
+import { ChocoboSaveData, GameContainerProps } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
 import ImagePreloader from './helpers/components/ImagePreloader';
 import ExternalUI from './ExternalUI';
-import { eatFunction, hatchingEvent, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
+import { eatFunction, hatchingEvent, resetFunction, saveFunction, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
 import QuestionWindow from './helpers/components/QuestionWindow';
 import MenuScreen from './additional_screens/MenuScreen';
 import StatusScreen from './additional_screens/StatusScreen';
@@ -41,6 +41,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   // State variables for game status
   const [dataExists, setDataExists] = useState<boolean>(false);
   const [hideWelcome, setHideWelcome] = useState<boolean>(false);
+  const [autosaveEnabled, setAutosaveEnabled] = useState<boolean>(() => (
+    localStorage.getItem('digitalPetAutosaveEnabled') !== 'false'
+  ));
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
@@ -84,6 +87,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [previewAnimation, setPreviewAnimation] = useState<string>('auto');
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
+  const hasHydratedSave = useRef<boolean>(false);
 
   // Battle State Values
   const [playerAttack, setPlayerAttack] = useState<boolean>(false);
@@ -91,6 +95,131 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [playerSpecial, setPlayerSpecial] = useState<boolean>(false);
   const [enemySpecial, setEnemySpecial] = useState<boolean>(false);
   const [playerRunning, setPlayerRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem('digitalPetSave');
+
+    if (!savedData) {
+      hasHydratedSave.current = true;
+      return;
+    }
+
+    try {
+      const data = JSON.parse(savedData) as ChocoboSaveData;
+
+      if (!data.playerName || !data.chocoboName) {
+        throw new Error('Saved chocobo data is missing required names.');
+      }
+
+      setPlayerName(data.playerName);
+      setChocoboName(data.chocoboName);
+      setCurrentShellColor(data.currentShellColor);
+      setCurrentHealth(data.currentHealth);
+      setMaxHealth(data.maxHealth);
+      setCurrentEnergy(data.currentEnergy);
+      setMaxEnergy(data.maxEnergy);
+      setCurrentHappiness(data.currentHappiness);
+      setCurrentHunger(data.currentHunger);
+      setCurrentPower(data.currentPower);
+      setCurrentDefense(data.currentDefense);
+      setCurrentSpeed(data.currentSpeed);
+      setCurrentEndurance(data.currentEndurance);
+      setCurrentMoodIcon(data.currentMoodIcon);
+      setCurrentMoney(data.currentMoney);
+      setAlreadyPurchased(data.alreadyPurchased);
+      setBattlesWon(data.battlesWon);
+      setRacesWon(data.racesWon);
+      setDataExists(true);
+      setHideWelcome(true);
+    } catch (error) {
+      console.error('Unable to load saved chocobo data:', error);
+      localStorage.removeItem('digitalPetSave');
+    } finally {
+      hasHydratedSave.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('digitalPetAutosaveEnabled', String(autosaveEnabled));
+  }, [autosaveEnabled]);
+
+  useEffect(() => {
+    if (!autosaveEnabled || !hasHydratedSave.current || !hideWelcome || !playerName || !chocoboName) {
+      return;
+    }
+
+    saveFunction({
+      playerName,
+      chocoboName,
+      currentShellColor,
+      currentHealth,
+      maxHealth,
+      currentEnergy,
+      maxEnergy,
+      currentHappiness,
+      currentHunger,
+      currentPower,
+      currentDefense,
+      currentSpeed,
+      currentEndurance,
+      currentMoodIcon,
+      currentMoney,
+      alreadyPurchased,
+      battlesWon,
+      racesWon,
+    });
+  }, [
+    alreadyPurchased,
+    battlesWon,
+    chocoboName,
+    currentDefense,
+    currentEndurance,
+    currentEnergy,
+    currentHappiness,
+    currentHealth,
+    currentMoodIcon,
+    currentMoney,
+    currentPower,
+    currentShellColor,
+    currentSpeed,
+    currentStatus,
+    currentHunger,
+    hideWelcome,
+    maxEnergy,
+    maxHealth,
+    playerName,
+    racesWon,
+    autosaveEnabled,
+  ]);
+
+  const handleSave = () => {
+    saveFunction({
+      playerName,
+      chocoboName,
+      currentShellColor,
+      currentHealth,
+      maxHealth,
+      currentEnergy,
+      maxEnergy,
+      currentHappiness,
+      currentHunger,
+      currentPower,
+      currentDefense,
+      currentSpeed,
+      currentEndurance,
+      currentMoodIcon,
+      currentMoney,
+      alreadyPurchased,
+      battlesWon,
+      racesWon,
+    });
+  };
+
+  const handleReset = () => {
+    if (resetFunction()) {
+      window.location.reload();
+    }
+  };
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
@@ -156,7 +285,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
+      <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime}
+        onSave={handleSave} onReset={handleReset} autosaveEnabled={autosaveEnabled}
+        setAutosaveEnabled={setAutosaveEnabled} />
 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
