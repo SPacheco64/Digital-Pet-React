@@ -98,11 +98,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       hatchingEvent(currentStatus, setCurrentStatus, setCurrentlyBusy);
     }
     if (currentStatus === 'eating') {
-      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentlyBusy);
+      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentHealth, setCurrentlyBusy);
     } else if (currentStatus === 'training') {
       // Training functionality currently handled externally
     } else if (currentStatus === 'sleeping') {
-      sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHappiness, setCurrentlyBusy);
+      sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHealth, setCurrentHappiness, setCurrentlyBusy);
     }
   }, [currentStatus]);
 
@@ -118,12 +118,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [optionSelected]);
 
-  // When the chocobo's energy drops to zero, its happiness decreases randomly.
-  // Does not apply when energy value was already 0.
+  // When the chocobo's energy drops to zero, its happiness and health 
+  // decreases randomly. Does not apply when energy value was already 0.
+  // Both values are reduced by a random amount between 10 and 20.
   useEffect(() => {
     if (previousEnergy.current > 0 && currentEnergy === 0) {
       const happinessLoss = 10 + Math.floor(Math.random() * 11);
+      const healthLoss = 10 + Math.floor(Math.random() * 11);
       setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, 0));
+      setCurrentHealth(prevHealth => Math.max(prevHealth - healthLoss, 0)); 
     }
     previousEnergy.current = currentEnergy;
   }, [currentEnergy]);
@@ -298,7 +301,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         {/* Bottom panel containing the main menu and game controls */}
         <div className='bottom-panel'>
           <Menu 
-            inCombat={inCombat} currentStatus={currentStatus} currentEnergy={currentEnergy} currentHunger={currentHunger}
+            inCombat={inCombat} currentStatus={currentStatus} currentHealth={currentHealth} maxHealth={maxHealth}
+            currentEnergy={currentEnergy} maxEnergy={maxEnergy} currentHunger={currentHunger}
             setCurrentStatus={setCurrentStatus} setShowStatusScreen={setShowStatusScreen}
             setActionFailureTrigger={setActionFailureTrigger}
             setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}

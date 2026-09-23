@@ -38,16 +38,19 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-    const randomHappinessGain = 5 + Math.floor(Math.random() * 5);
-    const randomEnergyGain = 5 + Math.floor(Math.random() * 10);
+    const randomHappinessGain = 5 + Math.floor(Math.random() * 6);
+    const randomEnergyGain = 5 + Math.floor(Math.random() * 11);
+    const randomHealthGain = 10 + Math.floor(Math.random() * 6);
     
     const eatingTimer = setTimeout(() => {
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.max(prevHunger - 20, 0)); // Decrease hunger by 20, but not below 0
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100)); // Increase happiness by 10, but not above 100
         setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, 100));
+        setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, 100));
         setCurrentlyBusy(false);
     }, 5000);
 
@@ -107,18 +110,21 @@ export const sleepingFunction = (
     setCurrentStatus: React.Dispatch<React.SetStateAction<string>>, 
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>, 
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     ) => {
     const randomHungerGain = 5 + Math.floor(Math.random() * 15);
-    const randomEnergyGain = 20 + Math.floor(Math.random() * 10);
-    const randomHappinessGain = 5 + Math.floor(Math.random() * 10);
+    const randomEnergyGain = 30 + Math.floor(Math.random() * 11);
+    const randomHappinessGain = 5 + Math.floor(Math.random() * 11);
+    const randomHealthGain = 25 + Math.floor(Math.random() * 11);
 
     const sleepingTimer = setTimeout(() => {
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
         setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, 100));
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100));
+        setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, 100));
         setCurrentlyBusy(false);
     }, 60000);
 

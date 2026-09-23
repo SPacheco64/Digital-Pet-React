@@ -34,7 +34,10 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
+    currentHealth,
+    maxHealth,
     currentEnergy,
+    maxEnergy,
     currentHunger,
     currentlyBusy,
     questionWindowOpen,
@@ -92,6 +95,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
   const actionFailsWhileSad = () => currentStatus === 'sad' && Math.random() < 0.25;
   const actionFailsWhileHungry = () => currentHunger >= HIGH_HUNGER_THRESHOLD && Math.random() < 0.25;
+  const sleepButtonDisabled = () => (currentEnergy === maxEnergy && currentHealth === maxHealth);
 
   const actionFails = () => {
     console.log('Action failed due to sadness!');
@@ -171,7 +175,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
                 (currentlyBusy && index < 4) ||
                 !welcomeFormHidden ||
                 (index === 1 && currentEnergy < MIN_TRAINING_ENERGY) ||
-                (index === 2 && currentEnergy < MIN_PLAY_ENERGY)
+                (index === 2 && currentEnergy < MIN_PLAY_ENERGY) ||
+                (index === 3 && sleepButtonDisabled())
               ) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>

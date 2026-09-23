@@ -40,7 +40,10 @@ export interface CreatureProps {
 export interface MenuProps {
     inCombat: boolean;
     currentStatus: string;
+    currentHealth: number;
+    maxHealth: number;
     currentEnergy: number;
+    maxEnergy: number;
     currentHunger: number;
     currentlyBusy: boolean;
     questionWindowOpen: boolean;
