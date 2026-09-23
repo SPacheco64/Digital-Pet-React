@@ -306,7 +306,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             !fishingOpen && !rpsOpen &&
             <GameDisplay creatureName={chocoboName} inCombat={inCombat}
             currentStatus={currentStatus} currentHealth={currentHealth}
-            currentHappiness={currentHappiness} currentHunger={currentHunger}
+            maxHealth={maxHealth} currentHappiness={currentHappiness} 
+            currentHunger={currentHunger}
             currentEnergy={currentEnergy} currentPower={currentPower}
             currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
             currentTime={currentTime} currentlyBusy={currentlyBusy}

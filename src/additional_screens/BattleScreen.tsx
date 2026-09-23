@@ -7,15 +7,10 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
   // Destructure props for ease of access & documentation
   const {
     // creatureName,
-    // currentStatus,
-    // currentHealth,
-    // currentHappiness,
-    // currentHunger,
-    // currentEnergy,
-    // currentPower,
-    // currentDefense,
-    // currentSpeed,
-    // currentEndurance,
+    currentHealth,
+    maxHealth,
+    currentPower,
+    currentDefense,
     isLoading,
     playerAttack,
     enemyAttack,
@@ -27,8 +22,8 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
 
     // const isHappy = (currentHappiness >= 70);
     // const isSad = (currentHappiness <=30);
-    // const powerCount = '★'.repeat(currentPower);
-    // const defenseCount = '★'.repeat(currentDefense);
+    const powerCount = '★'.repeat(currentPower);
+    const defenseCount = '★'.repeat(currentDefense);
     // const speedCount = '★'.repeat(currentSpeed);
     // const enduranceCount = '★'.repeat(currentEndurance);
 
@@ -52,15 +47,15 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
                 <div className='choco-info'>
                     <div className='health'>
                         HP:<br/>
-                        100/100
+                        {currentHealth}/{maxHealth}
                     </div>
                     <div className='power'>
                         POW:<br/>
-                        ★★★★★★★★★★
+                        {powerCount}
                     </div>
                     <div className='defense'>
                         DEF:<br/>
-                        ★★★★★★★★★★
+                        {defenseCount}
                     </div>
                 </div>
             </div>

@@ -13,6 +13,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     creatureName,
     currentStatus,
     currentHealth,
+    maxHealth,
     currentHappiness,
     currentHunger,
     currentEnergy,
@@ -66,7 +67,9 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
         <BattleScreen isLoading={isLoading} setIsLoading={setIsLoading} 
           playerAttack={playerAttack} enemyAttack={enemyAttack} 
           playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
-          playerRunning={playerRunning} 
+          playerRunning={playerRunning} currentHealth={currentHealth}
+          maxHealth={maxHealth} currentPower={currentPower} 
+          currentDefense={currentDefense}
         />
       }
     </div>

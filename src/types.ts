@@ -28,6 +28,7 @@ export interface GameDisplayProps {
     creatureName: string;
     currentStatus: string;
     currentHealth: number;
+    maxHealth: number;
     currentHappiness: number;
     currentHunger: number;
     currentEnergy: number;
@@ -212,5 +213,9 @@ export interface BattleScreenProps {
     playerSpecial: boolean; 
     enemySpecial: boolean; 
     playerRunning: boolean; 
+    currentHealth: number;
+    maxHealth: number;
+    currentPower: number;
+    currentDefense: number;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
