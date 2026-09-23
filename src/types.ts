@@ -28,6 +28,7 @@ export interface GameDisplayProps {
     creatureName: string;
     currentStatus: string;
     currentHealth: number;
+    battlesWon: number;
     maxHealth: number;
     currentHappiness: number;
     currentHunger: number;
@@ -39,7 +40,9 @@ export interface GameDisplayProps {
     actionFailureTrigger: number;
     currentlyBusy: boolean;
     showMenuScreen: boolean;
+    showBattleSelection: boolean;
     showBattleScreen: boolean;
+    selectedEnemyLevel: number;
     isLoading: boolean;
     playerAttack: boolean;
     enemyAttack: boolean; 
@@ -49,6 +52,9 @@ export interface GameDisplayProps {
     previewAnimation: string;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedEnemyLevel: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface CreatureProps {
@@ -74,6 +80,7 @@ export interface MenuProps {
     showShopScreen: boolean;
     showAchievementsScreen: boolean;
     showInfoScreen: boolean;
+    showBattleSelection: boolean;
     showBattleScreen: boolean;
     playerAttack: boolean;
     enemyAttack: boolean;
@@ -101,6 +108,7 @@ export interface MenuProps {
     setFishingInput: React.Dispatch<React.SetStateAction<number>>;
     setRpsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setRpsInput: React.Dispatch<React.SetStateAction<number>>;
+    setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
     setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerAttack: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
@@ -207,8 +215,18 @@ export interface BattleCanvasProps {
     playerRunning: boolean; 
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
+export interface BattleSelectionScreenProps {
+    isLoading: boolean;
+    battlesWon: number;
+    currentHealth: number;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedEnemyLevel: React.Dispatch<React.SetStateAction<number>>;
+}
 
 export interface BattleScreenProps {
+    selectedEnemyLevel: number;
     isLoading: boolean;
     playerAttack: boolean;
     enemyAttack: boolean; 

@@ -6,7 +6,7 @@ import BattleCanvas from '../helpers/canvas/BattleCanvas';
 const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => {
   // Destructure props for ease of access & documentation
   const {
-    // creatureName,
+    selectedEnemyLevel,
     currentHealth,
     maxHealth,
     currentPower,
@@ -60,7 +60,7 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
                 </div>
             </div>
 
-            <BattleCanvas selectedEnemyLevel={1} isLoading={isLoading} setIsLoading={setIsLoading} 
+            <BattleCanvas selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
                 playerAttack={playerAttack} enemyAttack={enemyAttack} 
                 playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
                 playerRunning={playerRunning} 

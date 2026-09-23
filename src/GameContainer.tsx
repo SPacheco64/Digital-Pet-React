@@ -51,7 +51,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
   const [optionSelected, setOptionSelected] = useState<number>(0);
   const [showMenuScreen, setShowMenuScreen] = useState<boolean>(false);
+  const [showBattleSelection, setShowBattleSelection] = useState<boolean>(false);
   const [showBattleScreen, setShowBattleScreen] = useState<boolean>(false);
+  const [selectedEnemyLevel, setSelectedEnemyLevel] = useState<number>(1);
   const [showStatusScreen, setShowStatusScreen] = useState<boolean>(false);
   const [showShopScreen, setShowShopScreen] = useState<boolean>(false);
   const [showAchievementsScreen, setShowAchievementsScreen] = useState<boolean>(false);
@@ -306,6 +308,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             !fishingOpen && !rpsOpen &&
             <GameDisplay creatureName={chocoboName} inCombat={inCombat}
             currentStatus={currentStatus} currentHealth={currentHealth}
+            battlesWon={battlesWon}
             maxHealth={maxHealth} currentHappiness={currentHappiness} 
             currentHunger={currentHunger}
             currentEnergy={currentEnergy} currentPower={currentPower}
@@ -313,9 +316,14 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             currentTime={currentTime} currentlyBusy={currentlyBusy}
             actionFailureTrigger={actionFailureTrigger}
             previewAnimation={previewAnimation}
-            showMenuScreen={showMenuScreen} showBattleScreen={showBattleScreen}
+            showMenuScreen={showMenuScreen} 
+            showBattleSelection={showBattleSelection} showBattleScreen={showBattleScreen}
+            selectedEnemyLevel={selectedEnemyLevel}
             isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
             setIsLoading={setIsLoading} 
+            setShowBattleSelection={setShowBattleSelection}
+            setShowBattleScreen={setShowBattleScreen}
+            setSelectedEnemyLevel={setSelectedEnemyLevel}
             playerAttack={playerAttack} enemyAttack={enemyAttack} 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
             playerRunning={playerRunning}            
@@ -456,6 +464,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setShowAchievementsScreen={setShowAchievementsScreen}
             showInfoScreen={showInfoScreen} setShowInfoScreen={setShowInfoScreen}
             welcomeFormHidden={hideWelcome}
+            showBattleSelection={showBattleSelection} setShowBattleSelection={setShowBattleSelection}
             showBattleScreen={showBattleScreen} setShowBattleScreen={setShowBattleScreen} 
             playerAttack={playerAttack} enemyAttack={enemyAttack}
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} playerRunning={playerRunning}

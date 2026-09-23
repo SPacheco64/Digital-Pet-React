@@ -5,6 +5,7 @@ import MoodDisplay from './MoodDisplay';
 import StatusDisplay from './StatusDisplay';
 import GameCanvas from './helpers/canvas/GameCanvas';
 import BattleScreen from './additional_screens/BattleScreen';
+import BattleSelectionScreen from './additional_screens/BattleSelectionScreen';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -13,6 +14,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     creatureName,
     currentStatus,
     currentHealth,
+    battlesWon,
     maxHealth,
     currentHappiness,
     currentHunger,
@@ -23,12 +25,17 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentTime,
     actionFailureTrigger,
     showMenuScreen,
+    showBattleSelection,
     showBattleScreen,
+    selectedEnemyLevel,
     currentlyBusy,
     isLoading,
     previewAnimation,
     setCurrentlyBusy,
     setIsLoading,
+    setShowBattleSelection,
+    setShowBattleScreen,
+    setSelectedEnemyLevel,
 
     // Props for battle & race functions:
     playerAttack,
@@ -61,10 +68,23 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
         </>
       }
 
+      {/* Displayed battle selection content */}
+      {
+        !showMenuScreen && showBattleSelection &&
+        <BattleSelectionScreen isLoading={isLoading} 
+          battlesWon={battlesWon} 
+          currentHealth={currentHealth} 
+          setIsLoading={setIsLoading} 
+          setShowBattleSelection={setShowBattleSelection}
+          setShowBattleScreen={setShowBattleScreen}
+          setSelectedEnemyLevel={setSelectedEnemyLevel}
+        />
+      } 
+
       {/* Displayed battle content */}
       {
         !showMenuScreen && showBattleScreen &&
-        <BattleScreen isLoading={isLoading} setIsLoading={setIsLoading} 
+        <BattleScreen selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
           playerAttack={playerAttack} enemyAttack={enemyAttack} 
           playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
           playerRunning={playerRunning} currentHealth={currentHealth}

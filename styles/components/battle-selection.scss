@@ -1,0 +1,90 @@
+#BattleSelectionScreen {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #76f5f8;
+    background: url(../../src/graphics/backgrounds/status-window-bg.png);
+    background-size: contain;
+    z-index: 5;
+
+    .battle-selection-header {
+        display: flex;
+        justify-content: space-between;
+        width: 95%;
+        padding: .5rem;
+        border: 0.1rem solid;
+        margin: 0.5rem 0;
+        color: #fff;
+        background: #00008f;
+        font-size: .5rem;
+        align-items: center;
+
+        img {
+            width: 1.5rem;
+            padding-right: .25rem;
+        }
+
+        .chocobo-health {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .battle-selection-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .difficulty-container {
+        text-align: left;
+        line-height: 1rem;
+        padding: 0.1rem 0.5rem;
+        font-size: 0.75rem;
+        border: .2rem solid #fff;
+        width: 95%;
+        max-height: 65%;
+        margin-bottom: .5rem;
+        background: #141470;
+    }
+    .difficulty-header {
+        color: #fff;
+        text-align: center;
+        padding-top: .5rem;
+    }
+    .difficulty-buttons {
+        height: 100%;
+        max-height: 85%;
+        overflow: scroll;
+        
+        button {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: .25rem;
+            padding: 0.25rem;
+            border: 0.1rem solid;
+            margin: 0.5rem 0;
+            color: #fff;
+            background: #00008f;
+            cursor: pointer;
+
+            &:hover:not(:disabled) {
+                background-color: #222;
+                color: #fff;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+                opacity: .5;
+            }
+        }
+    }
+}
