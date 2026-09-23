@@ -16,6 +16,8 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
     currentDefense,
     currentSpeed,
     currentEndurance,
+    maxHealth,
+    maxEnergy,
   } = props;
 
     const isHappy = (currentHappiness >= 70);
@@ -38,8 +40,8 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
     const statsArray = [
         {isStar: false, label: 'Mood: ', value: determineMood()},
         {isStar: false, label: 'Hunger: ', value: `${currentHunger}/100`},
-        {isStar: false, label: 'Energy: ', value: `${currentEnergy}/100`},
-        {isStar: false, label: 'Health: ', value: `${currentHealth}/100`},
+        {isStar: false, label: 'Energy: ', value: `${currentEnergy}/${maxEnergy}`},
+        {isStar: false, label: 'Health: ', value: `${currentHealth}/${maxHealth}`},
         {isStar: true, label: 'POW:', value: powerCount},
         {isStar: true, label: 'DEF:', value: defenseCount},
         {isStar: true, label: 'SPD:', value: speedCount},

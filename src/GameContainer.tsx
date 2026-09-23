@@ -386,6 +386,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               currentEnergy={currentEnergy} currentPower={currentPower} 
               currentDefense={currentDefense} currentSpeed={currentSpeed}
               currentEndurance={currentEndurance}
+              maxHealth={maxHealth} maxEnergy={maxEnergy}
             />
           }
 
