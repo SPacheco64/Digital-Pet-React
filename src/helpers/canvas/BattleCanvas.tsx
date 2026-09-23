@@ -7,6 +7,7 @@ import attackSheet from '../../graphics/canvas_sprites/attack-spritesheet.png';
 import { BattleCanvasProps } from '../../types';
 import '../../../styles/components/battle-canvas.scss';
 import BattleLoader from '../components/BattleLoader';
+import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import Konva from 'konva';
 
 type AnimAttr = {
@@ -94,7 +95,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     const [attackAttrToUse, setAttackAttrToUse] = useState<AnimAttr>({x: 40, y: 105, anim: 'normalHit', frameRate: 13, scale: .7});
 
     // The actual animations used pulled from the Chocobo Spritesheet
-    const animations = {
+    const animations = useRef({
         // Chocobo:
         miniChocoStand: [
             299, 918, 80, 80,     // frame 1
@@ -156,31 +157,33 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             0, 0, 49, 60,
             62, 0, 49, 60,
             124, 0, 49, 60,
-            200, 0, 0, 0,
-            200, 0, 0, 0,
-            200, 0, 0, 0,
+            124, 0, 49, 60,
         ],
-    };
+    }).current;
 
-    // Starts animation whenever actions are taken
-    useEffect(() => {
-        const spriteNode1 = spriteRef1.current;
-        const spriteNode2 = spriteRef2.current;
-        const spriteNode3 = spriteRef3.current;
-
-        console.log('Sprite Node 1: ', spriteNode1);
-        console.log('Sprite Node 2: ', spriteNode2);
-        console.log('Sprite Node 3: ', spriteNode3);
-
-        if (spriteNode1) { spriteNode1.start(); }
-        if (spriteNode2) { spriteNode2.start(); }
-        if (spriteNode3) { spriteNode3.start(); }
-    }, [isLoading, playerAttack, enemyAttack]);
+    // Battle sprites use the custom loop so one-frame and multi-frame definitions never enter invalid indexes.
+    useSpriteAnimation(spriteRef1, enemyAttrToUse.anim, enemyAttrToUse.frameRate, animations, !isLoading);
+    useSpriteAnimation(spriteRef2, chocoAttrToUse.anim, chocoAttrToUse.frameRate, animations, !isLoading);
+    useSpriteAnimation(
+        spriteRef3,
+        attackAttrToUse.anim,
+        attackAttrToUse.frameRate,
+        animations,
+        !isLoading && (playerAttack || enemyAttack),
+    );
 
     useEffect(() => {
+        if (!playerAttack && !enemyAttack) {
+            return;
+        }
+
         const ogChocoState = chocoAttrToUse;
         const ogEnemyState = enemyAttrToUse;
         const targetNode = playerAttack ? spriteRef1.current : spriteRef2.current;
+
+        if (!targetNode) {
+            return;
+        }
 
         const flashSprite = new Konva.Tween({
             node: targetNode,
@@ -196,10 +199,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                 }).play();
             }
         });
-
-        console.log('Player Attack: ', playerAttack);
-        console.log('Enemy Attack: ', enemyAttack);
-        console.log('Target Node: ', targetNode);
 
         if (playerAttack) {
             setAttackAttrToUse(attackAttrs[0]);
@@ -227,7 +226,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         }
 
         if (enemyAttack) {
-            console.log('attackAttrs[1]: ', attackAttrs[1]);
             setAttackAttrToUse(attackAttrs[1]);
             flashSprite.play();
 
@@ -251,10 +249,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             }, 400);
         }
     }, [playerAttack, enemyAttack]);
-
-    useEffect(() => {
-        console.log('Attack To Use: ', attackAttrToUse);
-    }, [attackAttrToUse]);
 
     // When enemy attacks, change their x value by +10
 

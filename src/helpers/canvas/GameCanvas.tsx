@@ -3,6 +3,7 @@ import { Stage, Layer, Sprite} from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { GameCanvasProps } from '../../types';
+import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import '../../../styles/components/game-canvas.scss';
 
 type AnimAttr = {
@@ -98,7 +99,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   }, [currentStatus, previewAnimation]);
 
   // The actual animations used pulled from the Chocobo Spritesheet
-  const animations = {
+  const animations = useRef({
     idle: [
       0, 0, 69, 72,      // frame 1
       107, 0, 69, 72,     // frame 2
@@ -156,16 +157,10 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
       360, 652, 80, 80,      // frame 7
       270, 652, 80, 80,      // frame 8
     ],
-  };
+  }).current;
 
-  // Starts animation whenever currentStatus changes
-  useEffect(() => {
-    const spriteNode = spriteRef.current;
-
-    if (spriteNode) {
-      spriteNode.start();
-    }
-  }, [currentStatus]);
+  // Use the custom loop so think, happy, and upset can play all of their frames.
+  useSpriteAnimation(spriteRef, attrToUse.anim, attrToUse.frameRate, animations);
 
   useEffect(() => {
     if (actionFailureTrigger !== lastActionFailureTrigger.current) {
@@ -187,7 +182,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
             animation={attrToUse.anim}
             animations={animations}
             frameRate={attrToUse.frameRate}
-            frameIndex={0}
             scaleX={attrToUse.scale}
             scaleY={attrToUse.scale}
           />

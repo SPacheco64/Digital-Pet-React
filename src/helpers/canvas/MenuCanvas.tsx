@@ -3,6 +3,7 @@ import { Stage, Layer, Sprite} from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { MenuCanvasProps } from '../../types';
+import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import '../../../styles/components/menu-canvas.scss';
 
 type AnimAttr = {
@@ -33,7 +34,7 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
     {x: 118, y: 190, anim: 'miniChocoTurned', frameRate: 1, scale: .6}, // Menu Choco Turned
   ];
 
-  const animations = {
+  const animations = useRef({
     eggbounce: [
       321, 268, 80, 80,     // frame 1
       411, 268, 80, 80,     // frame 2
@@ -56,7 +57,7 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
     miniChocoTurned: [
       0, 918, 80, 80,     // frame 1
     ],
-  };
+  }).current;
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
@@ -66,13 +67,8 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
     }
   }, [currentStatus]);
 
-  useEffect(() => {
-    const spriteNode = spriteRef.current;
-
-    if (spriteNode) {
-      spriteNode.start();
-    }
-  }, [currentStatus]);
+  // Menu animations use the same frame-count-safe loop as the main Chocobo canvas.
+  useSpriteAnimation(spriteRef, attrToUse.anim, attrToUse.frameRate, animations);
 
   return (
     <>
@@ -88,7 +84,6 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
               animation={attrToUse.anim}
               animations={animations}
               frameRate={attrToUse.frameRate}
-              frameIndex={0}
               scaleX={attrToUse.scale}
               scaleY={attrToUse.scale}
             />
