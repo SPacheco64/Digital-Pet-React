@@ -313,6 +313,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             showInfoScreen={showInfoScreen} setShowInfoScreen={setShowInfoScreen}
             welcomeFormHidden={hideWelcome}
             showBattleScreen={showBattleScreen} setShowBattleScreen={setShowBattleScreen} 
+            playerAttack={playerAttack} enemyAttack={enemyAttack}
+            playerSpecial={playerSpecial} enemySpecial={enemySpecial} playerRunning={playerRunning}
             setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 
             setPlayerSpecial={setPlayerSpecial} setEnemySpecial={setEnemySpecial} 
             setPlayerRunning={setPlayerRunning}            

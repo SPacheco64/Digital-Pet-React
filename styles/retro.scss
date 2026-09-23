@@ -60,5 +60,15 @@
                 opacity: .75;
             }
         }
+
+        #FishingScreen {
+            .fishing-minigame {
+                .fishing {
+                    &-meter, &-hint, &-result {
+                        background: #000;
+                    }
+                }
+            }
+        }
     }
 }

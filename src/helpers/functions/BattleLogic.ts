@@ -54,11 +54,16 @@ export const specialFunction = (
 
 // When trying to run from battle, determines if the player succeeds or fails
 export const escapeFunction = (
+    setPlayerRunning?: React.Dispatch<React.SetStateAction<boolean>>,
     currentSpeed?: number,
     currentHealth?: number,
     enemyInfo?: EnemyInformation,
 ) => {
     console.log('Run function triggered.');
+
+    setTimeout(() => {
+        setPlayerRunning?.(false);
+    }, 400);
 }
 
 // Implements the results of a finished battle (victory vs. loss)

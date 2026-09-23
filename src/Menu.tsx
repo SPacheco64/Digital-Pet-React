@@ -23,6 +23,7 @@ import achievementIcon from './graphics/icons/game_buttons/menu/achievement.svg'
 import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
+import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
 import { attackFunction, escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
 
 const MIN_PLAY_ENERGY = 3;
@@ -43,6 +44,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     showAchievementsScreen,
     showInfoScreen,
     showBattleScreen,
+    playerAttack,
+    enemyAttack,
+    playerSpecial,
+    enemySpecial,
+    playerRunning,
     fishingOpen,
     fishingComplete,
     rpsOpen,
@@ -77,7 +83,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const checkIfDisabled = (index: number) => {
     return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2)
       || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) ||
-      (showBattleScreen && index === 0) || (showBattleScreen && index === 4);
+      (showBattleScreen && index === 0) || (showBattleScreen && index === 4) ||
+      (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning));
   };
 
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
@@ -111,7 +118,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: ()=>{setPlayerAttack(true); attackFunction(setPlayerAttack);}},
     {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: ()=>{setPlayerSpecial(true); specialFunction()}},
-    {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction()}},
+    {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction(setPlayerRunning)}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ];
 
@@ -123,7 +130,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
       setFishingInput(0);
       setCurrentlyBusy(false);
     }},
-    {buttonName: 'Fish', buttonIcon: twoIcon, buttonFunction: ()=>{setFishingInput(input => input + 1);}},
+    {buttonName: 'Fish', buttonIcon: hookIcon, buttonFunction: ()=>{setFishingInput(input => input + 1);}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ];

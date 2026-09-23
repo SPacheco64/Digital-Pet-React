@@ -50,6 +50,11 @@ export interface MenuProps {
     showAchievementsScreen: boolean;
     showInfoScreen: boolean;
     showBattleScreen: boolean;
+    playerAttack: boolean;
+    enemyAttack: boolean;
+    playerSpecial: boolean;
+    enemySpecial: boolean;
+    playerRunning: boolean;
     fishingOpen: boolean;
     fishingComplete: boolean;
     rpsOpen: boolean;
