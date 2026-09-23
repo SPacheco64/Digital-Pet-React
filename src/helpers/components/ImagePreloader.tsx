@@ -1,5 +1,4 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { preload } from 'react-dom';
 import '../../../styles/components/loading-screen.scss';
 
 // Import for images to preload
@@ -26,6 +25,23 @@ const determineBg = (hour: number) => {
   }
 }
 
+// Preloads an image and returns a Promise that completes when loading finishes.
+const loadImage = (imagePath: string) => new Promise<void>((resolve, reject) => {
+  const image = new Image();
+
+  image.onload = () => {
+    image.decode()
+    .then(() => resolve())
+    .catch(() => resolve()); // resolve even if decoding fails, to avoid blocking the loading process
+  };
+  image.onerror = () => reject(new Error(`Failed to preload image: ${imagePath}`));
+  image.src = imagePath;
+});
+
+// If the minimum loading time has not been met, the loading screen will continue to be displayed.
+// Used to simulate the video game loading experience.
+const MINIMUM_LOADING_TIME = 2000;
+
 const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   const [imagesLoading, setImagesLoading] = useState<boolean>(true);
 
@@ -33,33 +49,47 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   const hour = now.getHours();
   let bgToPreload;
 
+  // Only preload the necessary day/evening/night background based on the current time.
+  // This helps avoid preloading unnecessary images.
   bgToPreload = determineBg(hour);
 
-  const preloadImages = () => {
-    try {
-      const imagePaths = [
-        shellTexture,
-        statusBg,
-        chocoSheet,
-        bgToPreload,
-      ];
+  useEffect(() => {
+    let isMounted = true;
+    let finishTimeout: ReturnType<typeof setTimeout> | undefined;
+    const loadingStartedAt = Date.now();
+    const imagePaths = [
+      shellTexture,
+      statusBg,
+      chocoSheet,
+      bgToPreload,
+    ];
 
-      imagePaths.forEach((imagePath) => {
-        preload(imagePath, { as: "image" });
+    const finishLoading = () => {
+      const remainingTime = Math.max(
+        MINIMUM_LOADING_TIME - (Date.now() - loadingStartedAt),
+        0,
+      );
+
+      finishTimeout = setTimeout(() => {
+        if (isMounted) {
+          setImagesLoading(false);
+        }
+      }, remainingTime);
+    };
+
+    Promise.all(imagePaths.map(loadImage))
+      .then(finishLoading)
+      .catch((error) => {
+        console.error('Error preloading images:', error);
+        finishLoading();
       });
 
-      // setIsLoading(false);
-      setTimeout(() => { 
-        setImagesLoading(false);
-      }, 2000); // Simulate loading time
-    } catch (error) {
-      console.error('Error preloading images:', error);
-      setImagesLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    preloadImages();
+    return () => {
+      isMounted = false;
+      if (finishTimeout !== undefined) {
+        clearTimeout(finishTimeout);
+      }
+    };
   }, []);
 
   return (

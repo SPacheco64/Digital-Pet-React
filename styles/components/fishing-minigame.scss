@@ -11,28 +11,27 @@
     z-index: 2;
     align-content: end;
 
-    .fishing-minigame {
-        width: 90%;
-        margin: 0 auto;
+    .fishing {
+        &-minigame {
+            width: 90%;
+            margin: 0 auto;
 
-        p {
-            margin: .5rem 0;
-            font-size: .75rem;
+            div {
+                margin: .5rem 0;
+                font-size: .75rem;
+            }
         }
-
-        .fishing-meter {
+        &-meter {
             position: relative;
             height: 1.5rem;
             margin: 1rem 0 .75rem;
             overflow: hidden;
             background: linear-gradient(90deg, #1CB5E0 0%, #0f186c 100%);
-            // border: .15rem solid #fff;
             box-shadow: 0px 0px 6px #fff;
             border-radius: .2rem;
             opacity: .95;
         }
-
-        .fishing-target {
+        &-target {
             position: absolute;
             left: 39%;
             width: 22%;
@@ -46,8 +45,7 @@
                 object-fit: contain;
             }
         }
-
-        .fishing-marker {
+        &-lure {
             position: absolute;
             top: 0;
             width: 5%;
@@ -56,19 +54,16 @@
             background: linear-gradient(to bottom, #e85454 0 50%, #fff 50% 100%);
             border-radius: 50%;
         }
-
-        .fishing-hint {
+        &-hint {
             color: #fff;
             background: rgba(0,0,0,.8);
             border: 3px solid #fff;
             border-radius: .2rem;
             padding: 5px 0;
         }
-
-        .fishing-result {
-            margin: 1rem 0;
+        &-result {
+            margin: .5rem 0;
             color: #fff;
-            font-weight: bold;
             background: rgba(0,0,0,.8);
             border: 3px solid #fff;
             border-radius: .2rem;

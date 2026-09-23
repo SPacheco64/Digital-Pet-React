@@ -17,8 +17,11 @@ import FishingMinigame from './helpers/components/FishingMinigame';
 import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
 
-const getPlayEnergyCost = () => 5 + Math.floor(Math.random() * 11);
-const getPlayHungerGain = () => 3 + Math.floor(Math.random() * 8);
+// Energy & Hunger changes after playing a minigame
+const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 11);
+const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 11);
+
+// Currency rewards for completing minigames
 const getFishingReward = (caughtCount: number) => (
   Array.from({ length: caughtCount }, () => 3 + Math.floor(Math.random() * 3))
     .reduce((totalReward, reward) => totalReward + reward, 0)
@@ -115,15 +118,17 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [optionSelected]);
 
+  // When the chocobo's energy drops to zero, its happiness decreases randomly.
+  // Does not apply when energy value was already 0.
   useEffect(() => {
     if (previousEnergy.current > 0 && currentEnergy === 0) {
-      const happinessLoss = 3 + Math.floor(Math.random() * 8);
+      const happinessLoss = 10 + Math.floor(Math.random() * 11);
       setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, 0));
     }
-
     previousEnergy.current = currentEnergy;
   }, [currentEnergy]);
 
+  // Set mood & status based on current happiness level
   useEffect(() => {
     if (currentStatus !== 'Egg') {
       if (currentHappiness >= 70) {
@@ -139,6 +144,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentHappiness]);
 
+  // If no saved data for the user exists, start the chocobo as an Egg.
   useEffect(() => {
     if (hideWelcome && !dataExists) {
       setCurrentStatus('Egg');
@@ -181,14 +187,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             />
           }
 
+          {/* Fishing Minigame game screen */}
           {
             fishingOpen &&
             <FishingMinigame inputTrigger={fishingInput} earnedCurrency={fishingEarnedCurrency}
               onComplete={(caughtCount) => {
                 const happinessChange = (caughtCount > 0) ? caughtCount * (3 + Math.floor(Math.random() * 6)) : -(5 + Math.floor(Math.random() * 6));
                 const earnedCurrency = getFishingReward(caughtCount);
-                console.log('happinessChange: ', happinessChange);
-
                 setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
                 setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
                 setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
@@ -205,6 +210,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             />
           }
 
+          {/* Rock Paper Scissors Minigame game screen */}
           {
             rpsOpen &&
             <RockPaperScissorsMinigame inputTrigger={rpsInput} earnedCurrency={rpsEarnedCurrency}
@@ -289,6 +295,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           }
         </div>
 
+        {/* Bottom panel containing the main menu and game controls */}
         <div className='bottom-panel'>
           <Menu 
             inCombat={inCombat} currentStatus={currentStatus} currentEnergy={currentEnergy} currentHunger={currentHunger}
@@ -321,6 +328,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           />
         </div>
 
+        {/* Testing panel for adjusting chocobo stats */}
         <TestingPanel
           chocoboName={chocoboName}
           currentStatus={currentStatus}
