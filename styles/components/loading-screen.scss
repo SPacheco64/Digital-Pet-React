@@ -28,9 +28,10 @@
     }
 }
 
-#BattleScreen {
+#BattleScreen, #FishingScreen {
     .loading-screen {
         background: url(../../src/graphics/backgrounds/status-window-bg.png);
+        border-radius: .75rem;
         z-index: 5;
     }
 }

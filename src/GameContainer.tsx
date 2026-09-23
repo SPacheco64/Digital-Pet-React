@@ -60,8 +60,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [fishingOpen, setFishingOpen] = useState<boolean>(false);
   const [fishingComplete, setFishingComplete] = useState<boolean>(false);
   const [fishingInput, setFishingInput] = useState<number>(0);
+  const [fishingEarnedCurrency, setFishingEarnedCurrency] = useState<number>(0);
   const [rpsOpen, setRpsOpen] = useState<boolean>(false);
   const [rpsInput, setRpsInput] = useState<number>(0);
+  const [rpsEarnedCurrency, setRpsEarnedCurrency] = useState<number>(0);
 
   // State Values for Creature Information
   const [currentStatus, setCurrentStatus] = useState<string>('');
@@ -181,15 +183,17 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
           {
             fishingOpen &&
-            <FishingMinigame inputTrigger={fishingInput}
+            <FishingMinigame inputTrigger={fishingInput} earnedCurrency={fishingEarnedCurrency}
               onComplete={(caughtCount) => {
                 const happinessChange = (caughtCount > 0) ? caughtCount * (3 + Math.floor(Math.random() * 6)) : -(5 + Math.floor(Math.random() * 6));
+                const earnedCurrency = getFishingReward(caughtCount);
                 console.log('happinessChange: ', happinessChange);
 
                 setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
                 setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
                 setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
-                setCurrentMoney(prevMoney => prevMoney + getFishingReward(caughtCount));
+                setCurrentMoney(prevMoney => prevMoney + earnedCurrency);
+                setFishingEarnedCurrency(earnedCurrency);
                 setFishingComplete(true);
               }}
               onClose={() => {
@@ -203,20 +207,22 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
           {
             rpsOpen &&
-            <RockPaperScissorsMinigame inputTrigger={rpsInput}
-              onComplete={(result) => {
+            <RockPaperScissorsMinigame inputTrigger={rpsInput} earnedCurrency={rpsEarnedCurrency}
+              onResult={(result) => {
                 const happinessChange = result === 'win'
                   ? 10 + Math.floor(Math.random() * 6)
                   : result === 'tie'
                     ? 5 + Math.floor(Math.random() * 4)
                     : 2 + Math.floor(Math.random() * 4);
+                const earnedCurrency = result === 'win' ? getRpsReward() : 0;
 
                 setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
                 setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
                 setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
-                if (result === 'win') {
-                  setCurrentMoney(prevMoney => prevMoney + getRpsReward());
-                }
+                setCurrentMoney(prevMoney => prevMoney + earnedCurrency);
+                setRpsEarnedCurrency(earnedCurrency);
+              }}
+              onComplete={() => {
                 setRpsOpen(false);
                 setRpsInput(0);
                 setCurrentlyBusy(false);

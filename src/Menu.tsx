@@ -92,7 +92,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   };
 
   const normalButtonList = [
-    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentStatus('eating'); setCurrentlyBusy(true);}},
+    {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{if (actionFailsWhileSad()) { actionFails(); return; } setCurrentStatus('eating'); setCurrentlyBusy(true);}},
     {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setPlayOpen(false); setTrainingOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('training');}},
     {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setTrainingOpen(false); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
     {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},

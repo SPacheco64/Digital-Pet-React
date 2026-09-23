@@ -4,11 +4,13 @@ import fishIcon from '../../graphics/icons/game_buttons/normal/fish.svg';
 import fishingBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg.avif';
 import fishingSuccessBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg-success.avif';
 import fishingFailBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg-fail.avif';
+import FishingLoader from './FishingLoader';
 
 interface FishingMinigameProps {
   onComplete: (caughtCount: number) => void;
   onClose: () => void;
   inputTrigger: number;
+  earnedCurrency: number;
 }
 
 const MARKER_WIDTH = 5;
@@ -16,7 +18,7 @@ const MIN_BOBBER_SPEED = 0.1;
 const MAX_BOBBER_SPEED = 0.15;
 const TOTAL_CATCHES = 3;
 
-const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger }) => {
+const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger, earnedCurrency }) => {
   const [markerPosition, setMarkerPosition] = useState<number>(0);
   const [gameState, setGameState] = useState<'fishing' | 'caught' | 'missed' | 'complete'>('fishing');
   const [catchCount, setCatchCount] = useState<number>(0);
@@ -141,36 +143,40 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, 
   }, [handleInput, inputTrigger]);
 
   return (
-    <section
-      className='fishing-minigame game-screen additional-screen'
-      aria-live='polite'
-      onClick={handleInput}
-      style={{ backgroundImage: `url(${currentBackground})` }}
-    >
-      {gameState === 'fishing' ? (
-        <>
-          <div className='fishing-meter' aria-label='Fishing timing meter'>
-            <span className='fishing-target'>
-              <img src={fishIcon} alt='Fish target' />
-            </span>
-            <span className='fishing-marker' style={{ left: `${markerPosition}%` }} />
-          </div>
-          <p className='fishing-hint'>Press BUTTON or SPACE to reel in!</p>
-        </>
-      ) : gameState === 'complete' ? (
-        <>
-          <p className='fishing-result'>You caught {caughtCount} of {TOTAL_CATCHES} fish!</p>
-          <p className='fishing-hint'>Press BACK BUTTON or SPACE to return!</p>
-        </>
-      ) : (
-        <>
-          <p className='fishing-result'>
-            {gameState === 'caught' ? 'You caught a fish!' : 'The fish got away!'}
-          </p>
-          <p className='fishing-hint'>Press BUTTON or SPACE to continue!</p>
-        </>
-      )}
-    </section>
+    <div id='FishingScreen' className='game-screen additional-screen'
+      style={{ backgroundImage: `url(${currentBackground})` }}>
+      <FishingLoader>
+        <section
+        className='fishing-minigame game-screen additional-screen'
+        aria-live='polite'
+        onClick={handleInput}
+      >
+        {gameState === 'fishing' ? (
+          <>
+            <div className='fishing-meter' aria-label='Fishing timing meter'>
+              <span className='fishing-target'>
+                <img src={fishIcon} alt='Fish target' />
+              </span>
+              <span className='fishing-marker' style={{ left: `${markerPosition}%` }} />
+            </div>
+            <p className='fishing-hint'>Press BUTTON or SPACE to reel in!</p>
+          </>
+        ) : gameState === 'complete' ? (
+          <>
+            <p className='fishing-result'>You caught {caughtCount} of {TOTAL_CATCHES} fish and earned {earnedCurrency}G!</p>
+            <p className='fishing-hint'>Press BACK BUTTON or SPACE to return.</p>
+          </>
+        ) : (
+          <>
+            <p className='fishing-result'>
+              {gameState === 'caught' ? 'You caught a fish!' : 'The fish got away!'}
+            </p>
+            <p className='fishing-hint'>Press BUTTON or SPACE to continue.</p>
+          </>
+        )}
+        </section>
+      </FishingLoader>
+    </div>
   );
 };
 

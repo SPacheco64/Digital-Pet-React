@@ -6,7 +6,9 @@ import scissorsIcon from '../../graphics/icons/game_buttons/normal/scissors.svg'
 
 interface RockPaperScissorsMinigameProps {
   onComplete: (result: 'win' | 'tie' | 'loss') => void;
+  onResult: (result: 'win' | 'tie' | 'loss') => void;
   inputTrigger: number;
+  earnedCurrency: number;
 }
 
 type Choice = 'rock' | 'paper' | 'scissors';
@@ -33,7 +35,7 @@ const getResult = (playerChoice: Choice, computerChoice: Choice): 'win' | 'tie' 
   return playerWins ? 'win' : 'loss';
 };
 
-const RockPaperScissorsMinigame: React.FC<RockPaperScissorsMinigameProps> = ({ onComplete, inputTrigger }) => {
+const RockPaperScissorsMinigame: React.FC<RockPaperScissorsMinigameProps> = ({ onComplete, onResult, inputTrigger, earnedCurrency }) => {
   const [gameState, setGameState] = useState<GameState>('playing');
   const [playerChoice, setPlayerChoice] = useState<Choice | null>(null);
   const [computerChoice, setComputerChoice] = useState<Choice | null>(null);
@@ -47,11 +49,13 @@ const RockPaperScissorsMinigame: React.FC<RockPaperScissorsMinigameProps> = ({ o
 
     const selectedChoice = choices[choiceIndex - 1];
     const selectedComputerChoice = choices[Math.floor(Math.random() * choices.length)];
+    const gameResult = getResult(selectedChoice, selectedComputerChoice);
     setPlayerChoice(selectedChoice);
     setComputerChoice(selectedComputerChoice);
-    setResult(getResult(selectedChoice, selectedComputerChoice));
+    setResult(gameResult);
     setGameState('finished');
-  }, [gameState]);
+    onResult(gameResult);
+  }, [gameState, onResult]);
 
   const handleInput = useCallback(() => {
     if (gameState === 'finished' && result !== null) {
@@ -113,6 +117,7 @@ const RockPaperScissorsMinigame: React.FC<RockPaperScissorsMinigameProps> = ({ o
           <p className='rps-result'>
             {result === 'win' ? 'You win!' : result === 'tie' ? 'It is a tie!' : 'You lose!'}
           </p>
+          <p className='rps-result'>You earned {earnedCurrency} G</p>
           <p className='rps-hint'>Click or press SPACE to return</p>
         </>
       )}
