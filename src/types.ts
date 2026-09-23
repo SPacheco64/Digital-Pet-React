@@ -135,11 +135,13 @@ export interface ColorPickerProps {
 }
 
 export interface TimeOfDayProps {
+    currentTime: string;
     setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface ExternalUIProps {
     setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
+    currentTime: string;
     setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
 }
 

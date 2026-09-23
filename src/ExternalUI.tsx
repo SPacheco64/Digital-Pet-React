@@ -9,6 +9,7 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
   // Destructure props for ease of access & documentation
   const {
         setCurrentShellColor,
+        currentTime,
         setCurrentTime
   } = props;
 
@@ -17,7 +18,7 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
       <div className='ui-container'>
         <ColorPicker setCurrentShellColor={setCurrentShellColor} />
         <OptionsMenu />
-        <TimeOfDay setCurrentTime={setCurrentTime} />
+        <TimeOfDay currentTime={currentTime} setCurrentTime={setCurrentTime} />
       </div>
     </div>
   );

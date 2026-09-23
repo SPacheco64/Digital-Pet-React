@@ -144,7 +144,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      <ExternalUI setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
+      <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime} />
 
       <div id='GameContainer' className={currentShellColor}>
         <div className='top-panel'>
@@ -308,6 +308,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           chocoboName={chocoboName}
           currentStatus={currentStatus}
           currentMoney={currentMoney}
+          currentTime={currentTime}
           currentHealth={currentHealth}
           maxHealth={maxHealth}
           currentEnergy={currentEnergy}
@@ -321,6 +322,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           setChocoboName={setChocoboName}
           setCurrentStatus={setCurrentStatus}
           setCurrentMoney={setCurrentMoney}
+          setCurrentTime={setCurrentTime}
           setCurrentHealth={setCurrentHealth}
           setMaxHealth={setMaxHealth}
           setCurrentEnergy={setCurrentEnergy}

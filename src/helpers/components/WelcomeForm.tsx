@@ -23,37 +23,47 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({ welcomeMessage, question1, qu
         setVal2(event.target.value);
     };
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if (val1 && val2) {
+            hideWelcomeForm(true);
+        }
+    };
+
     return (
         <div id='WelcomeForm' className='question-window game-screen additional-screen'>
-            <div className='welcome-message'>
-                {welcomeMessage}
-            </div>
+            <form onSubmit={handleSubmit}>
+                <div className='welcome-message'>
+                    {welcomeMessage}
+                </div>
 
-            {
-                question1 &&
-                <>
-                    <div className='dialogue'>
-                        {question1}
-                    </div>
-                    
-                    <input value={val1} onChange={handlePlayerName} maxLength={10} minLength={1}></input>
-                </>
-            }
+                {
+                    question1 &&
+                    <>
+                        <div className='dialogue'>
+                            {question1}
+                        </div>
+                        
+                        <input value={val1} onChange={handlePlayerName} maxLength={10} minLength={1}></input>
+                    </>
+                }
 
-            {
-                question2 &&
-                <>
-                    <div className='dialogue'>
-                        {question2}
-                    </div>
-                    
-                    <input value={val2} onChange={handleChocoboName} maxLength={10} minLength={1}></input>
-                </>
-            }
+                {
+                    question2 &&
+                    <>
+                        <div className='dialogue'>
+                            {question2}
+                        </div>
+                        
+                        <input value={val2} onChange={handleChocoboName} maxLength={10} minLength={1}></input>
+                    </>
+                }
 
-            <button onClick={() => hideWelcomeForm(true)} className={`${(val1 && val2) ? '' : 'disabled'}`}>
-                { buttonTxt }
-            </button>
+                <button type='submit' className={`${(val1 && val2) ? '' : 'disabled'}`}>
+                    { buttonTxt }
+                </button>
+            </form>
         </div>
     );
 };

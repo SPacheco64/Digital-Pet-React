@@ -7,6 +7,7 @@ import nightSymbol from '../../graphics/time_of_day/moon.png'
 const TimeOfDay: React.FC<TimeOfDayProps> = (props: TimeOfDayProps) => {
     // Destructure props for ease of access & documentation
     const {
+        currentTime,
         setCurrentTime,
     } = props;
 
@@ -40,6 +41,16 @@ const TimeOfDay: React.FC<TimeOfDayProps> = (props: TimeOfDayProps) => {
 
         determineSymbol(hour);
     }, []);
+
+    useEffect(() => {
+        if (currentTime === 'Day') {
+            setTimeSymbol(daySymbol);
+        } else if (currentTime === 'Evening') {
+            setTimeSymbol(eveningSymbol);
+        } else if (currentTime === 'Night') {
+            setTimeSymbol(nightSymbol);
+        }
+    }, [currentTime]);
 
     return (
         <div id='TimeOfDay'>

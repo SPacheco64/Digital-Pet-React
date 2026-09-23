@@ -5,6 +5,7 @@ interface TestingPanelProps {
   chocoboName: string;
   currentStatus: string;
   currentMoney: number;
+  currentTime: string;
   currentHealth: number;
   maxHealth: number;
   currentEnergy: number;
@@ -18,6 +19,7 @@ interface TestingPanelProps {
   setChocoboName: React.Dispatch<React.SetStateAction<string>>;
   setCurrentStatus: React.Dispatch<React.SetStateAction<string>>;
   setCurrentMoney: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
   setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
   setMaxHealth: React.Dispatch<React.SetStateAction<number>>;
   setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>;
@@ -40,6 +42,7 @@ const TestingPanel: React.FC<TestingPanelProps> = ({
   chocoboName,
   currentStatus,
   currentMoney,
+  currentTime,
   currentHealth,
   maxHealth,
   currentEnergy,
@@ -53,6 +56,7 @@ const TestingPanel: React.FC<TestingPanelProps> = ({
   setChocoboName,
   setCurrentStatus,
   setCurrentMoney,
+  setCurrentTime,
   setCurrentHealth,
   setMaxHealth,
   setCurrentEnergy,
@@ -78,6 +82,14 @@ const TestingPanel: React.FC<TestingPanelProps> = ({
       <label>
         Currency
         <input type='number' min='0' value={currentMoney} onChange={(event) => updateNumber(setCurrentMoney, event.target.value)} />
+      </label>
+      <label>
+        Time of day
+        <select value={currentTime} onChange={(event) => setCurrentTime(event.target.value)}>
+          <option value='Day'>Day</option>
+          <option value='Evening'>Evening</option>
+          <option value='Night'>Night</option>
+        </select>
       </label>
       <label>
         Health
