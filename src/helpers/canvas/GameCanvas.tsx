@@ -78,7 +78,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
         think: mainAnimationAttrs[5],
         happy: mainAnimationAttrs[6],
         upset: mainAnimationAttrs[7],
-        fishing: mainAnimationAttrs[8],
       };
 
       setAttrToUse(previewMap[previewAnimation] ?? mainAnimationAttrs[0]);
@@ -157,16 +156,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
       360, 652, 80, 80,      // frame 7
       270, 652, 80, 80,      // frame 8
     ],
-    fishing: [
-      0, 1190, 111, 69,       // frame 1
-      0, 1190, 111, 69,       // frame 1
-      143, 1190, 113, 69,      // frame 2
-      143, 1190, 113, 69,      // frame 2
-      0, 1190, 111, 69,       // frame 3
-      0, 1190, 111, 69,       // frame 3
-      143, 1190, 113, 69,      // frame 4
-      143, 1190, 113, 69,      // frame 4
-    ]
   };
 
   // Starts animation whenever currentStatus changes
