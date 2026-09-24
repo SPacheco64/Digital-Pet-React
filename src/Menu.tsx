@@ -82,8 +82,9 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     // Props for battle & race functions:
     setPlayerSpecial,
     setEnemySpecial,
-    setPlayerRunning
+    setPlayerRunning,
 
+    isLoading,
   } = props;
 
   const checkIfDisabled = (index: number) => {
@@ -92,7 +93,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
       (showBattleScreen && index === 0) || (showBattleScreen && index === 4) ||
       (showBattleScreen && currentEnemyHealth <= 0 && index === 1) ||
       (showBattleScreen && battleLocked) ||
-      (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning));
+      (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning)) || isLoading;
   };
 
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
@@ -278,7 +279,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             fishingButtonList.map((button, index) => (
-                <span key={index} className={`normal-button-${index} ${(!fishingComplete && index === 2) || (fishingComplete && index === 1) ? '' : 'disabled'}`}>
+                <span key={index} className={`normal-button-${index} ${(!fishingComplete && index === 2) || (fishingComplete && index === 1) || isLoading ? '' : 'disabled'}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName || 'Inactive'} />
               </span>
             ))

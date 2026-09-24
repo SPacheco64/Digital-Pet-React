@@ -11,6 +11,7 @@ interface FishingMinigameProps {
   onClose: () => void;
   inputTrigger: number;
   earnedCurrency: number;
+  isLoading: boolean;
 }
 
 // Size of the moving fishing lure
@@ -30,7 +31,7 @@ const MAX_SPEED_INCREMENT = 0.02;
 // Total number of times the user will attempt to catch a fish per game
 const TOTAL_ATTEMPTS = 3;
 
-const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger, earnedCurrency }) => {
+const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger, earnedCurrency, isLoading }) => {
   const [lurePosition, setLurePosition] = useState<number>(0);
   const [gameState, setGameState] = useState<'fishing' | 'caught' | 'missed' | 'complete'>('fishing');
   const [attemptCount, setAttemptCount] = useState<number>(0);
@@ -143,7 +144,7 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Prevents other key inputs or an already held down Spacebar from triggering the fishing attempt
-      if (event.code !== 'Space' || event.repeat) { return; }
+      if (event.code !== 'Space' || event.repeat || isLoading) { return; }
       event.preventDefault();
       // If the game is already complete, close the screen instead of attempting to fish again.
       if (gameState === 'complete') {

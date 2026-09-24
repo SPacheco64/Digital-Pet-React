@@ -24,7 +24,7 @@ const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 11);
 
 // Currency rewards for completing minigames
 const getFishingReward = (caughtCount: number) => (
-  Array.from({ length: caughtCount }, () => 3 + Math.floor(Math.random() * 3))
+  Array.from({ length: caughtCount }, () => 5 + Math.floor(Math.random() * 5))
     .reduce((totalReward, reward) => totalReward + reward, 0)
 );
 const getRpsReward = () => 5 + Math.floor(Math.random() * 6);
@@ -408,6 +408,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
                 setFishingInput(0);
                 setCurrentlyBusy(false);
               }}
+              isLoading={isLoading}
             />
           }
 
@@ -530,7 +531,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} playerRunning={playerRunning}
             setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 
             setPlayerSpecial={setPlayerSpecial} setEnemySpecial={setEnemySpecial} 
-            setPlayerRunning={setPlayerRunning}            
+            setPlayerRunning={setPlayerRunning} isLoading={isLoading}
           />
         </div>
 

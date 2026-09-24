@@ -120,6 +120,7 @@ export interface MenuProps {
     setPlayerSpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerRunning: React.Dispatch<React.SetStateAction<boolean>>;
+    isLoading: boolean;
 }
 
 export interface MenuScreenProps {
