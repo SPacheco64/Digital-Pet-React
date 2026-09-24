@@ -2,7 +2,6 @@ import { ChocoboSaveData } from '../../types';
 
 // External UI Functions
 export const saveFunction = (saveData: ChocoboSaveData) => {
-    console.log('Saving data: ', saveData);
     localStorage.setItem('digitalPetSave', JSON.stringify(saveData));
 };
 export const resetFunction = () => {

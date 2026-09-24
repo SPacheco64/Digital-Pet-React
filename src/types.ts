@@ -35,6 +35,8 @@ export interface GameDisplayProps {
     currentEnergy: number;
     currentPower: number;
     currentDefense: number;
+    battleMessage: string;
+    battleResult: 'victory' | 'defeat' | null;
     currentMoodIcon: string;
     currentTime: string;
     actionFailureTrigger: number;
@@ -70,6 +72,9 @@ export interface MenuProps {
     currentStatus: string;
     currentHealth: number;
     maxHealth: number;
+    onAttack: () => void;
+    currentEnemyHealth: number;
+    battleLocked: boolean;
     currentEnergy: number;
     maxEnergy: number;
     currentHunger: number;
@@ -213,6 +218,7 @@ export interface BattleCanvasProps {
     playerSpecial: boolean; 
     enemySpecial: boolean; 
     playerRunning: boolean; 
+    battleResult: 'victory' | 'defeat' | null;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export interface BattleSelectionScreenProps {
@@ -237,5 +243,7 @@ export interface BattleScreenProps {
     maxHealth: number;
     currentPower: number;
     currentDefense: number;
+    battleMessage: string;
+    battleResult: 'victory' | 'defeat' | null;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

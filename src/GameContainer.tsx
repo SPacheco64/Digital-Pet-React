@@ -16,6 +16,7 @@ import WelcomeForm from './helpers/components/WelcomeForm';
 import FishingMinigame from './helpers/components/FishingMinigame';
 import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
+import { attackFunction, createEnemyForDifficulty, EnemyInformation } from './helpers/functions/BattleLogic';
 
 // Energy & Hunger changes after playing a minigame
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 11);
@@ -97,6 +98,55 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [playerSpecial, setPlayerSpecial] = useState<boolean>(false);
   const [enemySpecial, setEnemySpecial] = useState<boolean>(false);
   const [playerRunning, setPlayerRunning] = useState<boolean>(false);
+  const [battleLocked, setBattleLocked] = useState<boolean>(false);
+  const [enemyInfo, setEnemyInfo] = useState<EnemyInformation | null>(null);
+  const [currentEnemyHealth, setCurrentEnemyHealth] = useState<number>(0);
+  const [battleMessage, setBattleMessage] = useState<string>('What will you do?');
+  const [battleResult, setBattleResult] = useState<'victory' | 'defeat' | null>(null);
+
+  const handleAttack = () => {
+    if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
+      return;
+    }
+
+    setBattleLocked(true);
+    attackFunction({
+      setPlayerAttack,
+      setEnemyAttack,
+      setBattleLocked,
+      setCurrentHealth,
+      setEnemyHealth: setCurrentEnemyHealth,
+      currentPower,
+      currentDefense,
+      currentHealth,
+      currentSpeed,
+      currentHappiness,
+      currentEnemyHealth,
+      enemyInfo,
+      onComplete: (result) => {
+        setBattleLocked(false);
+        setBattleResult(result);
+        setBattleMessage(result === 'victory' ? 'Victory!' : 'Defeat...');
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (showBattleScreen) {
+      const nextEnemy = createEnemyForDifficulty(selectedEnemyLevel);
+      setEnemyInfo(nextEnemy);
+      setCurrentEnemyHealth(nextEnemy.health);
+      setBattleMessage('What will you do?');
+      setBattleResult(null);
+      setBattleLocked(false);
+      return;
+    }
+
+    setEnemyInfo(null);
+    setCurrentEnemyHealth(0);
+    setBattleResult(null);
+    setBattleLocked(false);
+  }, [selectedEnemyLevel, showBattleScreen]);
 
   useEffect(() => {
     const savedData = localStorage.getItem('digitalPetSave');
@@ -287,6 +337,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
+      {/* ======= JUST FOR TESTING ======= */}
+      <div className='enemy-hp' style={{position: 'absolute', top: '1rem'}}>
+        Enemy HP: {currentEnemyHealth}
+      </div>
+      {/* ======= JUST FOR TESTING ======= */}
+
       <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime}
         onSave={handleSave} onReset={handleReset} autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled} />
@@ -313,6 +369,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             currentHunger={currentHunger}
             currentEnergy={currentEnergy} currentPower={currentPower}
             currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
+            battleMessage={battleMessage}
+            battleResult={battleResult}
             currentTime={currentTime} currentlyBusy={currentlyBusy}
             actionFailureTrigger={actionFailureTrigger}
             previewAnimation={previewAnimation}
@@ -443,6 +501,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         <div className='bottom-panel'>
           <Menu 
             inCombat={inCombat} currentStatus={currentStatus} currentHealth={currentHealth} maxHealth={maxHealth}
+            onAttack={handleAttack} currentEnemyHealth={currentEnemyHealth}
+            battleLocked={battleLocked}
             currentEnergy={currentEnergy} maxEnergy={maxEnergy} currentHunger={currentHunger}
             setCurrentStatus={setCurrentStatus} setShowStatusScreen={setShowStatusScreen}
             setActionFailureTrigger={setActionFailureTrigger}

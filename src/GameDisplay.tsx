@@ -21,6 +21,8 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentEnergy,
     currentPower,
     currentDefense,
+    battleMessage,
+    battleResult,
     currentMoodIcon,
     currentTime,
     actionFailureTrigger,
@@ -89,7 +91,8 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
           playerRunning={playerRunning} currentHealth={currentHealth}
           maxHealth={maxHealth} currentPower={currentPower} 
-          currentDefense={currentDefense}
+          currentDefense={currentDefense} battleMessage={battleMessage}
+          battleResult={battleResult}
         />
       }
     </div>

@@ -24,7 +24,7 @@ import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
-import { attackFunction, escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
+import { escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
 
 const MIN_PLAY_ENERGY = 3;
 const MIN_TRAINING_ENERGY = 20;
@@ -36,6 +36,9 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     currentStatus,
     currentHealth,
     maxHealth,
+    onAttack,
+    currentEnemyHealth,
+    battleLocked,
     currentEnergy,
     maxEnergy,
     currentHunger,
@@ -77,8 +80,6 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setRpsInput,
 
     // Props for battle & race functions:
-    setPlayerAttack,
-    setEnemyAttack,
     setPlayerSpecial,
     setEnemySpecial,
     setPlayerRunning
@@ -89,6 +90,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2)
       || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) ||
       (showBattleScreen && index === 0) || (showBattleScreen && index === 4) ||
+      (showBattleScreen && currentEnemyHealth <= 0 && index === 1) ||
+      (showBattleScreen && battleLocked) ||
       (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning));
   };
 
@@ -100,7 +103,6 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const sleepButtonDisabled = () => (currentEnergy === maxEnergy && currentHealth === maxHealth);
 
   const actionFails = () => {
-    console.log('Action failed due to sadness!');
     setActionFailureTrigger(trigger => trigger + 1);
   };
 
@@ -122,7 +124,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
   const combatButtonList = [
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
-    {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: ()=>{setPlayerAttack(true); attackFunction(setPlayerAttack);}},
+    {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: onAttack},
     {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: ()=>{setPlayerSpecial(true); specialFunction()}},
     {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction(setPlayerRunning)}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},

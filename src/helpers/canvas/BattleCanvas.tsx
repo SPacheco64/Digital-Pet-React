@@ -31,6 +31,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         playerSpecial,
         enemySpecial,
         playerRunning,
+        battleResult,
         setIsLoading,
     } = props;
 
@@ -249,6 +250,29 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             }, 400);
         }
     }, [playerAttack, enemyAttack]);
+
+    useEffect(() => {
+        if (!battleResult) {
+            return;
+        }
+
+        const targetNode = battleResult === 'victory' ? spriteRef1.current : spriteRef2.current;
+
+        if (!targetNode) {
+            return;
+        }
+
+        const fadeSprite = new Konva.Tween({
+            node: targetNode,
+            opacity: 0,
+            duration: 1,
+            easing: Konva.Easings.EaseIn,
+        });
+
+        fadeSprite.play();
+
+        return () => fadeSprite.destroy();
+    }, [battleResult]);
 
     // When enemy attacks, change their x value by +10
 
