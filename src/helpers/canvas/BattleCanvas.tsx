@@ -47,7 +47,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                 return Math.floor(Math.random() * 3) + 9;
             default:
                 return Math.floor(Math.random() * 3) + 12;
-            
         }
     };
 
@@ -252,15 +251,11 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     }, [playerAttack, enemyAttack]);
 
     useEffect(() => {
-        if (!battleResult) {
-            return;
-        }
+        if (!battleResult) { return; }
 
         const targetNode = battleResult === 'victory' ? spriteRef1.current : spriteRef2.current;
 
-        if (!targetNode) {
-            return;
-        }
+        if (!targetNode) { return; }
 
         const fadeSprite = new Konva.Tween({
             node: targetNode,
@@ -275,7 +270,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     }, [battleResult]);
 
     // When enemy attacks, change their x value by +10
-
     return (
         <BattleLoader selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading}>
             <Stage id='BattleStage' className='battle-canvas' height={248} width={256} ref={stageRef}>

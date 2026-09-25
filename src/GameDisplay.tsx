@@ -38,6 +38,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     setShowBattleSelection,
     setShowBattleScreen,
     setSelectedEnemyLevel,
+    setInCombat,
 
     // Props for battle & race functions:
     playerAttack,
@@ -80,6 +81,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           setShowBattleSelection={setShowBattleSelection}
           setShowBattleScreen={setShowBattleScreen}
           setSelectedEnemyLevel={setSelectedEnemyLevel}
+          setInCombat={setInCombat}
         />
       } 
 

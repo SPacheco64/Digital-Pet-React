@@ -16,7 +16,7 @@ import WelcomeForm from './helpers/components/WelcomeForm';
 import FishingMinigame from './helpers/components/FishingMinigame';
 import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
-import { attackFunction, createEnemyForDifficulty, EnemyInformation } from './helpers/functions/BattleLogic';
+import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation } from './helpers/functions/BattleLogic';
 
 // Energy & Hunger changes after playing a minigame
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 11);
@@ -126,7 +126,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       onComplete: (result) => {
         setBattleLocked(false);
         setBattleResult(result);
-        setBattleMessage(result === 'victory' ? 'Victory!' : 'Defeat...');
+        setInCombat(false);
       },
     });
   };
@@ -147,6 +147,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     setBattleResult(null);
     setBattleLocked(false);
   }, [selectedEnemyLevel, showBattleScreen]);
+
+  useEffect(() => {
+    if (battleResult != null) {
+      battleEndFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
+        setCurrentEndurance, setCurrentlyBusy, ()=>{}, setCurrentHappiness, setCurrentMoney, setBattlesWon, setMaxHealth, 
+        setMaxEnergy, setCurrentHealth, setBattleMessage, chocoboName, selectedEnemyLevel, (battleResult === 'victory'), battlesWon
+      );
+    }
+  }, [battleResult]);
 
   useEffect(() => {
     const savedData = localStorage.getItem('digitalPetSave');
@@ -279,11 +288,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       hatchingEvent(currentStatus, setCurrentStatus, setCurrentlyBusy);
     }
     if (currentStatus === 'eating') {
-      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentHealth, setCurrentlyBusy);
+      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentHealth, setCurrentlyBusy,
+        maxEnergy, maxHealth
+      );
     } else if (currentStatus === 'training') {
       // Training functionality currently handled externally
     } else if (currentStatus === 'sleeping') {
-      sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHealth, setCurrentHappiness, setCurrentlyBusy);
+      sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHealth, setCurrentHappiness, setCurrentlyBusy,
+        maxEnergy, maxHealth
+      );
     }
   }, [currentStatus]);
 
@@ -384,7 +397,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setSelectedEnemyLevel={setSelectedEnemyLevel}
             playerAttack={playerAttack} enemyAttack={enemyAttack} 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
-            playerRunning={playerRunning}            
+            playerRunning={playerRunning} setInCombat={setInCombat}      
             />
           }
 
@@ -533,7 +546,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 
             setPlayerSpecial={setPlayerSpecial} setEnemySpecial={setEnemySpecial} 
             setPlayerRunning={setPlayerRunning} isLoading={isLoading}
-            setIsLoading={setIsLoading}
+            setIsLoading={setIsLoading} setCurrentHealth={setCurrentHealth}
+            setCurrentEnergy={setCurrentEnergy}
           />
         </div>
 

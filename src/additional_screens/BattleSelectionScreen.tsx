@@ -14,6 +14,7 @@ const BattleSelectionScreen: React.FC<BattleSelectionScreenProps> = (props: Batt
         setShowBattleSelection,
         setShowBattleScreen,
         setSelectedEnemyLevel,
+        setInCombat,
     } = props;
 
     const difficultyLevels = [
@@ -29,6 +30,7 @@ const BattleSelectionScreen: React.FC<BattleSelectionScreenProps> = (props: Batt
         setIsLoading(true);
         setShowBattleSelection(false);
         setShowBattleScreen(true);
+        setInCombat(true);
     };
 
     const battleRequirement = (level: number) => {

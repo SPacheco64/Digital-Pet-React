@@ -52,6 +52,7 @@ export interface GameDisplayProps {
     enemySpecial: boolean; 
     playerRunning: boolean; 
     previewAnimation: string;
+    setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
@@ -122,6 +123,8 @@ export interface MenuProps {
     setPlayerRunning: React.Dispatch<React.SetStateAction<boolean>>;
     isLoading: boolean;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface MenuScreenProps {
@@ -231,6 +234,7 @@ export interface BattleSelectionScreenProps {
     setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
     setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedEnemyLevel: React.Dispatch<React.SetStateAction<number>>;
+    setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface BattleScreenProps {

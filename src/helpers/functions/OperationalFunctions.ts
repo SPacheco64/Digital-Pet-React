@@ -52,17 +52,20 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>,
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
+    maxEnergy: number,
+    maxHealth: number,
 ) => {
-    const randomHappinessGain = 5 + Math.floor(Math.random() * 6);
+    const randomHappinessGain = 5 + Math.floor(Math.random() * 11);
     const randomEnergyGain = 5 + Math.floor(Math.random() * 11);
     const randomHealthGain = 10 + Math.floor(Math.random() * 6);
+    const hungerReduction = 20 + Math.floor(Math.random() * 10);
     
     const eatingTimer = setTimeout(() => {
         setCurrentStatus('normal');
-        setCurrentHunger(prevHunger => Math.max(prevHunger - 20, 0)); // Decrease hunger by 20, but not below 0
+        setCurrentHunger(prevHunger => Math.max(prevHunger - hungerReduction, 0)); // Decrease hunger, but not below 0
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100)); // Increase happiness by 10, but not above 100
-        setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, 100));
-        setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, 100));
+        setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, maxEnergy));
+        setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, maxHealth));
         setCurrentlyBusy(false);
     }, 5000);
 
@@ -84,13 +87,13 @@ export const trainingFunction = (
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     optionSelected: number,
 ) => {
-    const randomHungerGain = 5 + Math.floor(Math.random() * 10);
+    const randomHungerGain = 15 + Math.floor(Math.random() * 15);
     const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
-    const randomEnergyLoss = 20 + Math.floor(Math.random() * 15);
-    const randomPowerGain = Number((0.1 + Math.random() * 0.3).toFixed(1));
-    const randomDefGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
-    const randomSpeedGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
-    const randomEnduranceGain = Number((0.1 + Math.random() * 0.5).toFixed(1));
+    const randomEnergyLoss = 25 + Math.floor(Math.random() * 15);
+    const randomPowerGain = Number((0.1 + Math.random() * .7).toFixed(1));
+    const randomDefGain = Number((0.1 + Math.random() * .7).toFixed(1));
+    const randomSpeedGain = Number((0.1 + Math.random() * .7).toFixed(1));
+    const randomEnduranceGain = Number((0.1 + Math.random() * .7).toFixed(1));
     setCurrentStatus('training');
 
     const trainingTimer = setTimeout(() => {
@@ -112,7 +115,7 @@ export const trainingFunction = (
         setCurrentQuestionType('');
         setQuestionWindowOpen(false);
         setCurrentlyBusy(false);
-    }, 10000);
+    }, 20000);
 
     return () => clearTimeout(trainingTimer);
 }
@@ -125,18 +128,20 @@ export const sleepingFunction = (
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
+    maxEnergy: number,
+    maxHealth: number,
     ) => {
     const randomHungerGain = 5 + Math.floor(Math.random() * 15);
-    const randomEnergyGain = 30 + Math.floor(Math.random() * 11);
+    const randomEnergyGain = 40 + Math.floor(Math.random() * 21);
     const randomHappinessGain = 5 + Math.floor(Math.random() * 11);
-    const randomHealthGain = 25 + Math.floor(Math.random() * 11);
+    const randomHealthGain = 30 + Math.floor(Math.random() * 11);
 
     const sleepingTimer = setTimeout(() => {
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
-        setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, 100));
+        setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, maxEnergy));
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100));
-        setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, 100));
+        setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, maxHealth));
         setCurrentlyBusy(false);
     }, 60000);
 

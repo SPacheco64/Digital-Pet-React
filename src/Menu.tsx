@@ -26,9 +26,9 @@ import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
 import { escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
 
-const MIN_PLAY_ENERGY = 3;
+const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;
-const HIGH_HUNGER_THRESHOLD = 80;
+const HIGH_HUNGER_THRESHOLD = 75;
 
 const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   // Destructure props for ease of access & documentation
@@ -78,6 +78,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setFishingInput,
     setRpsOpen,
     setRpsInput,
+    setCurrentHealth,
+    setCurrentEnergy,
 
     // Props for battle & race functions:
     setPlayerSpecial,
@@ -86,16 +88,18 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
     isLoading,
     setIsLoading,
+
+    inCombat,
   } = props;
 
   const checkIfDisabled = (index: number) => {
     return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2)
-      || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) ||
-      (showBattleScreen && index === 0) || (showBattleScreen && index === 4) ||
-      (showBattleScreen && currentEnemyHealth <= 0 && index === 1) ||
+      || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) || 
+      (showBattleScreen && index === 4) ||
+      (showBattleScreen && (currentEnemyHealth <= 0 || currentHealth <= 0) && index > 0) ||
       (showBattleScreen && battleLocked) ||
       (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning)) || 
-      isLoading;
+      isLoading || (inCombat && index === 0);
   };
 
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
@@ -126,7 +130,14 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   ];
 
   const combatButtonList = [
-    {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
+      setShowBattleScreen(false);
+      setCurrentlyBusy(false);
+      if (currentHealth === 0) {
+        setCurrentHealth(1);
+        setCurrentEnergy(1);
+      }
+    }},
     {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: onAttack},
     {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: ()=>{setPlayerSpecial(true); specialFunction()}},
     {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction(setPlayerRunning)}},
@@ -192,9 +203,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
               <span key={index} className={`normal-button-${index} ${(
                 (currentlyBusy && index < 4) ||
                 !welcomeFormHidden ||
+                (index === 0 && currentHunger === 0) ||
                 (index === 1 && currentEnergy < MIN_TRAINING_ENERGY) ||
                 (index === 2 && currentEnergy < MIN_PLAY_ENERGY) ||
-                (index === 3 && sleepButtonDisabled())
+                (index === 3 && sleepButtonDisabled()) ||
+                (index != 0 && currentHunger === 100)
               ) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>
