@@ -85,6 +85,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setPlayerRunning,
 
     isLoading,
+    setIsLoading,
   } = props;
 
   const checkIfDisabled = (index: number) => {
@@ -93,7 +94,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
       (showBattleScreen && index === 0) || (showBattleScreen && index === 4) ||
       (showBattleScreen && currentEnemyHealth <= 0 && index === 1) ||
       (showBattleScreen && battleLocked) ||
-      (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning)) || isLoading;
+      (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning)) || 
+      isLoading;
   };
 
   const [trainingOpen, setTrainingOpen] = useState<boolean>(false);
@@ -173,7 +175,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
   const playQuestionButtonList = [
     {buttonName: 'Rock, Paper, Scissors', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setPlayOpen(false); setRpsInput(0); setRpsOpen(true); setQuestionWindowOpen(false);}},
-    {buttonName: 'Fishing', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setPlayOpen(false); setFishingComplete(false); setFishingInput(0); setFishingOpen(true); setQuestionWindowOpen(false);}},
+    {buttonName: 'Fishing', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setPlayOpen(false); setFishingComplete(false); setFishingInput(0); setFishingOpen(true); setQuestionWindowOpen(false); setIsLoading(true);}},
     {buttonName: 'Race', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setPlayOpen(false); setQuestionWindowOpen(false);}},
     {buttonName: 'Battle', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setPlayOpen(false); setQuestionWindowOpen(false); setShowBattleSelection(true);}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setPlayOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
@@ -279,7 +281,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
         <>
           {
             fishingButtonList.map((button, index) => (
-                <span key={index} className={`normal-button-${index} ${(!fishingComplete && index === 2) || (fishingComplete && index === 1) || isLoading ? '' : 'disabled'}`}>
+              <span key={index} className={`normal-button-${index} ${(!fishingComplete && index === 2) || (fishingComplete && index === 1) ? '' : 'disabled'} ${!isLoading ? '' : 'disabled'}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName || 'Inactive'} />
               </span>
             ))

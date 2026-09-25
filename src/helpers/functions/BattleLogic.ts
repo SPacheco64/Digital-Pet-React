@@ -53,7 +53,6 @@ export const createEnemyForDifficulty = (difficultyLevel: number): EnemyInformat
         power: Math.max(.75, Math.min(10, clampedDifficulty * randomPwrMod + difficultyBaseStatIncrease) - levelScaleDecrease * 1.25),
         defense: Math.max(.75, Math.min(10, clampedDifficulty * randomDefMod + difficultyBaseStatIncrease) - levelScaleDecrease * 1.25),
         speed: Math.max(.75, Math.min(10, clampedDifficulty * randomSpdMod + difficultyBaseStatIncrease) - levelScaleDecrease * 1.25),
-        // health: (clampedDifficulty === 5) ? 100 : (15 * clampedDifficulty) + (randomHealthMod),
         health: clampedDifficulty === 5 ? 120 : 100,
         specialAttacks: [],
         difficultyLevel: clampedDifficulty,
@@ -168,7 +167,6 @@ export const attackFunction = (
         performPlayerAttack(performEnemyAttack);
         return;
     }
-
     performEnemyAttack(performPlayerAttack);
 };
 
@@ -222,10 +220,10 @@ export const battleEndFunction = (
     const randomHungerGain = (3*difficultyLevel) + Math.floor(Math.random() * 5);
     const randomHappinessChange = (3*difficultyLevel) + Math.floor(Math.random() * 5);
     const randomEnergyLoss = (5*difficultyLevel) + Math.floor(Math.random() * 10);
-    const randomPowerGain = Number(((0.1*difficultyLevel) + Math.random() * 0.3).toFixed(1));
-    const randomDefGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
-    const randomSpeedGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
-    const randomEnduranceGain = Number(((0.1*difficultyLevel) + Math.random() * 0.5).toFixed(1));
+    const randomPowerGain = Number(((0.2*difficultyLevel) + Math.random() * (0.3*difficultyLevel)).toFixed(1));
+    const randomDefGain = Number(((0.2*difficultyLevel) + Math.random() * (0.3*difficultyLevel)).toFixed(1));
+    const randomSpeedGain = Number(((0.2*difficultyLevel) + Math.random() * (0.3*difficultyLevel)).toFixed(1));
+    const randomEnduranceGain = Number(((0.2*difficultyLevel) + Math.random() * (0.3*difficultyLevel)).toFixed(1));
     const hpGain = difficultyLevel * Math.floor((Math.random() * 4) + 1);
     const energyGain = difficultyLevel * Math.floor((Math.random() * 4) + 1);
 

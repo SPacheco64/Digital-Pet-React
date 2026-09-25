@@ -5,13 +5,14 @@ import fishingSuccessBg from '../../graphics/minigame_assets/fishing/fishing-hol
 import fishingFailBg from '../../graphics/minigame_assets/fishing/fishing-hole-bg-fail.avif';
 
 interface FishingLoaderProps {
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   children: ReactNode;
 }
 
-const FishingLoader: React.FC<FishingLoaderProps> = ({ children }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
+const FishingLoader: React.FC<FishingLoaderProps> = ({ isLoading, setIsLoading, children }) => {
   useEffect(() => {
+    console.log('isLoading: ', isLoading);
     const imagePaths = [fishingBg, fishingSuccessBg, fishingFailBg];
     const imageLoads = imagePaths.map((imagePath) => new Promise<void>((resolve, reject) => {
       const image = new Image();
@@ -22,6 +23,7 @@ const FishingLoader: React.FC<FishingLoaderProps> = ({ children }) => {
 
     Promise.all(imageLoads)
       .then(() => {
+        console.log('Fishing images loaded successfully');
         setIsLoading(false);
       })
       .catch((error) => console.error(error));

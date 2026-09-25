@@ -12,6 +12,7 @@ interface FishingMinigameProps {
   inputTrigger: number;
   earnedCurrency: number;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Size of the moving fishing lure
@@ -31,7 +32,7 @@ const MAX_SPEED_INCREMENT = 0.02;
 // Total number of times the user will attempt to catch a fish per game
 const TOTAL_ATTEMPTS = 3;
 
-const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger, earnedCurrency, isLoading }) => {
+const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, inputTrigger, earnedCurrency, isLoading, setIsLoading }) => {
   const [lurePosition, setLurePosition] = useState<number>(0);
   const [gameState, setGameState] = useState<'fishing' | 'caught' | 'missed' | 'complete'>('fishing');
   const [attemptCount, setAttemptCount] = useState<number>(0);
@@ -168,7 +169,7 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, 
   }, [handleInput, inputTrigger]);
 
   return (
-    <FishingLoader>
+    <FishingLoader isLoading={isLoading} setIsLoading={setIsLoading}>
       <div id='FishingScreen' className='game-screen additional-screen'
         style={{ backgroundImage: `url(${currentBackground})` }}>
         <section

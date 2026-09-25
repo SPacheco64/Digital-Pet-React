@@ -409,6 +409,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
                 setCurrentlyBusy(false);
               }}
               isLoading={isLoading}
+              setIsLoading={setIsLoading}
             />
           }
 
@@ -532,6 +533,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 
             setPlayerSpecial={setPlayerSpecial} setEnemySpecial={setEnemySpecial} 
             setPlayerRunning={setPlayerRunning} isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         </div>
 
