@@ -45,7 +45,9 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     enemyAttack,
     playerSpecial,
     enemySpecial,
-    playerRunning
+    playerRunning,
+    damageToEnemy,
+    damageToPlayer
   } = props;
 
   const determineTimeClass = () => {
@@ -94,7 +96,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           playerRunning={playerRunning} currentHealth={currentHealth}
           maxHealth={maxHealth} currentPower={currentPower} 
           currentDefense={currentDefense} battleMessage={battleMessage}
-          battleResult={battleResult}
+          battleResult={battleResult} damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
         />
       }
     </div>

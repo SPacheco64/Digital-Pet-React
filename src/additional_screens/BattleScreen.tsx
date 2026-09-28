@@ -19,6 +19,8 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
     playerSpecial,
     enemySpecial,
     playerRunning,
+    damageToEnemy,
+    damageToPlayer,
     setIsLoading
   } = props;
 
@@ -46,6 +48,16 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
                     </div>
                 </div>
             </div>
+
+            {/* Damage values that show on attack */}
+            {
+                playerAttack && damageToEnemy &&
+                <div className='damage-number to-enemy warning'> {damageToEnemy} </div>
+            }
+            {
+                enemyAttack && damageToPlayer &&
+                <div className='damage-number to-player warning'> {damageToPlayer} </div>
+            }
 
             <BattleCanvas selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
                 playerAttack={playerAttack} enemyAttack={enemyAttack} 

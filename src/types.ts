@@ -53,6 +53,8 @@ export interface GameDisplayProps {
     enemySpecial: boolean; 
     playerRunning: boolean; 
     previewAnimation: string;
+    damageToEnemy: number;
+    damageToPlayer: number;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -258,5 +260,7 @@ export interface BattleScreenProps {
     currentDefense: number;
     battleMessage: string;
     battleResult: 'victory' | 'defeat' | null;
+    damageToEnemy: number;
+    damageToPlayer: number;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -101,6 +101,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentEnemyHealth, setCurrentEnemyHealth] = useState<number>(0);
   const [battleMessage, setBattleMessage] = useState<string>('What will you do?');
   const [battleResult, setBattleResult] = useState<'victory' | 'defeat' | null>(null);
+  const [damageToEnemy, setDamageToEnemy] = useState<number>(0);
+  const [damageToPlayer, setDamageToPlayer] = useState<number>(0);
 
   const handleAttack = () => {
     if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
@@ -126,6 +128,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setBattleResult(result);
         setInCombat(false);
       },
+      setDamageToEnemy,
+      setDamageToPlayer,
     });
   };
 
@@ -397,6 +401,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             playerAttack={playerAttack} enemyAttack={enemyAttack} 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
             playerRunning={playerRunning} setInCombat={setInCombat}      
+            damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
             />
           }
 

@@ -105,6 +105,8 @@ export const attackFunction = (
         currentEnemyHealth: number;
         enemyInfo: EnemyInformation;
         onComplete: (result: 'victory' | 'defeat') => void;
+        setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
+        setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
     },
 ) => {
     const {
@@ -121,6 +123,8 @@ export const attackFunction = (
         currentEnemyHealth,
         enemyInfo,
         onComplete,
+        setDamageToEnemy,
+        setDamageToPlayer,
     } = options;
     const firstTurn = turnOrderFunction(currentSpeed, currentHappiness, enemyInfo);
 
@@ -131,7 +135,7 @@ export const attackFunction = (
         const initDamage = calculateDamage(currentPower, enemyInfo.defense, enemyInfo.difficultyLevel);
         const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
         
-        console.log('Chocobo deals ', finalDamage, ' damage!');
+        setDamageToEnemy(finalDamage);
         const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
         setEnemyHealth(remainingEnemyHealth);
 
@@ -154,7 +158,7 @@ export const attackFunction = (
         const initDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
         const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
         
-        console.log('Enemy deals ', finalDamage, ' damage!');
+        setDamageToPlayer(finalDamage);
         const remainingHealth = Math.max(currentHealth - finalDamage, 0);
         setCurrentHealth(remainingHealth);
 
