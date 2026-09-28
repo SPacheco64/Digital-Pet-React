@@ -9,7 +9,13 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
     currentMoney,
     alreadyPurchased,
     setCurrentMoney,
-    setAlreadyPurchased
+    setAlreadyPurchased,
+    currentHealth,
+    setCurrentHealth,
+    maxHealth,
+    currentEnergy,
+    setCurrentEnergy,
+    maxEnergy,
   } = props;
 
   const purchaseHandler = (index: number, cost: number) => {
@@ -22,6 +28,8 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   }
 
   const shopList = [
+    {cost: 30, image: gysahlGreens, label: 'Healing Potion', description: 'Fully restores HP.'},
+    {cost: 30, image: gysahlGreens, label: 'Energy Potion', description: 'Fully restores Energy.'},
     {cost: 50, image: gysahlGreens, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
     {cost: 50, image: gysahlGreens, label: 'Cushy Pillow', description: 'Permanently increases the effectiveness of Sleeping.'},
     {cost: 50, image: gysahlGreens, label: 'Soft Down', description: 'Permanently increases the speed of Sleeping.'},
@@ -47,11 +55,21 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
         <div className='shop-list'>
             {
                 shopList.map((item, index) => (
-                    <div className={`shop-item ${alreadyPurchased.includes(index) ? 'already-purchased' : ''}`} 
-                        key={index} onClick={() => {purchaseHandler(index, item.cost)}}>
+                    <div className={`shop-item ${(alreadyPurchased.includes(index) && index > 1) ? 'already-purchased' : ''}`} 
+                        key={index} onClick={() => {
+                            if (index === 0) { // Healing potion purchased
+                                if (currentHealth === maxHealth) return;
+                                setCurrentHealth(maxHealth);
+                            } else if (index === 1) { // Energy potion purchased
+                                if (currentEnergy === maxEnergy) return;
+                                setCurrentEnergy(maxEnergy);
+                            }
+
+                            purchaseHandler(index, item.cost);
+                        }}>
                         <div className='cost'>
                             {
-                                alreadyPurchased.includes(index) ?
+                                (alreadyPurchased.includes(index) && index > 1) ?
                                 <>
                                     SOLD
                                 </> :

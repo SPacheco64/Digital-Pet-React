@@ -5,7 +5,7 @@
     justify-content: center;
     background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
-    background-color: #cbcaff;
+    background-color: #76f5f8;;
     height: 100%;
     border-radius: 1rem;
     padding: 1rem 0;
@@ -49,6 +49,7 @@
             background: #00008f;
             cursor: pointer;
             position: relative;
+            user-select: none;
 
             &:hover {
                 background-color: #222;

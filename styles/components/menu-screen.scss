@@ -41,12 +41,14 @@
         line-height: 1.25rem;
 
         .menu-option {
-            .menu-icon {
-                // padding-right: .5rem;
+            display: flex;
+            align-items: center;
 
+            .menu-icon {
                 img {
                     height: 1rem;
                     width: 1rem;
+                    margin-right: .25rem;
                 }
             }
         }

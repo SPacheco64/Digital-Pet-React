@@ -19,12 +19,12 @@ import TestingPanel from './helpers/components/TestingPanel';
 import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation } from './helpers/functions/BattleLogic';
 
 // Energy & Hunger changes after playing a minigame
-const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 11);
-const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 11);
+const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
+const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 10);
 
 // Currency rewards for completing minigames
 const getFishingReward = (caughtCount: number) => (
-  Array.from({ length: caughtCount }, () => 5 + Math.floor(Math.random() * 5))
+  Array.from({ length: caughtCount }, () => 7 + Math.floor(Math.random() * 7))
     .reduce((totalReward, reward) => totalReward + reward, 0)
 );
 const getRpsReward = () => 5 + Math.floor(Math.random() * 6);
@@ -42,9 +42,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   // State variables for game status
   const [dataExists, setDataExists] = useState<boolean>(false);
   const [hideWelcome, setHideWelcome] = useState<boolean>(false);
-  const [autosaveEnabled, setAutosaveEnabled] = useState<boolean>(() => (
-    localStorage.getItem('digitalPetAutosaveEnabled') !== 'false'
-  ));
+  const [autosaveEnabled, setAutosaveEnabled] = useState<boolean>(() => (localStorage.getItem('digitalPetAutosaveEnabled') !== 'false'));
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
@@ -59,9 +57,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [showShopScreen, setShowShopScreen] = useState<boolean>(false);
   const [showAchievementsScreen, setShowAchievementsScreen] = useState<boolean>(false);
   const [showInfoScreen, setShowInfoScreen] = useState<boolean>(false);
-  const [inCombat, setInCombat] = useState<boolean>(false); // TO BE IMPLEMENTED LATER
-  const [inPlay, setInPlay] = useState<boolean>(false); // TO BE IMPLEMENTED LATER
-  const [battlesWon, setBattlesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
+  const [inCombat, setInCombat] = useState<boolean>(false);
+  const [battlesWon, setBattlesWon] = useState<number>(0);
   const [racesWon, setRacesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
   const [currentMoney, setCurrentMoney] = useState<number>(0);
   const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
@@ -73,6 +70,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [rpsOpen, setRpsOpen] = useState<boolean>(false);
   const [rpsInput, setRpsInput] = useState<number>(0);
   const [rpsEarnedCurrency, setRpsEarnedCurrency] = useState<number>(0);
+  const hasHydratedSave = useRef<boolean>(false);
+  const [battlesLost, setBattlesLost] = useState<number>(0); // Going to track losses to track Chocobo death
 
   // State Values for Creature Information
   const [currentStatus, setCurrentStatus] = useState<string>('');
@@ -90,7 +89,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [previewAnimation, setPreviewAnimation] = useState<string>('auto');
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
-  const hasHydratedSave = useRef<boolean>(false);
 
   // Battle State Values
   const [playerAttack, setPlayerAttack] = useState<boolean>(false);
@@ -149,13 +147,17 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   }, [selectedEnemyLevel, showBattleScreen]);
 
   useEffect(() => {
-    if (battleResult != null) {
+    if (battleResult !== null) {
       battleEndFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
         setCurrentEndurance, setCurrentlyBusy, ()=>{}, setCurrentHappiness, setCurrentMoney, setBattlesWon, setMaxHealth, 
-        setMaxEnergy, setCurrentHealth, setBattleMessage, chocoboName, selectedEnemyLevel, (battleResult === 'victory'), battlesWon
+        setMaxEnergy, setCurrentHealth, setBattleMessage, setBattlesLost, chocoboName, selectedEnemyLevel, (battleResult === 'victory'), battlesWon
       );
     }
   }, [battleResult]);
+
+  useEffect(() => {
+    console.log('Battles lost: ', battlesLost);
+  }, [battlesLost])
 
   useEffect(() => {
     const savedData = localStorage.getItem('digitalPetSave');
@@ -189,6 +191,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       setCurrentMoney(data.currentMoney);
       setAlreadyPurchased(data.alreadyPurchased);
       setBattlesWon(data.battlesWon);
+      setBattlesLost(data.battlesLost);
       setRacesWon(data.racesWon);
       setDataExists(true);
       setHideWelcome(true);
@@ -227,6 +230,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       currentMoney,
       alreadyPurchased,
       battlesWon,
+      battlesLost,
       racesWon,
     });
   }, [
@@ -272,6 +276,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       currentMoney,
       alreadyPurchased,
       battlesWon,
+      battlesLost,
       racesWon,
     });
   };
@@ -314,11 +319,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   // When the chocobo's energy drops to zero, its happiness and health 
   // decreases randomly. Does not apply when energy value was already 0.
-  // Both values are reduced by a random amount between 10 and 20.
+  // Both values are reduced by a random amount between 10 and 30.
   useEffect(() => {
     if (previousEnergy.current > 0 && currentEnergy === 0) {
-      const happinessLoss = 10 + Math.floor(Math.random() * 11);
-      const healthLoss = 10 + Math.floor(Math.random() * 11);
+      const happinessLoss = 10 + Math.floor(Math.random() * 20);
+      const healthLoss = 10 + Math.floor(Math.random() * 20);
       setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, 0));
       setCurrentHealth(prevHealth => Math.max(prevHealth - healthLoss, 0)); 
     }
@@ -350,12 +355,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      {/* ======= JUST FOR TESTING ======= */}
-      <div className='enemy-hp' style={{position: 'absolute', top: '1rem'}}>
-        Enemy HP: {currentEnemyHealth}
-      </div>
-      {/* ======= JUST FOR TESTING ======= */}
-
       <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime}
         onSave={handleSave} onReset={handleReset} autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled} />
@@ -476,7 +475,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             showShopScreen && !questionWindowOpen &&
             <ShopScreen currentStatus={currentStatus} currentMoney={currentMoney} 
               alreadyPurchased={alreadyPurchased} setCurrentMoney={setCurrentMoney} 
-              setAlreadyPurchased={setAlreadyPurchased}  
+              setAlreadyPurchased={setAlreadyPurchased} 
+              currentHealth={currentHealth} maxHealth={maxHealth}
+              currentEnergy={currentEnergy} maxEnergy={maxEnergy} 
+              setCurrentHealth={setCurrentHealth} setCurrentEnergy={setCurrentEnergy}
             />
           }
 

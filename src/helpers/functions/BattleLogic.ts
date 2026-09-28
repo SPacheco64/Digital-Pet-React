@@ -223,6 +223,7 @@ export const battleEndFunction = (
     setMaxEnergy: React.Dispatch<React.SetStateAction<number>>,
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
     setBattleMessage: React.Dispatch<React.SetStateAction<string>>,
+    setBattlesLost: React.Dispatch<React.SetStateAction<number>>,
     chocoboName: string,
     difficultyLevel: number, // 1-5 difficulty
     victory: boolean,
@@ -240,7 +241,7 @@ export const battleEndFunction = (
     const randomEnduranceGain = Math.max(Number(((0.2*difficultyLevel) + Math.random() * (0.2*difficultyLevel)).toFixed(1)) - (battlesWon * .05), minimumStatGain);
     const hpGain = Math.max(Math.round(difficultyLevel + Math.floor((Math.random() * 2))) - (battlesWon * 1), minimumHpGain);
     const energyGain = Math.max(Math.round(difficultyLevel + Math.floor((Math.random() * 2))) - (battlesWon * 1), minimumEnergyGain);
-    const randomMoneyGain = (5*difficultyLevel) + Math.floor(Math.random() * (10*difficultyLevel));
+    const randomMoneyGain = (10*difficultyLevel) + Math.floor(Math.random() * (10*difficultyLevel));
     const randomMoneyLoss = (5*difficultyLevel) + Math.floor(Math.random() * (10*difficultyLevel));
 
     setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
@@ -262,11 +263,12 @@ export const battleEndFunction = (
         setCurrentMoney(prevMoney => prevMoney + randomMoneyGain);
         setTotalBattlesWon(prevWins => prevWins + 1);
 
-        const victoryMessage = `Victory! You earned ${randomMoneyGain}G. ${chocoboName} feels stronger!`;
+        const victoryMessage = `Victory! You and ${chocoboName} earned ${randomMoneyGain}G.`;
         setBattleMessage(victoryMessage);
     } else {
         setCurrentHappiness(prevHappy => Math.max(prevHappy - (difficultyLevel * 5), 0));
         setCurrentMoney(prevMoney => Math.max(prevMoney - randomMoneyLoss, 0));
+        setBattlesLost(prevLosses => prevLosses + 1);
 
         const defeatMessage = `${chocoboName} has lost... ${randomMoneyLoss}G was stolen.`;
         setBattleMessage(defeatMessage);

@@ -93,7 +93,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   } = props;
 
   const checkIfDisabled = (index: number) => {
-    return (showStatusScreen && index > 0) || (showAchievementsScreen && index != 2)
+    return (showStatusScreen && index > 0) || (showAchievementsScreen && index !== 2)
       || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) || 
       (showBattleScreen && index === 4) ||
       (showBattleScreen && (currentEnemyHealth <= 0 || currentHealth <= 0) && index > 0) ||
@@ -207,7 +207,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
                 (index === 1 && currentEnergy < MIN_TRAINING_ENERGY) ||
                 (index === 2 && currentEnergy < MIN_PLAY_ENERGY) ||
                 (index === 3 && sleepButtonDisabled()) ||
-                (index != 0 && currentHunger === 100)
+                (index !== 0 && index !== 4 && currentHunger === 100)
               ) ? 'disabled' : ''}`}>
                 <MenuOption onClick={button.buttonFunction} icon={button.buttonIcon} optionName={button.buttonName} />
               </span>

@@ -115,7 +115,7 @@ export const trainingFunction = (
         setCurrentQuestionType('');
         setQuestionWindowOpen(false);
         setCurrentlyBusy(false);
-    }, 20000);
+    }, 15000);
 
     return () => clearTimeout(trainingTimer);
 }

@@ -20,6 +20,7 @@ export interface ChocoboSaveData {
     currentMoney: number;
     alreadyPurchased: number[];
     battlesWon: number;
+    battlesLost: number;
     racesWon: number;
 }
 
@@ -153,6 +154,12 @@ export interface ShopScreenProps {
     alreadyPurchased: Array<number>;
     setCurrentMoney: React.Dispatch<React.SetStateAction<number>>;
     setAlreadyPurchased: React.Dispatch<React.SetStateAction<Array<number>>>
+    currentHealth: number;
+    currentEnergy: number;
+    maxHealth: number;
+    maxEnergy: number;
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface AchievementScreenProps {
