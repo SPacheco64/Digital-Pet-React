@@ -3,6 +3,10 @@
         background-color: #222222;
         background-image: none;
 
+        .warning {
+            color: #fff;
+        }
+
         #GameContainer {
             background-image: url('../src/graphics/backgrounds/tracks-bg.png');
 
@@ -40,7 +44,7 @@
             z-index: 0;
         }
         
-        .game-screen {
+        .game-screen, .minigame-loading-screen {
             filter: opacity(.7) grayscale(100%);
             border: none;
 

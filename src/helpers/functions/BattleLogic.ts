@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface EnemyInformation {
     name: string;
     sprite: string;
@@ -182,16 +184,39 @@ export const attackFunction = (
 
 // Handles the calculation of damage/the result of a special action
 export const specialFunction = (
-    currentPower?: number,
-    currentDefense?: number,
-    currentHealth?: number,
-    currentHappiness?: number, // For player, helps determines the chance of success
-    attacker?: number, // 1 = Player | 2 = Enemy
-    enemyInfo?: EnemyInformation,
+    currentPower: number,
+    currentDefense: number,
+    currentSpeed: number,
+    currentHealth: number,
+    currentEnemyHealth: number,
+    currentHappiness: number, // For player, helps determines the chance of success
+    attacker: number, // 1 = Player | 2 = Enemy
+    enemyInfo: EnemyInformation,
+    setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>,
+    setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
+    setEnemyHealth: React.Dispatch<React.SetStateAction<number>>,
 ) => {
     console.log('Special function triggered.');
+    const criticalHit = Math.random() < ((currentSpeed/2)/10);
+    const initDamage = calculateDamage(currentPower, enemyInfo.defense, enemyInfo.difficultyLevel) * 2;
+    const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
+
     if (attacker === 1) {
+        // Player's special action logic here
+        setDamageToEnemy(finalDamage);
+        const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
+        setEnemyHealth(remainingEnemyHealth);
         
+        if (currentPower <= 3) {
+            // Low power special animation
+        } else if (currentPower <= 6) {
+            // Medium power special animation
+        } else {
+            // High power special animation
+        }
+    } else {
+        // Enemy's special action logic here
     }
 }
 

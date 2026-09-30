@@ -174,9 +174,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     try {
       const data = JSON.parse(savedData) as ChocoboSaveData;
 
-      if (!data.playerName || !data.chocoboName) {
-        throw new Error('Saved chocobo data is missing required names.');
-      }
+      console.log('Loaded saved data:', data);
 
       setPlayerName(data.playerName);
       setChocoboName(data.chocoboName);
@@ -354,6 +352,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   useEffect(() => {
     if (hideWelcome && !dataExists) {
       setCurrentStatus('Egg');
+    }
+
+    // Following code prevents bug where user reloads page at 0 hp. Ensures that Chocobo is not
+    // sitting at 0 hp and sets to 1 instead.
+    if (dataExists && (currentHealth < 1)) {
+      setCurrentHealth(1);
     }
   }, [hideWelcome, dataExists]);
 
