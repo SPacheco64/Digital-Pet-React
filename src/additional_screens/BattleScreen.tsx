@@ -21,6 +21,7 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
     playerRunning,
     damageToEnemy,
     damageToPlayer,
+    specialCharge,
     setIsLoading
   } = props;
 
@@ -38,20 +39,26 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
                         HP:<br/>
                         {currentHealth}/{maxHealth}
                     </div>
-                    <div className='power'>
+                    {/* <div className='power'>
                         POW:<br/>
                         {powerCount}
                     </div>
                     <div className='defense'>
                         DEF:<br/>
                         {defenseCount}
+                    </div> */}
+                    <div className='special-meter' aria-label={`Special charge ${specialCharge}%`}>
+                        <div className='special-meter-label'>LIMIT</div>
+                        <div className='special-meter-track' role='progressbar' aria-valuenow={specialCharge} aria-valuemin={0} aria-valuemax={100}>
+                            <div className={`special-meter-fill${specialCharge >= 100 ? ' charged' : ''}`} style={{ width: `${specialCharge}%` }} />
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Damage values that show on attack */}
             {
-                playerAttack && damageToEnemy &&
+                (playerAttack || playerSpecial) && damageToEnemy > 0 &&
                 <div className='damage-number to-enemy warning'> {damageToEnemy} </div>
             }
             {

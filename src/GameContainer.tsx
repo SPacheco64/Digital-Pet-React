@@ -16,7 +16,7 @@ import WelcomeForm from './helpers/components/WelcomeForm';
 import FishingMinigame from './helpers/components/FishingMinigame';
 import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
-import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation } from './helpers/functions/BattleLogic';
+import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
 
 // Energy & Hunger changes after playing a minigame
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
@@ -72,6 +72,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [rpsEarnedCurrency, setRpsEarnedCurrency] = useState<number>(0);
   const hasHydratedSave = useRef<boolean>(false);
   const [battlesLost, setBattlesLost] = useState<number>(0); // Going to track losses to track Chocobo death
+  const [specialCharge, setSpecialCharge] = useState<number>(0);
 
   // State Values for Creature Information
   const [currentStatus, setCurrentStatus] = useState<string>('');
@@ -130,6 +131,37 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       },
       setDamageToEnemy,
       setDamageToPlayer,
+      setSpecialCharge,
+    });
+  };
+
+  const handleSpecial = () => {
+    if (isLoading || battleLocked || specialCharge < 100 || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
+      return;
+    }
+
+    setBattleLocked(true);
+    setSpecialCharge(0);
+    specialFunction({
+      setPlayerSpecial,
+      setEnemyAttack,
+      setBattleLocked,
+      setCurrentHealth,
+      setEnemyHealth: setCurrentEnemyHealth,
+      setSpecialCharge,
+      setDamageToEnemy,
+      setDamageToPlayer,
+      currentPower,
+      currentDefense,
+      currentSpeed,
+      currentHealth,
+      currentEnemyHealth,
+      enemyInfo,
+      onComplete: (result) => {
+        setBattleLocked(false);
+        setBattleResult(result);
+        setInCombat(false);
+      },
     });
   };
 
@@ -195,6 +227,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       setBattlesWon(data.battlesWon);
       setBattlesLost(data.battlesLost);
       setRacesWon(data.racesWon);
+      setSpecialCharge(Math.min(data.specialCharge ?? 0, 100));
       setDataExists(true);
       setHideWelcome(true);
     } catch (error) {
@@ -234,6 +267,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       battlesWon,
       battlesLost,
       racesWon,
+      specialCharge,
     });
   }, [
     alreadyPurchased,
@@ -256,6 +290,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     maxHealth,
     playerName,
     racesWon,
+    specialCharge,
     autosaveEnabled,
   ]);
 
@@ -280,6 +315,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       battlesWon,
       battlesLost,
       racesWon,
+      specialCharge,
     });
   };
 
@@ -406,6 +442,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
             playerRunning={playerRunning} setInCombat={setInCombat}      
             damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
+            specialCharge={specialCharge}
             />
           }
 
@@ -527,7 +564,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         <div className='bottom-panel'>
           <Menu 
             inCombat={inCombat} currentStatus={currentStatus} currentHealth={currentHealth} maxHealth={maxHealth}
-            onAttack={handleAttack} currentEnemyHealth={currentEnemyHealth}
+            onAttack={handleAttack} onSpecial={handleSpecial} specialCharge={specialCharge}
+            currentEnemyHealth={currentEnemyHealth}
             battleLocked={battleLocked}
             currentEnergy={currentEnergy} maxEnergy={maxEnergy} currentHunger={currentHunger}
             setCurrentStatus={setCurrentStatus} setShowStatusScreen={setShowStatusScreen}

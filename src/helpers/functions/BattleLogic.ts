@@ -109,6 +109,7 @@ export const attackFunction = (
         onComplete: (result: 'victory' | 'defeat') => void;
         setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
         setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
+        setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
     },
 ) => {
     const {
@@ -127,6 +128,7 @@ export const attackFunction = (
         onComplete,
         setDamageToEnemy,
         setDamageToPlayer,
+        setSpecialCharge,
     } = options;
     const firstTurn = turnOrderFunction(currentSpeed, currentHappiness, enemyInfo);
 
@@ -161,6 +163,7 @@ export const attackFunction = (
         const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
         
         setDamageToPlayer(finalDamage);
+        setSpecialCharge(prevCharge => Math.min(prevCharge + finalDamage, 100));
         const remainingHealth = Math.max(currentHealth - finalDamage, 0);
         setCurrentHealth(remainingHealth);
 
@@ -183,42 +186,78 @@ export const attackFunction = (
 };
 
 // Handles the calculation of damage/the result of a special action
-export const specialFunction = (
-    currentPower: number,
-    currentDefense: number,
-    currentSpeed: number,
-    currentHealth: number,
-    currentEnemyHealth: number,
-    currentHappiness: number, // For player, helps determines the chance of success
-    attacker: number, // 1 = Player | 2 = Enemy
-    enemyInfo: EnemyInformation,
-    setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>,
-    setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>,
-    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
-    setEnemyHealth: React.Dispatch<React.SetStateAction<number>>,
-) => {
-    console.log('Special function triggered.');
-    const criticalHit = Math.random() < ((currentSpeed/2)/10);
+export const specialFunction = (options: {
+    setPlayerSpecial: React.Dispatch<React.SetStateAction<boolean>>;
+    setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setBattleLocked: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
+    setEnemyHealth: React.Dispatch<React.SetStateAction<number>>;
+    setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
+    setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
+    setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
+    currentPower: number;
+    currentDefense: number;
+    currentSpeed: number;
+    currentHealth: number;
+    currentEnemyHealth: number;
+    enemyInfo: EnemyInformation;
+    onComplete: (result: 'victory' | 'defeat') => void;
+}) => {
+    const {
+        setPlayerSpecial,
+        setEnemyAttack,
+        setBattleLocked,
+        setCurrentHealth,
+        setEnemyHealth,
+        setSpecialCharge,
+        setDamageToEnemy,
+        setDamageToPlayer,
+        currentPower,
+        currentDefense,
+        currentSpeed,
+        currentHealth,
+        currentEnemyHealth,
+        enemyInfo,
+        onComplete,
+    } = options;
+    const criticalHit = Math.random() < ((currentSpeed / 2) / 10);
     const initDamage = calculateDamage(currentPower, enemyInfo.defense, enemyInfo.difficultyLevel) * 2;
     const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
+    const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
 
-    if (attacker === 1) {
-        // Player's special action logic here
-        setDamageToEnemy(finalDamage);
-        const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
-        setEnemyHealth(remainingEnemyHealth);
-        
-        if (currentPower <= 3) {
-            // Low power special animation
-        } else if (currentPower <= 6) {
-            // Medium power special animation
-        } else {
-            // High power special animation
+    setPlayerSpecial(true);
+    setDamageToEnemy(finalDamage);
+    setEnemyHealth(remainingEnemyHealth);
+
+    setTimeout(() => {
+        setPlayerSpecial(false);
+        if (remainingEnemyHealth === 0) {
+            setBattleLocked(false);
+            onComplete('victory');
+            return;
         }
-    } else {
-        // Enemy's special action logic here
-    }
-}
+
+        setTimeout(() => {
+            setEnemyAttack(true);
+            const enemyCriticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
+            const enemyDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
+            const finalEnemyDamage = Math.round(enemyCriticalHit ? enemyDamage * 1.25 : enemyDamage);
+            const remainingHealth = Math.max(currentHealth - finalEnemyDamage, 0);
+
+            setDamageToPlayer(finalEnemyDamage);
+            setSpecialCharge(prevCharge => Math.min(prevCharge + finalEnemyDamage, 100));
+            setCurrentHealth(remainingHealth);
+
+            setTimeout(() => {
+                setEnemyAttack(false);
+                setBattleLocked(false);
+                if (remainingHealth === 0) {
+                    onComplete('defeat');
+                }
+            }, ATTACK_ANIMATION_DELAY);
+        }, ENEMY_RESPONSE_DELAY);
+    }, ATTACK_ANIMATION_DELAY + 200);
+};
 
 // When trying to run from battle, determines if the player succeeds or fails
 export const escapeFunction = (

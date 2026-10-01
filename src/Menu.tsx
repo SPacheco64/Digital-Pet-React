@@ -24,7 +24,7 @@ import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
-import { escapeFunction, specialFunction } from './helpers/functions/BattleLogic';
+import { escapeFunction } from './helpers/functions/BattleLogic';
 
 const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;
@@ -37,6 +37,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     currentHealth,
     maxHealth,
     onAttack,
+    onSpecial,
+    specialCharge,
     currentEnemyHealth,
     battleLocked,
     currentEnergy,
@@ -96,6 +98,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     return (showStatusScreen && index > 0) || (showAchievementsScreen && index !== 2)
       || (showInfoScreen && index !== 3) || (showShopScreen && index !== 1) || 
       (showBattleScreen && index === 4) ||
+      (showBattleScreen && index === 2 && specialCharge < 100) ||
       (showBattleScreen && (currentEnemyHealth <= 0 || currentHealth <= 0) && index > 0) ||
       (showBattleScreen && battleLocked) ||
       (showBattleScreen && (playerAttack || enemyAttack || playerSpecial || enemySpecial || playerRunning)) || 
@@ -139,7 +142,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
       }
     }},
     {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: onAttack},
-    {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: ()=>{setPlayerSpecial(true); specialFunction()}},
+    {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: onSpecial},
     {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction(setPlayerRunning)}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ];

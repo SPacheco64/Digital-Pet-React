@@ -28,13 +28,18 @@
         to { opacity: 0; transform: translateY(10px); }
     }
 
+    @keyframes specialMeterBlink {
+        50% { opacity: .45; }
+    }
+
     .battle-display {
         width: 95%;
         color: #fff;
         background: #00008f;
-        height: 4rem;
+        height: fit-content;
+        max-height: 4rem;
         position: absolute;
-        bottom: 1%;
+        bottom: 3%;
         display: flex;
 
         .message-box {
@@ -62,6 +67,34 @@
 
             .power, .defense {
                 line-height: .4rem;
+            }
+
+            .special-meter {
+                margin-top: .2rem;
+                width: 100%;
+            }
+
+            .special-meter-label {
+                font-size: .35rem;
+                line-height: .4rem;
+            }
+
+            .special-meter-track {
+                height: .35rem;
+                width: 100%;
+                border: 1px solid #fff;
+                background: #292929;
+            }
+
+            .special-meter-fill {
+                height: 100%;
+                background: #f2c14e;
+                transition: width .2s ease-out;
+
+                &.charged {
+                    background: #ffc0cb;
+                    animation: specialMeterBlink 2s ease-in-out infinite;
+                }
             }
         }
     }

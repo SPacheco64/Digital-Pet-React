@@ -104,6 +104,9 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         miniChocoAttack: [
             405, 918, 80, 80,     // frame 1
         ],
+        miniChocoSpecial: [
+            405, 918, 80, 80,
+        ],
 
         // Enemies:
         cactuar: [
@@ -169,17 +172,20 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         attackAttrToUse.anim,
         attackAttrToUse.frameRate,
         animations,
-        !isLoading && (playerAttack || enemyAttack),
+        !isLoading && (playerAttack || enemyAttack || playerSpecial || enemySpecial),
     );
 
     useEffect(() => {
-        if (!playerAttack && !enemyAttack) {
+        const playerAction = playerAttack || playerSpecial;
+        const enemyAction = enemyAttack || enemySpecial;
+        if (!playerAction && !enemyAction) {
             return;
         }
 
+        const isSpecialAction = playerSpecial || enemySpecial;
         const ogChocoState = chocoAttrToUse;
         const ogEnemyState = enemyAttrToUse;
-        const targetNode = playerAttack ? spriteRef1.current : spriteRef2.current;
+        const targetNode = playerAction ? spriteRef1.current : spriteRef2.current;
 
         if (!targetNode) {
             return;
@@ -200,46 +206,49 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             }
         });
 
-        if (playerAttack) {
-            setAttackAttrToUse(attackAttrs[0]);
+        if (playerAction) {
+            setAttackAttrToUse(isSpecialAction ? { ...attackAttrs[0], x: 28, y: 78, scale: 1.25 } : attackAttrs[0]);
             flashSprite.play();
 
             setChocoAttrToUse(prevState => ({
                 ...prevState,
-                x: prevState.x - 10,
-                y: prevState.y - 4,
-                anim: 'miniChocoAttack'
+                x: prevState.x - (isSpecialAction ? 24 : 10),
+                y: prevState.y - (isSpecialAction ? 12 : 4),
+                scale: prevState.scale + (isSpecialAction ? .12 : 0),
+                anim: isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack'
             }));
 
             setEnemyAttrToUse(prevState => ({
                 ...prevState,
-                x: prevState.x - 5,
-                y: prevState.y + 1,
-                scale: prevState.scale -.05
+                x: prevState.x - (isSpecialAction ? 12 : 5),
+                y: prevState.y + (isSpecialAction ? 5 : 1),
+                scale: prevState.scale - (isSpecialAction ? .12 : .05)
             }));
 
             setTimeout(() => {
                 setChocoAttrToUse(ogChocoState);
                 setEnemyAttrToUse(ogEnemyState);
                 flashSprite.destroy();
-            }, 400);
+            }, isSpecialAction ? 600 : 400);
         }
 
-        if (enemyAttack) {
-            setAttackAttrToUse(attackAttrs[1]);
+        if (enemyAction) {
+            setAttackAttrToUse(isSpecialAction ? { ...attackAttrs[1], x: 174, y: 78, scale: 1.25 } : attackAttrs[1]);
             flashSprite.play();
 
             setChocoAttrToUse(prevState => ({
                 ...prevState,
-                x: prevState.x + 10,
-                anim: 'miniChocoAttack'
+                x: prevState.x + (isSpecialAction ? 20 : 10),
+                y: prevState.y + (isSpecialAction ? 8 : 0),
+                scale: prevState.scale + (isSpecialAction ? .1 : 0),
+                anim: isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack'
             }));
 
             setEnemyAttrToUse(prevState => ({
                 ...prevState,
-                x: prevState.x + 5,
+                x: prevState.x + (isSpecialAction ? 12 : 5),
                 y: prevState.y,
-                scale: prevState.scale + .05
+                scale: prevState.scale + (isSpecialAction ? .12 : .05)
             }));
 
             setTimeout(() => {
@@ -248,7 +257,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                 flashSprite.destroy();
             }, 400);
         }
-    }, [playerAttack, enemyAttack]);
+    }, [playerAttack, enemyAttack, playerSpecial, enemySpecial]);
 
     useEffect(() => {
         if (!battleResult) { return; }
@@ -307,7 +316,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                     {/* Show only when an Attack or Special Action is taking place */}
 
                     {
-                        (playerAttack || enemyAttack) &&
+                        (playerAttack || enemyAttack || playerSpecial || enemySpecial) &&
                         <Sprite
                             ref={spriteRef3}
                             x={attackAttrToUse.x}

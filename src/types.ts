@@ -22,6 +22,7 @@ export interface ChocoboSaveData {
     battlesWon: number;
     battlesLost: number;
     racesWon: number;
+    specialCharge: number;
 }
 
 export interface GameDisplayProps {
@@ -55,6 +56,7 @@ export interface GameDisplayProps {
     previewAnimation: string;
     damageToEnemy: number;
     damageToPlayer: number;
+    specialCharge: number;
     setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,6 +79,8 @@ export interface MenuProps {
     currentHealth: number;
     maxHealth: number;
     onAttack: () => void;
+    onSpecial: () => void;
+    specialCharge: number;
     currentEnemyHealth: number;
     battleLocked: boolean;
     currentEnergy: number;
@@ -262,5 +266,6 @@ export interface BattleScreenProps {
     battleResult: 'victory' | 'defeat' | null;
     damageToEnemy: number;
     damageToPlayer: number;
+        specialCharge: number;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
