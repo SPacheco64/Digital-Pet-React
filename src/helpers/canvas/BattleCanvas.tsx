@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Stage, Layer, Sprite} from 'react-konva';
+import { Circle, Group, Layer, Ring, Sprite, Stage, Star } from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import enemySheet from '../../graphics/canvas_sprites/enemy-spritesheet.png';
@@ -21,9 +21,6 @@ type AnimAttr = {
 const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => {
     // Destructure props for ease of access & documentation
     const {
-        // currentPlayerAction,
-        // currentEnemyAction,
-        // currentEnemy,
         selectedEnemyLevel,
         isLoading,
         playerAttack,
@@ -85,6 +82,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     const spriteRef1 = useRef<any>(null);
     const spriteRef2 = useRef<any>(null);
     const spriteRef3 = useRef<any>(null);
+    const specialImpactRefs = [useRef<any>(null), useRef<any>(null), useRef<any>(null)];
 
     const [chocoSheetImg] = useImage(chocoSheet);
     const [enemySheetImg] = useImage(enemySheet);
@@ -172,7 +170,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         attackAttrToUse.anim,
         attackAttrToUse.frameRate,
         animations,
-        !isLoading && (playerAttack || enemyAttack || playerSpecial || enemySpecial),
+        !isLoading && (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial,
     );
 
     useEffect(() => {
@@ -260,6 +258,64 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     }, [playerAttack, enemyAttack, playerSpecial, enemySpecial]);
 
     useEffect(() => {
+        if (!playerSpecial && !enemySpecial) {
+            return;
+        }
+
+        const stageNode = stageRef.current;
+        const impactNodes = specialImpactRefs.map((impactRef) => impactRef.current);
+
+        if (impactNodes.some((impactNode) => !impactNode) || !stageNode) {
+            return;
+        }
+
+        const impactTweens: Konva.Tween[] = [];
+        const impactTimers = impactNodes.map((impactNode, index) => {
+            impactNode.opacity(0);
+            impactNode.scale({ x: 0.3, y: 0.3 });
+            impactNode.rotation(0);
+
+            return window.setTimeout(() => {
+                impactNodes[index].opacity(0.95);
+                const impactTween = new Konva.Tween({
+                    node: impactNode,
+                    opacity: 0,
+                    scaleX: [1.15, 1.55, 1.3][index],
+                    scaleY: [1.15, 1.55, 1.3][index],
+                    rotation: index % 2 === 0 ? 45 : -35,
+                    duration: 0.32,
+                    easing: Konva.Easings.EaseOut,
+                });
+                impactTweens[index] = impactTween;
+                impactTween.play();
+            }, index * 180);
+        });
+
+        const shakeTween = new Konva.Tween({
+            node: stageNode,
+            x: playerSpecial ? -4 : 4,
+            duration: 0.06,
+            easing: Konva.Easings.Linear,
+            onFinish: () => {
+                new Konva.Tween({
+                    node: stageNode,
+                    x: 0,
+                    duration: 0.18,
+                    easing: Konva.Easings.EaseOut,
+                }).play();
+            },
+        });
+        shakeTween.play();
+
+        return () => {
+            impactTimers.forEach((impactTimer) => window.clearTimeout(impactTimer));
+            impactTweens.forEach((impactTween) => impactTween?.destroy());
+            shakeTween.destroy();
+            stageNode.x(0);
+        };
+    }, [playerSpecial, enemySpecial]);
+
+    useEffect(() => {
         if (!battleResult) { return; }
 
         const targetNode = battleResult === 'victory' ? spriteRef1.current : spriteRef2.current;
@@ -313,10 +369,10 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                         scaleY={chocoAttrToUse.scale}
                     />
 
-                    {/* Show only when an Attack or Special Action is taking place */}
+                    {/* Regular attack effect; Special uses only the burst below. */}
 
                     {
-                        (playerAttack || enemyAttack || playerSpecial || enemySpecial) &&
+                        (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial &&
                         <Sprite
                             ref={spriteRef3}
                             x={attackAttrToUse.x}
@@ -329,6 +385,77 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                             scaleX={attackAttrToUse.scale}
                             scaleY={attackAttrToUse.scale}
                         />
+                    }
+
+                    {(playerSpecial || enemySpecial) &&
+                        <Group listening={false}>
+                            <Group
+                                ref={specialImpactRefs[0]}
+                                x={attackAttrToUse.x + 10}
+                                y={attackAttrToUse.y + 38}
+                                listening={false}
+                            >
+                                <Star
+                                    numPoints={10}
+                                    innerRadius={14}
+                                    outerRadius={34}
+                                    fill='#ffd34e'
+                                    stroke='#fff4ae'
+                                    strokeWidth={2}
+                                />
+                                <Ring
+                                    innerRadius={18}
+                                    outerRadius={22}
+                                    stroke='#fff4ae'
+                                    strokeWidth={2}
+                                />
+                                <Circle radius={11} fill='#fff4ae' opacity={0.8} />
+                            </Group>
+                            <Group
+                                ref={specialImpactRefs[1]}
+                                x={attackAttrToUse.x + 24}
+                                y={attackAttrToUse.y + 22}
+                                listening={false}
+                            >
+                                <Star
+                                    numPoints={14}
+                                    innerRadius={22}
+                                    outerRadius={58}
+                                    fill='#ffb52e'
+                                    stroke='#fff4ae'
+                                    strokeWidth={2}
+                                />
+                                <Ring
+                                    innerRadius={30}
+                                    outerRadius={36}
+                                    stroke='#fff4ae'
+                                    strokeWidth={2}
+                                />
+                                <Circle radius={17} fill='#fff4ae' opacity={0.8} />
+                            </Group>
+                            <Group
+                                ref={specialImpactRefs[2]}
+                                x={attackAttrToUse.x + 38}
+                                y={attackAttrToUse.y + 34}
+                                listening={false}
+                            >
+                                <Star
+                                    numPoints={12}
+                                    innerRadius={17}
+                                    outerRadius={44}
+                                    fill='#ffd34e'
+                                    stroke='#fff4ae'
+                                    strokeWidth={2}
+                                />
+                                <Ring
+                                    innerRadius={23}
+                                    outerRadius={28}
+                                    stroke='#fff4ae'
+                                    strokeWidth={2}
+                                />
+                                <Circle radius={13} fill='#fff4ae' opacity={0.8} />
+                            </Group>
+                        </Group>
                     }
                 </Layer>
             </Stage>
