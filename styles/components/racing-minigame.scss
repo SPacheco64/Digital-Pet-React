@@ -1,4 +1,4 @@
-.racing-screen {
+#RacingScreen {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -8,8 +8,6 @@
     overflow: hidden;
     box-sizing: border-box;
     color: #fff;
-    border: .25rem solid #555;
-    border-radius: 1rem;
     background: #428349;
     background: linear-gradient(
         to top,

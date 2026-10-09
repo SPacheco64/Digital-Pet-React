@@ -13,8 +13,6 @@ import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
-import FishingMinigame from './helpers/components/FishingMinigame';
-import RacingMinigame from './helpers/components/RacingMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
 import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
 
@@ -420,7 +418,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Main Game Display */}
           {
             !showMenuScreen && !questionWindowOpen && hideWelcome &&
-            !fishingOpen && !raceOpen &&
             <GameDisplay creatureName={chocoboName} inCombat={inCombat}
             currentStatus={currentStatus} currentHealth={currentHealth}
             battlesWon={battlesWon}
@@ -436,6 +433,46 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             showMenuScreen={showMenuScreen} 
             showBattleSelection={showBattleSelection} showBattleScreen={showBattleScreen}
             raceSelectionOpen={raceSelectionOpen}
+            fishingOpen={fishingOpen}
+            fishingInput={fishingInput}
+            fishingEarnedCurrency={fishingEarnedCurrency}
+            onFishingComplete={(caughtCount) => {
+              const happinessChange = (caughtCount > 0) ? caughtCount * (3 + Math.floor(Math.random() * 6)) : -(5 + Math.floor(Math.random() * 6));
+              const earnedCurrency = getFishingReward(caughtCount);
+              setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
+              setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
+              setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
+              setCurrentMoney(prevMoney => prevMoney + earnedCurrency);
+              setFishingEarnedCurrency(earnedCurrency);
+              setFishingComplete(true);
+            }}
+            onFishingClose={() => {
+              setFishingOpen(false);
+              setFishingComplete(false);
+              setFishingInput(0);
+              setCurrentlyBusy(false);
+            }}
+            raceOpen={raceOpen}
+            raceDifficulty={raceDifficulty}
+            currentSpeed={currentSpeed}
+            currentEndurance={currentEndurance}
+            raceSteeringInput={raceSteeringInput}
+            sprintActive={sprintActive}
+            setSprintActive={setSprintActive}
+            onRaceComplete={(place) => {
+              setRaceComplete(true);
+              if (place === 1) setRacesWon((wins) => wins + 1);
+              setCurrentHappiness((happiness) => Math.min(100, happiness + (place === 1 ? 12 : 5)));
+              setCurrentHunger((hunger) => Math.min(100, hunger + getPlayHungerGain()));
+              setCurrentEnergy((energy) => Math.max(0, energy - getPlayEnergyCost()));
+              setCurrentMoney((money) => money + getRaceReward(place));
+            }}
+            onRaceClose={() => {
+              setRaceOpen(false);
+              setRaceComplete(false);
+              setSprintActive(false);
+              setCurrentlyBusy(false);
+            }}
             onSelectRaceDifficulty={(difficulty) => {
               setRaceDifficulty(difficulty);
               setRaceSelectionOpen(false);
@@ -457,57 +494,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             specialCharge={specialCharge}
             />
           }
-
-          {/* Fishing Minigame game screen */}
-          {
-            fishingOpen &&
-            <FishingMinigame inputTrigger={fishingInput} earnedCurrency={fishingEarnedCurrency}
-              onComplete={(caughtCount) => {
-                const happinessChange = (caughtCount > 0) ? caughtCount * (3 + Math.floor(Math.random() * 6)) : -(5 + Math.floor(Math.random() * 6));
-                const earnedCurrency = getFishingReward(caughtCount);
-                setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
-                setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
-                setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
-                setCurrentMoney(prevMoney => prevMoney + earnedCurrency);
-                setFishingEarnedCurrency(earnedCurrency);
-                setFishingComplete(true);
-              }}
-              onClose={() => {
-                setFishingOpen(false);
-                setFishingComplete(false);
-                setFishingInput(0);
-                setCurrentlyBusy(false);
-              }}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-            />
-          }
-
-          {raceOpen && (
-            <RacingMinigame
-              difficulty={raceDifficulty}
-              currentSpeed={currentSpeed}
-              currentEndurance={currentEndurance}
-              creatureName={chocoboName}
-              steeringInput={raceSteeringInput}
-              sprintActive={sprintActive}
-              setSprintActive={setSprintActive}
-              onComplete={(place) => {
-                setRaceComplete(true);
-                if (place === 1) setRacesWon((wins) => wins + 1);
-                setCurrentHappiness((happiness) => Math.min(100, happiness + (place === 1 ? 12 : 5)));
-                setCurrentHunger((hunger) => Math.min(100, hunger + getPlayHungerGain()));
-                setCurrentEnergy((energy) => Math.max(0, energy - getPlayEnergyCost()));
-                setCurrentMoney((money) => money + getRaceReward(place));
-              }}
-              onClose={() => {
-                setRaceOpen(false);
-                setRaceComplete(false);
-                setSprintActive(false);
-                setCurrentlyBusy(false);
-              }}
-            />
-          )}
 
           {/* Menu Screen w/several options (status, shop, achievements, info & tips) */}
           {

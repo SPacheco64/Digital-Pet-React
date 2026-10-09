@@ -7,6 +7,8 @@ import GameCanvas from './helpers/canvas/GameCanvas';
 import BattleScreen from './additional_screens/BattleScreen';
 import BattleSelectionScreen from './additional_screens/BattleSelectionScreen';
 import RaceSelectionScreen from './additional_screens/RaceSelectionScreen';
+import FishingMinigame from './helpers/components/FishingMinigame';
+import RacingMinigame from './helpers/components/RacingMinigame';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -31,6 +33,20 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     showBattleSelection,
     showBattleScreen,
     raceSelectionOpen,
+    fishingOpen,
+    fishingInput,
+    fishingEarnedCurrency,
+    onFishingComplete,
+    onFishingClose,
+    raceOpen,
+    raceDifficulty,
+    currentSpeed,
+    currentEndurance,
+    raceSteeringInput,
+    sprintActive,
+    setSprintActive,
+    onRaceComplete,
+    onRaceClose,
     onSelectRaceDifficulty,
     selectedEnemyLevel,
     currentlyBusy,
@@ -70,6 +86,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {/* Displayed game content */}
       {
         !showMenuScreen && !showBattleScreen && !showBattleSelection && !raceSelectionOpen &&
+        !fishingOpen && !raceOpen &&
         <>
           <GameCanvas currentStatus={currentStatus} previewAnimation={previewAnimation} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
@@ -93,6 +110,31 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
 
       {!showMenuScreen && raceSelectionOpen && 
         <RaceSelectionScreen onSelect={onSelectRaceDifficulty} />
+      }
+
+      {!showMenuScreen && fishingOpen &&
+        <FishingMinigame
+          inputTrigger={fishingInput}
+          earnedCurrency={fishingEarnedCurrency}
+          onComplete={onFishingComplete}
+          onClose={onFishingClose}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
+      }
+
+      {!showMenuScreen && raceOpen &&
+        <RacingMinigame
+          difficulty={raceDifficulty}
+          currentSpeed={currentSpeed}
+          currentEndurance={currentEndurance}
+          creatureName={creatureName}
+          steeringInput={raceSteeringInput}
+          sprintActive={sprintActive}
+          setSprintActive={setSprintActive}
+          onComplete={onRaceComplete}
+          onClose={onRaceClose}
+        />
       }
 
       {/* Displayed battle content */}
