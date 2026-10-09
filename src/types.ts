@@ -106,7 +106,6 @@ export interface MenuProps {
     playerRunning: boolean;
     fishingOpen: boolean;
     fishingComplete: boolean;
-    rpsOpen: boolean;
     raceSelectionOpen: boolean;
     raceOpen: boolean;
     raceComplete: boolean;
@@ -127,8 +126,6 @@ export interface MenuProps {
     setFishingOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFishingComplete: React.Dispatch<React.SetStateAction<boolean>>;
     setFishingInput: React.Dispatch<React.SetStateAction<number>>;
-    setRpsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setRpsInput: React.Dispatch<React.SetStateAction<number>>;
     setRaceSelectionOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setRaceOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setRaceComplete: React.Dispatch<React.SetStateAction<boolean>>;

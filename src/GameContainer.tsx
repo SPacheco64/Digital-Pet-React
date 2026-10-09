@@ -14,7 +14,6 @@ import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
 import FishingMinigame from './helpers/components/FishingMinigame';
-import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
 import RacingMinigame from './helpers/components/RacingMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
 import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
@@ -28,7 +27,6 @@ const getFishingReward = (caughtCount: number) => (
   Array.from({ length: caughtCount }, () => 7 + Math.floor(Math.random() * 7))
     .reduce((totalReward, reward) => totalReward + reward, 0)
 );
-const getRpsReward = () => 5 + Math.floor(Math.random() * 6);
 const getRaceReward = (place: number) => [0, 24, 14, 8, 4][place] ?? 0;
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
@@ -69,9 +67,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [fishingComplete, setFishingComplete] = useState<boolean>(false);
   const [fishingInput, setFishingInput] = useState<number>(0);
   const [fishingEarnedCurrency, setFishingEarnedCurrency] = useState<number>(0);
-  const [rpsOpen, setRpsOpen] = useState<boolean>(false);
-  const [rpsInput, setRpsInput] = useState<number>(0);
-  const [rpsEarnedCurrency, setRpsEarnedCurrency] = useState<number>(0);
   const [raceSelectionOpen, setRaceSelectionOpen] = useState<boolean>(false);
   const [raceOpen, setRaceOpen] = useState<boolean>(false);
   const [raceDifficulty, setRaceDifficulty] = useState<RaceDifficulty>(2);
@@ -425,7 +420,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Main Game Display */}
           {
             !showMenuScreen && !questionWindowOpen && hideWelcome &&
-            !fishingOpen && !rpsOpen && !raceOpen &&
+            !fishingOpen && !raceOpen &&
             <GameDisplay creatureName={chocoboName} inCombat={inCombat}
             currentStatus={currentStatus} currentHealth={currentHealth}
             battlesWon={battlesWon}
@@ -486,31 +481,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />
-          }
-
-          {/* Rock Paper Scissors Minigame game screen */}
-          {
-            rpsOpen &&
-            <RockPaperScissorsMinigame inputTrigger={rpsInput} earnedCurrency={rpsEarnedCurrency}
-              onResult={(result) => {
-                const happinessChange = result === 'win'
-                  ? 10 + Math.floor(Math.random() * 6)
-                  : result === 'tie'
-                    ? 5 + Math.floor(Math.random() * 4)
-                    : 2 + Math.floor(Math.random() * 4);
-                const earnedCurrency = result === 'win' ? getRpsReward() : 0;
-
-                setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
-                setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
-                setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
-                setCurrentMoney(prevMoney => prevMoney + earnedCurrency);
-                setRpsEarnedCurrency(earnedCurrency);
-              }}
-              onComplete={() => {
-                setRpsOpen(false);
-                setRpsInput(0);
-                setCurrentlyBusy(false);
-              }} />
           }
 
           {raceOpen && (
@@ -597,7 +567,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               }
               {
                 currentQuestionType === 'play' &&
-                <QuestionWindow dialogue='What To Play?' responsesArray={['R.P.S', 'Fishing', 'Chocobo Race', 'Battle']} />
+                <QuestionWindow dialogue='What To Play?' responsesArray={['Fishing', 'Chocobo Race', 'Battle']} />
               }
             </>
           }
@@ -621,14 +591,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setFishingInput={setFishingInput}
             fishingOpen={fishingOpen}
             fishingComplete={fishingComplete}
-            setRpsOpen={setRpsOpen}
-            setRpsInput={setRpsInput}
             setRaceSelectionOpen={setRaceSelectionOpen}
             setRaceOpen={setRaceOpen}
             setRaceComplete={setRaceComplete}
             setSprintActive={setSprintActive}
             setRaceSteeringInput={setRaceSteeringInput}
-            rpsOpen={rpsOpen}
             raceSelectionOpen={raceSelectionOpen}
             raceOpen={raceOpen}
             raceComplete={raceComplete}
