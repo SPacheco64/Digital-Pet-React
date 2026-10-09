@@ -1,0 +1,345 @@
+.racing-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    color: #fff;
+    border: .25rem solid #555;
+    border-radius: 1rem;
+    background: #428349;
+    background: linear-gradient(
+        to top,
+        #768a45,#418147
+    );
+    // background: url('../../src/graphics/backgrounds/racing-grass-bg.png');
+    background-repeat: repeat;
+    background-size: contain;
+    // font-family: 'Courier New', monospace;
+
+    .race-hud {
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        min-height: 2.7rem;
+        padding: 0.3rem 0.4rem;
+        background: #141470;
+        border-bottom: 2px solid #fff;
+        justify-content: space-evenly;
+        width: 100%;
+
+        .race-endurance {
+            min-width: 5rem;
+
+            span {
+                text-align: center;
+            }
+        }
+
+        div { min-width: 0; }
+
+        span {
+            display: block;
+            color: #fff;
+            font-size: .35rem;
+            line-height: 1.1;
+        }
+
+        strong {
+            display: block;
+            margin-top: .12rem;
+            font-size: .5rem;
+            line-height: 1;
+            font-weight: normal;
+        }
+    }
+
+    .endurance-meter {
+        height: .45rem;
+        margin-top: .25rem;
+        overflow: hidden;
+        border: 1px solid #fff;
+        background: #333;
+
+        span {
+            height: 100%;
+            background: #ffdd1e;
+            transition: width 90ms linear;
+        }
+    }
+
+    .race-course {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .race-road {
+        position: absolute;
+        inset: 0 11%;
+        overflow: hidden;
+        background-color: #e29451;
+        background-image: url('../../src/graphics/backgrounds/racing-track-bg.png');
+        background-repeat: repeat;
+        clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+
+        @media (prefers-reduced-motion: reduce) {
+            background-position-y: 0 !important;
+        }
+    }
+
+    .race-racer {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        z-index: 1;
+        width: 23%;
+        height: 3rem;
+        transform: translate(-50%, -50%) scale(var(--track-scale, 1));
+        transition: left 100ms ease-out, transform 80ms linear;
+    }
+
+    .race-rival {
+        z-index: 2;
+        height: 3.5rem;
+
+        .racer-sprite {
+            opacity: .9;
+        }
+
+        &.is-slowed .racer-sprite { opacity: .5; }
+        &.is-sprinting .racer-sprite { filter: drop-shadow(0 0 3px #f4e08b) var(--racer-filter, none); }
+    }
+
+    .race-player {
+        z-index: 3;
+        top: 75%;
+        height: 3.5rem;
+
+        .racer-sprite {
+            width: 56px;
+            height: 56px;
+        }
+    }
+
+    .racer-sprite {
+        display: block;
+        width: 56px;
+        height: 56px;
+        transform: translateX(-50%);
+        background-repeat: no-repeat;
+        background-position: 0 -642px;
+        background-size: 414px 790px;
+        animation: race-chocobo-run 480ms steps(1, end) infinite;
+        image-rendering: pixelated;
+        filter: var(--racer-filter, none);
+        transform: scale(.65);
+        transform-origin: center bottom;
+    }
+
+    .racer-name {
+        position: absolute;
+        top: .5rem;
+        left: .5rem;
+        max-width: 100%;
+        overflow: hidden;
+        color: #fff;
+        font-size: .45rem;
+        text-overflow: ellipsis;
+        text-shadow: 1px 1px #000;
+        white-space: nowrap;
+    }
+
+    .race-obstacle {
+        position: absolute;
+        z-index: 1;
+        width: 1rem;
+        height: .8rem;
+
+        background: url('../../src/graphics/minigame_assets/racing/rock.png');
+        background-size: cover;
+        background-position: center;
+        transform: translate(-50%, -50%) scale(var(--track-scale, 1));
+    }
+
+    .race-finish-line {
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        left: 0;
+        height: .5rem;
+        background: #e6e6e6;
+    }
+
+    .race-impact {
+        position: absolute;
+        z-index: 4;
+        top: 49%;
+        left: 50%;
+        padding: .2rem .35rem;
+        color: #fff5b1;
+        background: #c14635;
+        border: 2px solid #fff5b1;
+        font-size: .65rem;
+        font-weight: 900;
+        transform: translate(-50%, -50%) rotate(-8deg);
+        animation: race-impact-pop 250ms steps(2, end) infinite alternate;
+    }
+
+    .race-countdown {
+        position: absolute;
+        z-index: 4;
+        top: 50%;
+        left: 50%;
+        padding: .35rem .65rem;
+        color: #fff;
+        text-shadow: 1px 2px #000;
+        font-size: 1.5rem;
+        font-weight: 900;
+        transform: translate(-50%, -50%);
+    }
+
+    .race-progress-track {
+        position: absolute;
+        z-index: 3;
+        right: 12%;
+        bottom: .2rem;
+        left: 12%;
+        height: 4px;
+        background: rgba(24, 34, 26, .75);
+
+        span {
+            display: block;
+            height: 100%;
+            border: 1px solid #333;
+            background: #f3e27c;
+        }
+    }
+
+    .race-instructions {
+        z-index: 2;
+        display: flex;
+        justify-content: space-evenly;
+        gap: .2rem;
+        min-height: 1.35rem;
+        align-items: center;
+        padding: .1rem .35rem;
+        color: #fff;
+        background: #141470;
+        font-size: .35rem;
+
+        .sprint-on { color: #f2df5c; }
+    }
+
+    .race-result {
+        position: absolute;
+        z-index: 5;
+        inset: 29% 9% auto;
+        display: grid;
+        justify-items: center;
+        gap: .4rem;
+        padding: .8rem .55rem;
+        border: .2rem solid #fff;
+        background: #141470;
+        box-shadow: 3px 4px rgba(0,0,0,.35);
+
+        strong { font-size: .75rem; }
+        span { font-size: .5rem; }
+
+        button {
+            padding: .25rem .55rem;
+            color: #fff;
+            background: #00008f;
+            border: 2px solid #fff;
+            font: inherit;
+            font-size: .6rem;
+            font-weight: 900;
+            cursor: pointer;
+
+            &:hover {
+
+            }
+        }
+    }
+
+    &.is-slowed .race-player .racer-sprite {
+        opacity: .75;
+    }
+}
+
+@keyframes race-chocobo-run {
+    0% { background-position: 0 -642px; }
+    33.333% { background-position: -62px -642px; }
+    66.667% { background-position: -125px -642px; }
+    100% { background-position: 0 -642px; }
+}
+
+@keyframes race-impact-pop {
+    from { scale: 1; }
+    to { scale: 1.12; }
+}
+
+#RaceSelectionScreen {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: .5rem;
+    color: #fff;
+    background: url(../../src/graphics/backgrounds/status-window-bg.png);
+    background-size: contain;
+
+    .race-selection-panel {
+        width: 95%;
+        max-height: 65%;
+        display: flex;
+        flex-direction: column;
+        padding: .1rem .5rem;
+        box-sizing: border-box;
+        border: .2rem solid #fff;
+        background: #141470;
+    }
+
+    h2 {
+        margin: 0;
+        padding-top: .5rem;
+        color: #fff;
+        font-size: .75rem;
+        line-height: 1rem;
+        text-align: center;
+    }
+
+    .race-difficulty-options {
+        min-height: 0;
+        overflow-y: auto;
+
+        button {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: .25rem;
+            padding: .25rem;
+            border: .1rem solid;
+            margin: .5rem 0;
+            color: #fff;
+            background: #00008f;
+            font: inherit;
+            cursor: pointer;
+
+            &:hover {
+                background: #222;
+            }
+
+            strong { font-size: .65rem; }
+            span { font-size: .46rem; }
+        }
+    }
+}

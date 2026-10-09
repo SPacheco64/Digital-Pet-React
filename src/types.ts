@@ -46,6 +46,7 @@ export interface GameDisplayProps {
     showMenuScreen: boolean;
     showBattleSelection: boolean;
     showBattleScreen: boolean;
+    raceSelectionOpen: boolean;
     selectedEnemyLevel: number;
     isLoading: boolean;
     playerAttack: boolean;
@@ -63,6 +64,7 @@ export interface GameDisplayProps {
     setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
     setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedEnemyLevel: React.Dispatch<React.SetStateAction<number>>;
+    onSelectRaceDifficulty: (difficulty: RaceDifficulty) => void;
 }
 
 export interface CreatureProps {
@@ -72,6 +74,8 @@ export interface CreatureProps {
     currentlyBusy: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export type RaceDifficulty = 1 | 2 | 3;
 
 export interface MenuProps {
     inCombat: boolean;
@@ -103,6 +107,10 @@ export interface MenuProps {
     fishingOpen: boolean;
     fishingComplete: boolean;
     rpsOpen: boolean;
+    raceSelectionOpen: boolean;
+    raceOpen: boolean;
+    raceComplete: boolean;
+    sprintActive: boolean;
     welcomeFormHidden: boolean;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMenuScreen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -121,6 +129,11 @@ export interface MenuProps {
     setFishingInput: React.Dispatch<React.SetStateAction<number>>;
     setRpsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setRpsInput: React.Dispatch<React.SetStateAction<number>>;
+    setRaceSelectionOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setRaceOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setRaceComplete: React.Dispatch<React.SetStateAction<boolean>>;
+    setSprintActive: React.Dispatch<React.SetStateAction<boolean>>;
+    setRaceSteeringInput: React.Dispatch<React.SetStateAction<{ direction: -1 | 1; sequence: number }>>;
     setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
     setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerAttack: React.Dispatch<React.SetStateAction<boolean>>;

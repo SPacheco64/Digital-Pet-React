@@ -39,7 +39,7 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
     {cost: 100, image: gysahlGreens, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
     {cost: 200, image: gysahlGreens, label: 'POW Materia', description: 'Increases POW in battles.'},
     {cost: 200, image: gysahlGreens, label: 'DEF Materia', description: 'Increases DEF in battles.'},
-    {cost: 500, image: gysahlGreens, label: 'Moogle', description: 'Gain a Moogle companion. Might help with Magic...'}
+    {cost: 500, image: gysahlGreens, label: 'Moogle', description: 'Gain a Moogle companion. Might help in Battle...'}
   ];
 
   return (

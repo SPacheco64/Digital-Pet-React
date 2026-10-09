@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChocoboSaveData, GameContainerProps } from './types';
+import { ChocoboSaveData, GameContainerProps, RaceDifficulty } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
@@ -15,6 +15,7 @@ import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
 import FishingMinigame from './helpers/components/FishingMinigame';
 import RockPaperScissorsMinigame from './helpers/components/RockPaperScissorsMinigame';
+import RacingMinigame from './helpers/components/RacingMinigame';
 import TestingPanel from './helpers/components/TestingPanel';
 import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
 
@@ -28,6 +29,7 @@ const getFishingReward = (caughtCount: number) => (
     .reduce((totalReward, reward) => totalReward + reward, 0)
 );
 const getRpsReward = () => 5 + Math.floor(Math.random() * 6);
+const getRaceReward = (place: number) => [0, 24, 14, 8, 4][place] ?? 0;
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -59,7 +61,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [showInfoScreen, setShowInfoScreen] = useState<boolean>(false);
   const [inCombat, setInCombat] = useState<boolean>(false);
   const [battlesWon, setBattlesWon] = useState<number>(0);
-  const [racesWon, setRacesWon] = useState<number>(0); // TO BE IMPLEMENTED LATER
+  const [racesWon, setRacesWon] = useState<number>(0);
   const [currentMoney, setCurrentMoney] = useState<number>(0);
   const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -70,6 +72,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [rpsOpen, setRpsOpen] = useState<boolean>(false);
   const [rpsInput, setRpsInput] = useState<number>(0);
   const [rpsEarnedCurrency, setRpsEarnedCurrency] = useState<number>(0);
+  const [raceSelectionOpen, setRaceSelectionOpen] = useState<boolean>(false);
+  const [raceOpen, setRaceOpen] = useState<boolean>(false);
+  const [raceDifficulty, setRaceDifficulty] = useState<RaceDifficulty>(2);
+  const [raceComplete, setRaceComplete] = useState<boolean>(false);
+  const [raceSteeringInput, setRaceSteeringInput] = useState<{ direction: -1 | 1; sequence: number }>({ direction: 1, sequence: 0 });
+  const [sprintActive, setSprintActive] = useState<boolean>(false);
   const hasHydratedSave = useRef<boolean>(false);
   const [battlesLost, setBattlesLost] = useState<number>(0); // Going to track losses to track Chocobo death
   const [specialCharge, setSpecialCharge] = useState<number>(0);
@@ -417,7 +425,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Main Game Display */}
           {
             !showMenuScreen && !questionWindowOpen && hideWelcome &&
-            !fishingOpen && !rpsOpen &&
+            !fishingOpen && !rpsOpen && !raceOpen &&
             <GameDisplay creatureName={chocoboName} inCombat={inCombat}
             currentStatus={currentStatus} currentHealth={currentHealth}
             battlesWon={battlesWon}
@@ -432,6 +440,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             previewAnimation={previewAnimation}
             showMenuScreen={showMenuScreen} 
             showBattleSelection={showBattleSelection} showBattleScreen={showBattleScreen}
+            raceSelectionOpen={raceSelectionOpen}
+            onSelectRaceDifficulty={(difficulty) => {
+              setRaceDifficulty(difficulty);
+              setRaceSelectionOpen(false);
+              setRaceSteeringInput({ direction: 1, sequence: 0 });
+              setRaceComplete(false);
+              setSprintActive(false);
+              setRaceOpen(true);
+            }}
             selectedEnemyLevel={selectedEnemyLevel}
             isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
             setIsLoading={setIsLoading} 
@@ -495,6 +512,32 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
                 setCurrentlyBusy(false);
               }} />
           }
+
+          {raceOpen && (
+            <RacingMinigame
+              difficulty={raceDifficulty}
+              currentSpeed={currentSpeed}
+              currentEndurance={currentEndurance}
+              creatureName={chocoboName}
+              steeringInput={raceSteeringInput}
+              sprintActive={sprintActive}
+              setSprintActive={setSprintActive}
+              onComplete={(place) => {
+                setRaceComplete(true);
+                if (place === 1) setRacesWon((wins) => wins + 1);
+                setCurrentHappiness((happiness) => Math.min(100, happiness + (place === 1 ? 12 : 5)));
+                setCurrentHunger((hunger) => Math.min(100, hunger + getPlayHungerGain()));
+                setCurrentEnergy((energy) => Math.max(0, energy - getPlayEnergyCost()));
+                setCurrentMoney((money) => money + getRaceReward(place));
+              }}
+              onClose={() => {
+                setRaceOpen(false);
+                setRaceComplete(false);
+                setSprintActive(false);
+                setCurrentlyBusy(false);
+              }}
+            />
+          )}
 
           {/* Menu Screen w/several options (status, shop, achievements, info & tips) */}
           {
@@ -580,7 +623,16 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             fishingComplete={fishingComplete}
             setRpsOpen={setRpsOpen}
             setRpsInput={setRpsInput}
+            setRaceSelectionOpen={setRaceSelectionOpen}
+            setRaceOpen={setRaceOpen}
+            setRaceComplete={setRaceComplete}
+            setSprintActive={setSprintActive}
+            setRaceSteeringInput={setRaceSteeringInput}
             rpsOpen={rpsOpen}
+            raceSelectionOpen={raceSelectionOpen}
+            raceOpen={raceOpen}
+            raceComplete={raceComplete}
+            sprintActive={sprintActive}
             setShowMenuScreen={setShowMenuScreen} showMenuScreen={showMenuScreen}
             showStatusScreen={showStatusScreen} setInCombat={setInCombat}
             showShopScreen={showShopScreen} setShowShopScreen={setShowShopScreen}

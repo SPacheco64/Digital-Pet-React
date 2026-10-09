@@ -6,6 +6,7 @@ import StatusDisplay from './StatusDisplay';
 import GameCanvas from './helpers/canvas/GameCanvas';
 import BattleScreen from './additional_screens/BattleScreen';
 import BattleSelectionScreen from './additional_screens/BattleSelectionScreen';
+import RaceSelectionScreen from './additional_screens/RaceSelectionScreen';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   // Destructure props for ease of access & documentation
@@ -29,6 +30,8 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     showMenuScreen,
     showBattleSelection,
     showBattleScreen,
+    raceSelectionOpen,
+    onSelectRaceDifficulty,
     selectedEnemyLevel,
     currentlyBusy,
     isLoading,
@@ -66,7 +69,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
       {/* Displayed game content */}
       {
-        !showMenuScreen && !showBattleScreen &&
+        !showMenuScreen && !showBattleScreen && !showBattleSelection && !raceSelectionOpen &&
         <>
           <GameCanvas currentStatus={currentStatus} previewAnimation={previewAnimation} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
@@ -87,6 +90,10 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           setInCombat={setInCombat}
         />
       } 
+
+      {!showMenuScreen && raceSelectionOpen && 
+        <RaceSelectionScreen onSelect={onSelectRaceDifficulty} />
+      }
 
       {/* Displayed battle content */}
       {

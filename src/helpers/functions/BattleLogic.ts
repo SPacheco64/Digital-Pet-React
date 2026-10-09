@@ -245,7 +245,7 @@ export const specialFunction = (options: {
             const remainingHealth = Math.max(currentHealth - finalEnemyDamage, 0);
 
             setDamageToPlayer(finalEnemyDamage);
-            setSpecialCharge(prevCharge => Math.min(prevCharge + finalEnemyDamage, 100));
+            setSpecialCharge(prevCharge => Math.min(prevCharge + finalEnemyDamage / 3, 100));
             setCurrentHealth(remainingHealth);
 
             setTimeout(() => {

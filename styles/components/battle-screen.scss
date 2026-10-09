@@ -88,11 +88,11 @@
 
             .special-meter-fill {
                 height: 100%;
-                background: #f2c14e;
+                background: #ffdd1e;
                 transition: width .2s ease-out;
 
                 &.charged {
-                    background: #ffc0cb;
+                    background: #ff627e;
                     animation: specialMeterBlink 2s ease-in-out infinite;
                 }
             }

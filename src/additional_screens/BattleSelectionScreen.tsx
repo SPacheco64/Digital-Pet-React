@@ -56,7 +56,7 @@ const BattleSelectionScreen: React.FC<BattleSelectionScreenProps> = (props: Batt
     };
 
     return (
-        <div id='BattleSelectionScreen'>
+        <div id='BattleSelectionScreen' className='game-screen additional-screen'>
             <div className='battle-selection-content'>
                 <div className='battle-selection-header'>
                     <div className='chocobo-health'>
