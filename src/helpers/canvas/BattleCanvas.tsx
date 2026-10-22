@@ -183,26 +183,32 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         const isSpecialAction = playerSpecial || enemySpecial;
         const ogChocoState = chocoAttrToUse;
         const ogEnemyState = enemyAttrToUse;
+        const ogAttackState = attackAttrToUse;
         const targetNode = playerAction ? spriteRef1.current : spriteRef2.current;
 
         if (!targetNode) {
             return;
         }
 
+        const actionTimers: number[] = [];
+        const actionTweens: Konva.Tween[] = [];
         const flashSprite = new Konva.Tween({
             node: targetNode,
             opacity: 0.5,
             duration: .1,
             easing: Konva.Easings.Linear,
             onFinish: () => {
-                    new Konva.Tween({
+                const restoreFlash = new Konva.Tween({
                     node: targetNode,
                     opacity: 1,
                     duration: 0.01,
                     easing: Konva.Easings.Linear,
-                }).play();
+                });
+                actionTweens.push(restoreFlash);
+                restoreFlash.play();
             }
         });
+        actionTweens.push(flashSprite);
 
         if (playerAction) {
             setAttackAttrToUse(isSpecialAction ? { ...attackAttrs[0], x: 28, y: 78, scale: 1.25 } : attackAttrs[0]);
@@ -223,11 +229,10 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                 scale: prevState.scale - (isSpecialAction ? .12 : .05)
             }));
 
-            setTimeout(() => {
+            actionTimers.push(window.setTimeout(() => {
                 setChocoAttrToUse(ogChocoState);
                 setEnemyAttrToUse(ogEnemyState);
-                flashSprite.destroy();
-            }, isSpecialAction ? 600 : 400);
+            }, isSpecialAction ? 600 : 400));
         }
 
         if (enemyAction) {
@@ -249,12 +254,19 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                 scale: prevState.scale + (isSpecialAction ? .12 : .05)
             }));
 
-            setTimeout(() => {
+            actionTimers.push(window.setTimeout(() => {
                 setChocoAttrToUse(ogChocoState);
                 setEnemyAttrToUse(ogEnemyState);
-                flashSprite.destroy();
-            }, 400);
+            }, 400));
         }
+
+        return () => {
+            actionTimers.forEach((timer) => window.clearTimeout(timer));
+            actionTweens.forEach((tween) => tween.destroy());
+            setChocoAttrToUse(ogChocoState);
+            setEnemyAttrToUse(ogEnemyState);
+            setAttackAttrToUse(ogAttackState);
+        };
     }, [playerAttack, enemyAttack, playerSpecial, enemySpecial]);
 
     useEffect(() => {
@@ -270,6 +282,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         }
 
         const impactTweens: Konva.Tween[] = [];
+        let shakeResetTween: Konva.Tween | null = null;
         const impactTimers = impactNodes.map((impactNode, index) => {
             impactNode.opacity(0);
             impactNode.scale({ x: 0.3, y: 0.3 });
@@ -297,12 +310,13 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             duration: 0.06,
             easing: Konva.Easings.Linear,
             onFinish: () => {
-                new Konva.Tween({
+                shakeResetTween = new Konva.Tween({
                     node: stageNode,
                     x: 0,
                     duration: 0.18,
                     easing: Konva.Easings.EaseOut,
-                }).play();
+                });
+                shakeResetTween.play();
             },
         });
         shakeTween.play();
@@ -311,6 +325,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             impactTimers.forEach((impactTimer) => window.clearTimeout(impactTimer));
             impactTweens.forEach((impactTween) => impactTween?.destroy());
             shakeTween.destroy();
+            shakeResetTween?.destroy();
             stageNode.x(0);
         };
     }, [playerSpecial, enemySpecial]);
