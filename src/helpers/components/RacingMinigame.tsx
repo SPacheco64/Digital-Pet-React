@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import '../../../styles/components/racing-minigame.scss';
 import chocoboSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
+import chocoboIcon from '../../graphics/icons/misc-icons/chocobo.svg';
 import RacingLoader from './RacingLoader';
 import { RaceDifficulty } from '../../types';
 
@@ -415,7 +416,15 @@ const RacingGame: React.FC<RacingMinigameProps> = ({
             <span className='racer-sprite' style={{ backgroundImage: `url(${chocoboSheet})`, '--racer-filter': COLOR_FILTERS.player } as React.CSSProperties} />
           </div>
           {frame.slowed && <div className='race-impact'>{frame.winded ? 'WINDED!' : 'BUMP!'}</div>}
-          <div className='race-progress-track'><span style={{ width: `${progress}%` }} /></div>
+          <div className='race-progress-track'>
+            <span style={{ width: `${progress}%` }} />
+            <img
+              className='race-progress-chocobo'
+              src={chocoboIcon}
+              aria-hidden='true'
+              style={{ left: `${progress}%` }}
+            />
+          </div>
         </div>
         <div className='race-course-edge race-course-edge-left' />
         <div className='race-course-edge race-course-edge-right' />
@@ -431,8 +440,8 @@ const RacingGame: React.FC<RacingMinigameProps> = ({
       )}
 
       <footer className='race-instructions'>
-        <span>{frame.winded ? 'WINDED...' : frame.slowed ? 'RECOVERING...' : '←/→ STEER'}</span>
-        <span className={sprintActive || spaceHeld.current ? 'sprint-on' : ''}>SPACE/DASH</span>
+        <span>{frame.winded ? 'WINDED...' : frame.slowed ? 'RECOVERING...' : 'ARROWS:STEER'}</span>
+        <span className={sprintActive || spaceHeld.current ? 'sprint-on' : ''}>SPACE:DASH</span>
         <span>{`${frame.collisionCount} BUMP${frame.collisionCount !== 1 ? 'S' : ''}`}</span>
       </footer>
     </section>

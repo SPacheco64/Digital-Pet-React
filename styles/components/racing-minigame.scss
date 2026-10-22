@@ -206,7 +206,7 @@
         position: absolute;
         z-index: 3;
         right: 12%;
-        bottom: .2rem;
+        bottom: .3rem;
         left: 12%;
         height: 4px;
         background: rgba(24, 34, 26, .75);
@@ -216,6 +216,18 @@
             height: 100%;
             border: 1px solid #333;
             background: #f3e27c;
+        }
+
+        .race-progress-chocobo {
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            object-fit: contain;
+            filter: drop-shadow(-1px 1px 0px #000);
+            transition: left 90ms linear;
+            pointer-events: none;
+            top: 0;
+            transform: scaleX(-1) translate(50%, -50%);
         }
     }
 
