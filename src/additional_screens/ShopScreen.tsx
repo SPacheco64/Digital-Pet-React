@@ -58,10 +58,10 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                     <div className={`shop-item ${(alreadyPurchased.includes(index) && index > 1) ? 'already-purchased' : ''}`} 
                         key={index} onClick={() => {
                             if (index === 0) { // Healing potion purchased
-                                if (currentHealth === maxHealth) return;
+                                if (currentHealth === maxHealth || currentMoney < item.cost) return;
                                 setCurrentHealth(maxHealth);
                             } else if (index === 1) { // Energy potion purchased
-                                if (currentEnergy === maxEnergy) return;
+                                if (currentEnergy === maxEnergy || currentMoney < item.cost) return;
                                 setCurrentEnergy(maxEnergy);
                             }
 
