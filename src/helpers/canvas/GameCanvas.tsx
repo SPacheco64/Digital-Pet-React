@@ -22,44 +22,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     actionFailureTrigger
   } = props;
 
-  // This function changes the Chocobo animation shown briefly
-  // on user click of the game screen. Result based on Chocobo's mood.
-  const touchReaction = (forceSadReaction = false) => {
-    const isUninteractable = currentStatus === 'training' || currentStatus === 'sleeping' || currentStatus === 'eating';
-
-    // Prevents bugs where buttons would become enabled when they should be disabled
-    // as the user touches the chocobo while it is busy with another action.
-    if (isUninteractable) {
-      return;
-    }
-
-    const previousState = attrToUse;
-
-    if (forceSadReaction || currentStatus === 'sad') {
-      setCurrentlyBusy(true);
-      setAttrToUse(mainAnimationAttrs[7]);
-    } else if (currentStatus === 'happy') {
-      setCurrentlyBusy(true);
-      setAttrToUse(mainAnimationAttrs[6]);
-    } else if (currentStatus === 'normal') {
-      setCurrentlyBusy(true);
-      setAttrToUse(mainAnimationAttrs[5]);
-    }
-
-    setTimeout(() => {
-      setAttrToUse(previousState);
-      setCurrentlyBusy(false);
-    }, 2000);
-  };
-
-  const stageRef = useRef<any>(null);
-  const spriteRef = useRef<any>(null);
-
-  const [chocoSheetImg] = useImage(chocoSheet);
-  const [attrToUse, setAttrToUse] = useState<AnimAttr>({x: 90, y: 110, anim: 'idle', frameRate: 5, scale: 1.6});
-  const lastActionFailureTrigger = useRef<number>(actionFailureTrigger);
-
-  // All animation settings for each animation shown in this canvas
   const mainAnimationAttrs = [
     {x: 90, y: 110, anim: 'idle', frameRate: 5, scale: 1.6}, // Idle
     {x: 80, y: 110, anim: 'eating', frameRate: 5, scale: 1.6}, // Eating
@@ -71,20 +33,74 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     {x: 90, y: 115, anim: 'upset', frameRate: 7, scale: 1.6}, // Upset Touch React
   ];
 
+  // This function changes the Chocobo animation shown briefly
+  // on user click of the game screen. Result based on Chocobo's mood.
+  const touchReaction = (forceSadReaction = false) => {
+    const isUninteractable = currentStatus === 'training' || currentStatus === 'sleeping' || currentStatus === 'eating';
+
+    // Prevents bugs where buttons would become enabled when they should be disabled
+    // as the user touches the chocobo while it is busy with another action.
+    if (isUninteractable) {
+      return;
+    }
+
+    let reactionAnimation: AnimAttr;
+
+    if (forceSadReaction || currentStatus === 'sad') {
+      reactionAnimation = mainAnimationAttrs[7];
+    } else if (currentStatus === 'happy') {
+      reactionAnimation = mainAnimationAttrs[6];
+    } else if (currentStatus === 'normal') {
+      reactionAnimation = mainAnimationAttrs[5];
+    } else {
+      return;
+    }
+
+    if (touchReactionTimer.current !== null) {
+      window.clearTimeout(touchReactionTimer.current);
+    }
+
+    setCurrentlyBusy(true);
+    setAttrToUse(reactionAnimation);
+    touchReactionTimer.current = window.setTimeout(() => {
+      touchReactionTimer.current = null;
+      setAttrToUse(getStatusAnimation(currentStatus));
+      setCurrentlyBusy(false);
+    }, 2000);
+  };
+
+  const stageRef = useRef<any>(null);
+  const spriteRef = useRef<any>(null);
+  const touchReactionTimer = useRef<number | null>(null);
+
+  const [chocoSheetImg] = useImage(chocoSheet);
+  const [attrToUse, setAttrToUse] = useState<AnimAttr>({x: 90, y: 110, anim: 'idle', frameRate: 5, scale: 1.6});
+  const lastActionFailureTrigger = useRef<number>(actionFailureTrigger);
+
+  const getStatusAnimation = (status: string): AnimAttr => {
+    if (status === 'eating') return mainAnimationAttrs[1];
+    if (status === 'training') return mainAnimationAttrs[2];
+    if (status === 'sleeping') return mainAnimationAttrs[3];
+    if (status === 'Egg') return mainAnimationAttrs[4];
+    return mainAnimationAttrs[0];
+  };
+
   // Sets the shown animation based on the chocobo's current status.
   useEffect(() => {
-    if (currentStatus === 'eating') {
-      setAttrToUse(mainAnimationAttrs[1]);
-    } else if (currentStatus === 'training') {
-      setAttrToUse(mainAnimationAttrs[2]);
-    } else if (currentStatus === 'sleeping') {
-      setAttrToUse(mainAnimationAttrs[3]);
-    } else if (currentStatus === 'Egg') {
-        setAttrToUse(mainAnimationAttrs[4]);
-    } else {
-      setAttrToUse(mainAnimationAttrs[0]);
+    if (touchReactionTimer.current !== null) {
+      window.clearTimeout(touchReactionTimer.current);
+      touchReactionTimer.current = null;
+      setCurrentlyBusy(false);
     }
-  }, [currentStatus]);
+
+    setAttrToUse(getStatusAnimation(currentStatus));
+  }, [currentStatus, setCurrentlyBusy]);
+
+  useEffect(() => () => {
+    if (touchReactionTimer.current !== null) {
+      window.clearTimeout(touchReactionTimer.current);
+    }
+  }, []);
 
   // The actual animations used pulled from the Chocobo Spritesheet
   const animations = useRef({
