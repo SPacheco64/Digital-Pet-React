@@ -1,60 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { TimeOfDayProps } from '../../types';
 import daySymbol from '../../graphics/time_of_day/sun.png'
 import eveningSymbol from '../../graphics/time_of_day/sun-cloud.png'
 import nightSymbol from '../../graphics/time_of_day/moon.png'
 
 const TimeOfDay: React.FC<TimeOfDayProps> = (props: TimeOfDayProps) => {
-    // Destructure props for ease of access & documentation
     const {
         currentTime,
         setCurrentTime,
     } = props;
 
-    const determineSymbol = (hour: number) => {
+    // Determine the time of day based on the current hour
+    // 'Day,' 'Evening,' or 'Night'
+    const determineTimeOfDay = (hour: number) => {
         if (hour >= 6 && hour < 18) {
-            setTimeSymbol(daySymbol);
-            setCurrentTime('Day');
-        } else if (hour >= 18 && hour < 21) {
-            setTimeSymbol(eveningSymbol);
-            setCurrentTime('Evening');
-        } else {
-            setTimeSymbol(nightSymbol);
-            setCurrentTime('Night');
+            return 'Day';
         }
-    }
-
-    const [timeSymbol, setTimeSymbol] = useState<string>(daySymbol);
-
-    // Start the timer to check the time every 600000 milliseconds (10 minutes)
-    const timeListener = setInterval(() => {
-        const now = new Date();
-        const hour = now.getHours();
-
-        determineSymbol(hour);
-    }, 600000);
-
-    // Check time on initialization
-    useEffect(() => {
-        const now = new Date();
-        const hour = now.getHours();
-
-        determineSymbol(hour);
-    }, []);
+        return hour >= 18 && hour < 21 ? 'Evening' : 'Night';
+    };
 
     useEffect(() => {
-        if (currentTime === 'Day') {
-            setTimeSymbol(daySymbol);
-        } else if (currentTime === 'Evening') {
-            setTimeSymbol(eveningSymbol);
-        } else if (currentTime === 'Night') {
-            setTimeSymbol(nightSymbol);
-        }
-    }, [currentTime]);
+        const updateTimeOfDay = () => {
+            const nextTimeOfDay = determineTimeOfDay(new Date().getHours());
+            setCurrentTime((currentTime) => (
+                currentTime === nextTimeOfDay ? currentTime : nextTimeOfDay
+            ));
+        };
+
+        updateTimeOfDay();
+        
+        // Update the time of day every 10 minutes (600,000 milliseconds)
+        const timeListener = window.setInterval(updateTimeOfDay, 600000);
+
+        return () => window.clearInterval(timeListener);
+    }, [setCurrentTime]);
+
+    const timeSymbols: Record<string, string> = {
+        Day: daySymbol,
+        Evening: eveningSymbol,
+        Night: nightSymbol,
+    };
 
     return (
         <div id='TimeOfDay'>
-            <img src={timeSymbol} />
+            <img src={timeSymbols[currentTime] ?? nightSymbol} alt={`${currentTime} time of day`} />
         </div>
     );
 };
