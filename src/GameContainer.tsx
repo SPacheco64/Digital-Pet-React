@@ -14,6 +14,7 @@ import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
 import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
+import { parseChocoboSaveData } from './helpers/functions/SaveData';
 
 // Energy & Hunger changes after playing a minigame
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
@@ -39,7 +40,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   // State variables for game status
   const [dataExists, setDataExists] = useState<boolean>(false);
   const [hideWelcome, setHideWelcome] = useState<boolean>(false);
-  const [autosaveEnabled, setAutosaveEnabled] = useState<boolean>(() => (localStorage.getItem('digitalPetAutosaveEnabled') !== 'false'));
+  const [autosaveEnabled, setAutosaveEnabled] = useState<boolean>(true);
+  const [storageHydrated, setStorageHydrated] = useState<boolean>(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveRecoveryRequired, setSaveRecoveryRequired] = useState<boolean>(false);
+  const [storageReadFailed, setStorageReadFailed] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
@@ -70,7 +75,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [raceComplete, setRaceComplete] = useState<boolean>(false);
   const [raceSteeringInput, setRaceSteeringInput] = useState<{ direction: -1 | 1; sequence: number }>({ direction: 1, sequence: 0 });
   const [sprintActive, setSprintActive] = useState<boolean>(false);
-  const hasHydratedSave = useRef<boolean>(false);
   const [battlesLost, setBattlesLost] = useState<number>(0); // Going to track losses to track Chocobo death
   const [specialCharge, setSpecialCharge] = useState<number>(0);
 
@@ -194,80 +198,110 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     console.log('Battles lost: ', battlesLost);
   }, [battlesLost])
 
-  useEffect(() => {
-    const savedData = localStorage.getItem('digitalPetSave');
+  const createSaveData = (): ChocoboSaveData => ({
+    playerName,
+    chocoboName,
+    currentShellColor,
+    currentHealth,
+    maxHealth,
+    currentEnergy,
+    maxEnergy,
+    currentHappiness,
+    currentHunger,
+    currentPower,
+    currentDefense,
+    currentSpeed,
+    currentEndurance,
+    currentMoodIcon,
+    currentMoney,
+    alreadyPurchased,
+    battlesWon,
+    battlesLost,
+    racesWon,
+    specialCharge,
+  });
 
-    if (!savedData) {
-      hasHydratedSave.current = true;
+  const reportSaveError = (message: string, error: unknown) => {
+    console.error(message, error);
+    setSaveError(message);
+  };
+
+  useEffect(() => {
+    let savedData: string | null;
+
+    try {
+      const autosavePreference = localStorage.getItem('digitalPetAutosaveEnabled');
+      if (autosavePreference !== null) {
+        setAutosaveEnabled(autosavePreference !== 'false');
+      }
+
+      savedData = localStorage.getItem('digitalPetSave');
+    } catch (error) {
+      reportSaveError('Unable to read browser storage. Existing progress could not be loaded, and changes may not be saved.', error);
+      setStorageReadFailed(true);
+      setStorageHydrated(true);
+      return;
+    }
+
+    if (savedData) {
+      try {
+        const data = parseChocoboSaveData(JSON.parse(savedData) as unknown);
+
+        setPlayerName(data.playerName);
+        setChocoboName(data.chocoboName);
+        setCurrentShellColor(data.currentShellColor);
+        setCurrentHealth(data.currentHealth);
+        setMaxHealth(data.maxHealth);
+        setCurrentEnergy(data.currentEnergy);
+        setMaxEnergy(data.maxEnergy);
+        setCurrentHappiness(data.currentHappiness);
+        setCurrentHunger(data.currentHunger);
+        setCurrentPower(data.currentPower);
+        setCurrentDefense(data.currentDefense);
+        setCurrentSpeed(data.currentSpeed);
+        setCurrentEndurance(data.currentEndurance);
+        setCurrentMoodIcon(data.currentMoodIcon);
+        setCurrentMoney(data.currentMoney);
+        setAlreadyPurchased(data.alreadyPurchased);
+        setBattlesWon(data.battlesWon);
+        setBattlesLost(data.battlesLost);
+        setRacesWon(data.racesWon);
+        setSpecialCharge(data.specialCharge);
+        setDataExists(true);
+        setHideWelcome(true);
+      } catch (error) {
+        console.error('Unable to validate saved chocobo data:', error);
+        setSaveRecoveryRequired(true);
+        setSaveError('The saved game is invalid or damaged. Reset it to start a new game; the saved data has not been deleted.');
+      }
+    }
+
+    setStorageHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!storageHydrated) {
       return;
     }
 
     try {
-      const data = JSON.parse(savedData) as ChocoboSaveData;
-
-      console.log('Loaded saved data:', data);
-
-      setPlayerName(data.playerName);
-      setChocoboName(data.chocoboName);
-      setCurrentShellColor(data.currentShellColor);
-      setCurrentHealth(data.currentHealth);
-      setMaxHealth(data.maxHealth);
-      setCurrentEnergy(data.currentEnergy);
-      setMaxEnergy(data.maxEnergy);
-      setCurrentHappiness(data.currentHappiness);
-      setCurrentHunger(data.currentHunger);
-      setCurrentPower(data.currentPower);
-      setCurrentDefense(data.currentDefense);
-      setCurrentSpeed(data.currentSpeed);
-      setCurrentEndurance(data.currentEndurance);
-      setCurrentMoodIcon(data.currentMoodIcon);
-      setCurrentMoney(data.currentMoney);
-      setAlreadyPurchased(data.alreadyPurchased);
-      setBattlesWon(data.battlesWon);
-      setBattlesLost(data.battlesLost);
-      setRacesWon(data.racesWon);
-      setSpecialCharge(Math.min(data.specialCharge ?? 0, 100));
-      setDataExists(true);
-      setHideWelcome(true);
+      localStorage.setItem('digitalPetAutosaveEnabled', String(autosaveEnabled));
     } catch (error) {
-      console.error('Unable to load saved chocobo data:', error);
-      localStorage.removeItem('digitalPetSave');
-    } finally {
-      hasHydratedSave.current = true;
+      reportSaveError('Unable to save the autosave preference. Browser storage may be unavailable or full.', error);
     }
-  }, []);
+  }, [autosaveEnabled, storageHydrated]);
 
   useEffect(() => {
-    localStorage.setItem('digitalPetAutosaveEnabled', String(autosaveEnabled));
-  }, [autosaveEnabled]);
-
-  useEffect(() => {
-    if (!autosaveEnabled || !hasHydratedSave.current || !hideWelcome || !playerName || !chocoboName) {
+    if (!autosaveEnabled || !storageHydrated || storageReadFailed || saveRecoveryRequired || !hideWelcome || !playerName || !chocoboName) {
       return;
     }
 
-    saveFunction({
-      playerName,
-      chocoboName,
-      currentShellColor,
-      currentHealth,
-      maxHealth,
-      currentEnergy,
-      maxEnergy,
-      currentHappiness,
-      currentHunger,
-      currentPower,
-      currentDefense,
-      currentSpeed,
-      currentEndurance,
-      currentMoodIcon,
-      currentMoney,
-      alreadyPurchased,
-      battlesWon,
-      battlesLost,
-      racesWon,
-      specialCharge,
-    });
+    try {
+      saveFunction(createSaveData());
+      setSaveError(null);
+    } catch (error) {
+      reportSaveError('Unable to autosave game progress. Check browser storage availability and space.', error);
+    }
   }, [
     alreadyPurchased,
     battlesWon,
@@ -291,36 +325,51 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     racesWon,
     specialCharge,
     autosaveEnabled,
+    storageHydrated,
+    storageReadFailed,
+    saveRecoveryRequired,
   ]);
 
   const handleSave = () => {
-    saveFunction({
-      playerName,
-      chocoboName,
-      currentShellColor,
-      currentHealth,
-      maxHealth,
-      currentEnergy,
-      maxEnergy,
-      currentHappiness,
-      currentHunger,
-      currentPower,
-      currentDefense,
-      currentSpeed,
-      currentEndurance,
-      currentMoodIcon,
-      currentMoney,
-      alreadyPurchased,
-      battlesWon,
-      battlesLost,
-      racesWon,
-      specialCharge,
-    });
+    if (!storageHydrated) {
+      setSaveError('Game storage is still loading. Try saving again in a moment.');
+      return;
+    }
+
+    if (storageReadFailed) {
+      setSaveError('Game progress cannot be saved because existing browser storage could not be read. Reload and try again.');
+      return;
+    }
+
+    if (saveRecoveryRequired) {
+      setSaveError('Reset the damaged save before saving a new game.');
+      return;
+    }
+
+    try {
+      saveFunction(createSaveData());
+      setSaveError(null);
+    } catch (error) {
+      reportSaveError('Unable to save game progress. Check browser storage availability and space.', error);
+    }
   };
 
   const handleReset = () => {
-    if (resetFunction()) {
+    try {
+      if (resetFunction()) {
+        window.location.reload();
+      }
+    } catch (error) {
+      reportSaveError('Unable to reset saved game data. Browser storage may be unavailable.', error);
+    }
+  };
+
+  const handleSaveRecovery = () => {
+    try {
+      localStorage.removeItem('digitalPetSave');
       window.location.reload();
+    } catch (error) {
+      reportSaveError('Unable to remove the damaged save. Browser storage may be unavailable.', error);
     }
   };
 
@@ -403,10 +452,20 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setAutosaveEnabled={setAutosaveEnabled} />
 
       <div id='GameContainer' className={currentShellColor}>
+        {saveError && !saveRecoveryRequired && (
+          <div className='save-notice' role='alert'>
+            {saveError}
+          </div>
+        )}
         <div className='top-panel'>
           {/* Welcome Form for when no game data present in storage */}
           {
-            !hideWelcome &&
+            saveRecoveryRequired ? (
+              <section className='save-recovery' role='alert'>
+                <p>{saveError}</p>
+                <button type='button' onClick={handleSaveRecovery}>Reset save and start over</button>
+              </section>
+            ) : !hideWelcome &&
             <WelcomeForm welcomeMessage='Welcome! Are you ready to raise your very own Chocobo?' 
               question1='First, what is your name?' question2='What do you want to name your Chocobo?'
               val1={playerName} val2={chocoboName} setVal1={setPlayerName} setVal2={setChocoboName} 
