@@ -18,6 +18,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
+    currentMoodIcon,
     setCurrentlyBusy,
     actionFailureTrigger
   } = props;
@@ -46,11 +47,11 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
 
     let reactionAnimation: AnimAttr;
 
-    if (forceSadReaction || currentStatus === 'sad') {
+    if (forceSadReaction || currentMoodIcon === 'sad') {
       reactionAnimation = mainAnimationAttrs[7];
-    } else if (currentStatus === 'happy') {
+    } else if (currentMoodIcon === 'happy') {
       reactionAnimation = mainAnimationAttrs[6];
-    } else if (currentStatus === 'normal') {
+    } else if (currentMoodIcon === 'normal') {
       reactionAnimation = mainAnimationAttrs[5];
     } else {
       return;

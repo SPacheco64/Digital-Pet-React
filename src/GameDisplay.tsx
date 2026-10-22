@@ -87,7 +87,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
         !showMenuScreen && !showBattleScreen && !showBattleSelection && !raceSelectionOpen &&
         !fishingOpen && !raceOpen &&
         <>
-          <GameCanvas currentStatus={currentStatus} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
+          <GameCanvas currentStatus={currentStatus} currentMoodIcon={currentMoodIcon} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
           <StatusDisplay currentStatus={currentStatus} />
         </>

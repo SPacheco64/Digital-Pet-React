@@ -241,6 +241,7 @@ export interface ExternalUIProps {
 
 export interface GameCanvasProps {
     currentStatus: string;
+    currentMoodIcon: string;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     actionFailureTrigger: number;
 }
