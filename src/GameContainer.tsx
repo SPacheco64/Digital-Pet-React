@@ -13,7 +13,6 @@ import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
-import TestingPanel from './helpers/components/TestingPanel';
 import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
 
 // Energy & Hunger changes after playing a minigame
@@ -88,7 +87,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentSpeed, setCurrentSpeed] = useState<number>(1);
   const [currentEndurance, setCurrentEndurance] = useState<number>(1);
   const [currentMoodIcon, setCurrentMoodIcon] = useState<string>('Normal');
-  const [previewAnimation, setPreviewAnimation] = useState<string>('auto');
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
 
@@ -429,7 +427,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             battleResult={battleResult}
             currentTime={currentTime} currentlyBusy={currentlyBusy}
             actionFailureTrigger={actionFailureTrigger}
-            previewAnimation={previewAnimation}
             showMenuScreen={showMenuScreen} 
             showBattleSelection={showBattleSelection} showBattleScreen={showBattleScreen}
             raceSelectionOpen={raceSelectionOpen}
@@ -605,39 +602,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           />
         </div>
 
-        {/* Testing panel for adjusting chocobo stats */}
-        <TestingPanel
-          chocoboName={chocoboName}
-          currentStatus={currentStatus}
-          currentMoney={currentMoney}
-          currentTime={currentTime}
-          currentHealth={currentHealth}
-          maxHealth={maxHealth}
-          currentEnergy={currentEnergy}
-          maxEnergy={maxEnergy}
-          currentHappiness={currentHappiness}
-          currentHunger={currentHunger}
-          currentPower={currentPower}
-          currentDefense={currentDefense}
-          currentSpeed={currentSpeed}
-          currentEndurance={currentEndurance}
-          previewAnimation={previewAnimation}
-          setChocoboName={setChocoboName}
-          setCurrentStatus={setCurrentStatus}
-          setCurrentMoney={setCurrentMoney}
-          setCurrentTime={setCurrentTime}
-          setCurrentHealth={setCurrentHealth}
-          setMaxHealth={setMaxHealth}
-          setCurrentEnergy={setCurrentEnergy}
-          setMaxEnergy={setMaxEnergy}
-          setCurrentHappiness={setCurrentHappiness}
-          setCurrentHunger={setCurrentHunger}
-          setCurrentPower={setCurrentPower}
-          setCurrentDefense={setCurrentDefense}
-          setCurrentSpeed={setCurrentSpeed}
-          setCurrentEndurance={setCurrentEndurance}
-          setPreviewAnimation={setPreviewAnimation}
-        />
       </div>
     </ImagePreloader>
   );

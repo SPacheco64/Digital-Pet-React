@@ -18,7 +18,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   // Destructure props for ease of access & documentation
   const {
     currentStatus,
-    previewAnimation,
     setCurrentlyBusy,
     actionFailureTrigger
   } = props;
@@ -70,27 +69,10 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     {x: 66, y: 124.5, anim: 'think', frameRate: 5, scale: 1.6}, // Neutral Touch React
     {x: 68, y: 100, anim: 'happy', frameRate: 7, scale: 1.6}, // Happy Touch React
     {x: 90, y: 115, anim: 'upset', frameRate: 7, scale: 1.6}, // Upset Touch React
-    {x: 90, y: 115, anim: 'fishing', frameRate: 5, scale: 1.6}, // Fishing
   ];
 
-  // Sets shown animation based on the chocobo's currentStatus value or the testing panel preview choice
+  // Sets the shown animation based on the chocobo's current status.
   useEffect(() => {
-    if (previewAnimation && previewAnimation !== 'auto') {
-      const previewMap: Record<string, AnimAttr> = {
-        idle: mainAnimationAttrs[0],
-        eating: mainAnimationAttrs[1],
-        training: mainAnimationAttrs[2],
-        sleeping: mainAnimationAttrs[3],
-        eggbounce: mainAnimationAttrs[4],
-        think: mainAnimationAttrs[5],
-        happy: mainAnimationAttrs[6],
-        upset: mainAnimationAttrs[7],
-      };
-
-      setAttrToUse(previewMap[previewAnimation] ?? mainAnimationAttrs[0]);
-      return;
-    }
-
     if (currentStatus === 'eating') {
       setAttrToUse(mainAnimationAttrs[1]);
     } else if (currentStatus === 'training') {
@@ -102,7 +84,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     } else {
       setAttrToUse(mainAnimationAttrs[0]);
     }
-  }, [currentStatus, previewAnimation]);
+  }, [currentStatus]);
 
   // The actual animations used pulled from the Chocobo Spritesheet
   const animations = useRef({

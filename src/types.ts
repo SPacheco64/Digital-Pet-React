@@ -68,7 +68,6 @@ export interface GameDisplayProps {
     playerSpecial: boolean; 
     enemySpecial: boolean; 
     playerRunning: boolean; 
-    previewAnimation: string;
     damageToEnemy: number;
     damageToPlayer: number;
     specialCharge: number;
@@ -242,7 +241,6 @@ export interface ExternalUIProps {
 
 export interface GameCanvasProps {
     currentStatus: string;
-    previewAnimation: string;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     actionFailureTrigger: number;
 }
