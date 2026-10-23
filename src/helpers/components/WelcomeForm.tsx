@@ -15,11 +15,11 @@ interface WelcomeFormProps {
 
 const WelcomeForm: React.FC<WelcomeFormProps> = ({ welcomeMessage, question1, question2, val1, val2, setVal1, setVal2, buttonTxt, hideWelcomeForm }) => {
 
-    const handlePlayerName = (event: any) => {
+    const handlePlayerName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVal1(event.target.value);
     };
 
-    const handleChocoboName = (event: any) => {
+    const handleChocoboName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVal2(event.target.value);
     };
 
@@ -41,22 +41,22 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({ welcomeMessage, question1, qu
                 {
                     question1 &&
                     <>
-                        <div className='dialogue'>
+                        <label className='dialogue' htmlFor='player-name'>
                             {question1}
-                        </div>
+                        </label>
                         
-                        <input value={val1} onChange={handlePlayerName} maxLength={10} minLength={1}></input>
+                        <input id='player-name' name='playerName' type='text' autoComplete='nickname' value={val1} onChange={handlePlayerName} maxLength={10} minLength={1} required />
                     </>
                 }
 
                 {
                     question2 &&
                     <>
-                        <div className='dialogue'>
+                        <label className='dialogue' htmlFor='chocobo-name'>
                             {question2}
-                        </div>
+                        </label>
                         
-                        <input value={val2} onChange={handleChocoboName} maxLength={10} minLength={1}></input>
+                        <input id='chocobo-name' name='chocoboName' type='text' autoComplete='off' value={val2} onChange={handleChocoboName} maxLength={10} minLength={1} required />
                     </>
                 }
 
