@@ -100,8 +100,10 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   useEffect(() => () => {
     if (touchReactionTimer.current !== null) {
       window.clearTimeout(touchReactionTimer.current);
+      touchReactionTimer.current = null;
+      setCurrentlyBusy(false);
     }
-  }, []);
+  }, [setCurrentlyBusy]);
 
   // The actual animations used pulled from the Chocobo Spritesheet
   const animations = useRef({
