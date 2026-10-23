@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, type RefObject } from 'react';
+import type Konva from 'konva';
 
 export const useSpriteAnimation = (
-  spriteRef: React.MutableRefObject<any>,
+  spriteRef: RefObject<Konva.Sprite | null>,
   animation: string,
   frameRate: number,
   animations: Record<string, number[]>,

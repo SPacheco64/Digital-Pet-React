@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Stage, Layer, Sprite} from 'react-konva';
+import type Konva from 'konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { GameCanvasProps } from '../../types';
@@ -70,8 +71,8 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     }, 2000);
   };
 
-  const stageRef = useRef<any>(null);
-  const spriteRef = useRef<any>(null);
+  const stageRef = useRef<Konva.Stage>(null);
+  const spriteRef = useRef<Konva.Sprite>(null);
   const touchReactionTimer = useRef<number | null>(null);
 
   const [chocoSheetImg] = useImage(chocoSheet);
@@ -167,7 +168,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   }).current;
 
   // Use the custom loop so think, happy, and upset can play all of their frames.
-  useSpriteAnimation(spriteRef, attrToUse.anim, attrToUse.frameRate, animations);
+  useSpriteAnimation(spriteRef, attrToUse.anim, attrToUse.frameRate, animations, !!chocoSheetImg);
 
   useEffect(() => {
     if (actionFailureTrigger !== lastActionFailureTrigger.current) {
@@ -180,18 +181,17 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     <>
       <Stage id='GameStage' className='game-canvas' height={248} width={256} ref={stageRef} onClick={() => touchReaction()}>
         <Layer id='GameLayer'>
-          <Sprite
+          {chocoSheetImg && <Sprite
             ref={spriteRef}
             x={attrToUse.x}
             y={attrToUse.y}
-            // @ts-ignore
             image={chocoSheetImg}
             animation={attrToUse.anim}
             animations={animations}
             frameRate={attrToUse.frameRate}
             scaleX={attrToUse.scale}
             scaleY={attrToUse.scale}
-          />
+          />}
         </Layer>
       </Stage>
     </>

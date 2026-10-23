@@ -78,11 +78,11 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         {x: 190, y: 105, anim: 'normalHit', frameRate: 13, scale: .7}, // Normal Attack on Player
     ];
 
-    const stageRef = useRef<any>(null);
-    const spriteRef1 = useRef<any>(null);
-    const spriteRef2 = useRef<any>(null);
-    const spriteRef3 = useRef<any>(null);
-    const specialImpactRefs = [useRef<any>(null), useRef<any>(null), useRef<any>(null)];
+    const stageRef = useRef<Konva.Stage>(null);
+    const spriteRef1 = useRef<Konva.Sprite>(null);
+    const spriteRef2 = useRef<Konva.Sprite>(null);
+    const spriteRef3 = useRef<Konva.Sprite>(null);
+    const specialImpactRefs = [useRef<Konva.Group>(null), useRef<Konva.Group>(null), useRef<Konva.Group>(null)];
 
     const [chocoSheetImg] = useImage(chocoSheet);
     const [enemySheetImg] = useImage(enemySheet);
@@ -163,14 +163,14 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     }).current;
 
     // Battle sprites use the custom loop so one-frame and multi-frame definitions never enter invalid indexes.
-    useSpriteAnimation(spriteRef1, enemyAttrToUse.anim, enemyAttrToUse.frameRate, animations, !isLoading);
-    useSpriteAnimation(spriteRef2, chocoAttrToUse.anim, chocoAttrToUse.frameRate, animations, !isLoading);
+    useSpriteAnimation(spriteRef1, enemyAttrToUse.anim, enemyAttrToUse.frameRate, animations, !isLoading && !!enemySheetImg);
+    useSpriteAnimation(spriteRef2, chocoAttrToUse.anim, chocoAttrToUse.frameRate, animations, !isLoading && !!chocoSheetImg);
     useSpriteAnimation(
         spriteRef3,
         attackAttrToUse.anim,
         attackAttrToUse.frameRate,
         animations,
-        !isLoading && (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial,
+        !isLoading && !!attackSheetImg && (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial,
     );
 
     useEffect(() => {
@@ -277,19 +277,25 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         const stageNode = stageRef.current;
         const impactNodes = specialImpactRefs.map((impactRef) => impactRef.current);
 
-        if (impactNodes.some((impactNode) => !impactNode) || !stageNode) {
+        if (!stageNode || impactNodes.some((impactNode) => impactNode === null)) {
             return;
         }
 
+        const [firstImpactNode, secondImpactNode, thirdImpactNode] = impactNodes;
+        if (!firstImpactNode || !secondImpactNode || !thirdImpactNode) {
+            return;
+        }
+        const validImpactNodes = [firstImpactNode, secondImpactNode, thirdImpactNode];
+
         const impactTweens: Konva.Tween[] = [];
         let shakeResetTween: Konva.Tween | null = null;
-        const impactTimers = impactNodes.map((impactNode, index) => {
+        const impactTimers = validImpactNodes.map((impactNode, index) => {
             impactNode.opacity(0);
             impactNode.scale({ x: 0.3, y: 0.3 });
             impactNode.rotation(0);
 
             return window.setTimeout(() => {
-                impactNodes[index].opacity(0.95);
+                impactNode.opacity(0.95);
                 const impactTween = new Konva.Tween({
                     node: impactNode,
                     opacity: 0,
@@ -355,12 +361,11 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             <Stage id='BattleStage' className='battle-canvas' height={248} width={256} ref={stageRef}>
                 <Layer id='BattleLayer'>
                     {/* Enemy Sprite: */}
-                    <Sprite
+                    {enemySheetImg && <Sprite
                         id='Enemy'
                         ref={spriteRef1}
                         x={enemyAttrToUse.x}
                         y={enemyAttrToUse.y}
-                        // @ts-ignore
                         image={enemySheetImg}
                         animation={enemyAttrToUse.anim}
                         animations={animations}
@@ -368,31 +373,29 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                         scaleX={enemyAttrToUse.scale}
                         scaleY={enemyAttrToUse.scale}
                         
-                    />
+                    />}
 
                     {/* Chocobo Sprite */}
-                    <Sprite
+                    {chocoSheetImg && <Sprite
                         ref={spriteRef2}
                         x={chocoAttrToUse.x}
                         y={chocoAttrToUse.y}
-                        // @ts-ignore
                         image={chocoSheetImg}
                         animation={chocoAttrToUse.anim}
                         animations={animations}
                         frameRate={chocoAttrToUse.frameRate}
                         scaleX={chocoAttrToUse.scale}
                         scaleY={chocoAttrToUse.scale}
-                    />
+                    />}
 
                     {/* Regular attack effect; Special uses only the burst below. */}
 
                     {
-                        (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial &&
+                        (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial && attackSheetImg &&
                         <Sprite
                             ref={spriteRef3}
                             x={attackAttrToUse.x}
                             y={attackAttrToUse.y}
-                            // @ts-ignore
                             image={attackSheetImg}
                             animation={attackAttrToUse.anim}
                             animations={animations}

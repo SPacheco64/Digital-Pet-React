@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Stage, Layer, Sprite} from 'react-konva';
+import type Konva from 'konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import { MenuCanvasProps } from '../../types';
@@ -21,8 +22,8 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
     iconToUse,
   } = props;
 
-  const stageRef = useRef<any>(null);
-  const spriteRef = useRef<any>(null);
+  const stageRef = useRef<Konva.Stage>(null);
+  const spriteRef = useRef<Konva.Sprite>(null);
 
   const [chocoSheetImg] = useImage(chocoSheet);
   const [attrToUse, setAttrToUse] = useState<AnimAttr>({x: 90, y: 110, anim: 'eggbounce', frameRate: 7, scale: .5});
@@ -68,25 +69,24 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
   }, [currentStatus]);
 
   // Menu animations use the same frame-count-safe loop as the main Chocobo canvas.
-  useSpriteAnimation(spriteRef, attrToUse.anim, attrToUse.frameRate, animations);
+  useSpriteAnimation(spriteRef, attrToUse.anim, attrToUse.frameRate, animations, !!chocoSheetImg);
 
   return (
     <>
       {
         <Stage id='MenuStage' className='menu-canvas' height={248} width={256} ref={stageRef}>
           <Layer id='MenuLayer'>
-            <Sprite
+            {chocoSheetImg && <Sprite
               ref={spriteRef}
               x={attrToUse.x}
               y={attrToUse.y}
-              // @ts-ignore
               image={chocoSheetImg}
               animation={attrToUse.anim}
               animations={animations}
               frameRate={attrToUse.frameRate}
               scaleX={attrToUse.scale}
               scaleY={attrToUse.scale}
-            />
+            />}
           </Layer>
         </Stage>
       }
