@@ -372,32 +372,36 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   useEffect(() => {
     if (currentStatus === 'Egg') {
       setCurrentlyBusy(true);
-      hatchingEvent(currentStatus, setCurrentStatus, setCurrentlyBusy);
+      return hatchingEvent(currentStatus, setCurrentStatus, setCurrentlyBusy);
     }
     if (currentStatus === 'eating') {
-      eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentHealth, setCurrentlyBusy,
-        maxEnergy, maxHealth
-      );
-    } else if (currentStatus === 'training') {
-      // Training functionality currently handled externally
-    } else if (currentStatus === 'sleeping') {
-      sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHealth, setCurrentHappiness, setCurrentlyBusy,
+      return eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentHealth, setCurrentlyBusy,
         maxEnergy, maxHealth
       );
     }
-  }, [currentStatus]);
+    if (currentStatus === 'sleeping') {
+      return sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHealth, setCurrentHappiness, setCurrentlyBusy,
+        maxEnergy, maxHealth
+      );
+    }
+  }, [currentStatus, maxEnergy, maxHealth]);
 
   useEffect(() => {
-    if (currentQuestionType === 'training') {
-        trainingFunction(setCurrentStatus, setCurrentHunger, 
-          setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
-          setCurrentEndurance, setCurrentlyBusy, setCurrentQuestionType, setQuestionWindowOpen,
-          setCurrentHappiness, optionSelected
-        );
-        setOptionSelected(0);
-        setCurrentQuestionType('');
+    if (optionSelected === 0) {
+      return;
     }
-  }, [optionSelected]);
+
+    if (currentQuestionType !== 'training') {
+        setOptionSelected(0);
+        return;
+    }
+
+    return trainingFunction(setCurrentStatus, setCurrentHunger,
+      setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
+      setCurrentEndurance, setCurrentlyBusy, setCurrentQuestionType, setQuestionWindowOpen,
+      setCurrentHappiness, optionSelected, () => setOptionSelected(0)
+    );
+  }, [currentQuestionType, optionSelected]);
 
   // When the chocobo's energy drops to zero, its happiness and health 
   // decreases randomly. Does not apply when energy value was already 0.

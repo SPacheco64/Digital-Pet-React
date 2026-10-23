@@ -86,6 +86,7 @@ export const trainingFunction = (
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
     optionSelected: number,
+    onComplete: () => void,
 ) => {
     const randomHungerGain = 15 + Math.floor(Math.random() * 15);
     const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
@@ -115,6 +116,7 @@ export const trainingFunction = (
         setCurrentQuestionType('');
         setQuestionWindowOpen(false);
         setCurrentlyBusy(false);
+        onComplete();
     }, 15000);
 
     return () => clearTimeout(trainingTimer);
