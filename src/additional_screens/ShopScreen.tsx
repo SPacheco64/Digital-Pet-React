@@ -55,8 +55,12 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
         <div className='shop-list'>
             {
                 shopList.map((item, index) => (
-                    <div className={`shop-item ${(alreadyPurchased.includes(index) && index > 1) ? 'already-purchased' : ''}`} 
-                        key={index} onClick={() => {
+                    <button
+                        type='button'
+                        className={`shop-item ${(alreadyPurchased.includes(index) && index > 1) ? 'already-purchased' : ''}`}
+                        key={index}
+                        disabled={alreadyPurchased.includes(index) && index > 1}
+                        onClick={() => {
                             if (index === 0) { // Healing potion purchased
                                 if (currentHealth === maxHealth || currentMoney < item.cost) return;
                                 setCurrentHealth(maxHealth);
@@ -87,7 +91,7 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                         <div className='item-descriptions'>
                             {item.description}
                         </div>
-                    </div>
+                    </button>
                 ))
             }
         </div>

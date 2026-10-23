@@ -42,12 +42,16 @@
         background: #141470;
 
         .shop-item {
+            display: block;
+            width: 100%;
             padding: 0.25rem;
             border: 0.1rem solid;
             margin: 0.5rem 0;
             color: #fff;
             background: #00008f;
             cursor: pointer;
+            font: inherit;
+            text-align: left;
             position: relative;
             user-select: none;
 
@@ -56,8 +60,13 @@
                 color: #fff;
             }
 
-            &.already-purchased {
-                pointer-events: none;
+            &:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 2px;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
                 opacity: .5;
             }
 
