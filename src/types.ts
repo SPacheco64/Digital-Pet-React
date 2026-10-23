@@ -25,6 +25,8 @@ export interface ChocoboSaveData {
     specialCharge: number;
 }
 
+export type GameActivity = 'pet' | 'battle-selection' | 'battle' | 'fishing' | 'race-selection' | 'race';
+
 export interface GameDisplayProps {
     inCombat: boolean;
     creatureName: string;
@@ -44,15 +46,12 @@ export interface GameDisplayProps {
     actionFailureTrigger: number;
     currentlyBusy: boolean;
     showMenuScreen: boolean;
-    showBattleSelection: boolean;
-    showBattleScreen: boolean;
-    raceSelectionOpen: boolean;
-    fishingOpen: boolean;
+    activity: GameActivity;
+    onStartBattle: (level: number) => void;
     fishingInput: number;
     fishingEarnedCurrency: number;
     onFishingComplete: (caughtCount: number) => void;
     onFishingClose: () => void;
-    raceOpen: boolean;
     raceDifficulty: RaceDifficulty;
     currentSpeed: number;
     currentEndurance: number;
@@ -71,12 +70,8 @@ export interface GameDisplayProps {
     damageToEnemy: number;
     damageToPlayer: number;
     specialCharge: number;
-    setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectedEnemyLevel: React.Dispatch<React.SetStateAction<number>>;
     onSelectRaceDifficulty: (difficulty: RaceDifficulty) => void;
 }
 
@@ -91,6 +86,8 @@ export interface CreatureProps {
 export type RaceDifficulty = 1 | 2 | 3;
 
 export interface MenuProps {
+    activity: GameActivity;
+    onActivityChange: (activity: GameActivity) => void;
     inCombat: boolean;
     currentStatus: string;
     currentHealth: number;
@@ -110,17 +107,12 @@ export interface MenuProps {
     showShopScreen: boolean;
     showAchievementsScreen: boolean;
     showInfoScreen: boolean;
-    showBattleSelection: boolean;
-    showBattleScreen: boolean;
     playerAttack: boolean;
     enemyAttack: boolean;
     playerSpecial: boolean;
     enemySpecial: boolean;
     playerRunning: boolean;
-    fishingOpen: boolean;
     fishingComplete: boolean;
-    raceSelectionOpen: boolean;
-    raceOpen: boolean;
     raceComplete: boolean;
     sprintActive: boolean;
     welcomeFormHidden: boolean;
@@ -136,16 +128,11 @@ export interface MenuProps {
     setOptionSelected: React.Dispatch<React.SetStateAction<number>>;
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>;
-    setFishingOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setFishingComplete: React.Dispatch<React.SetStateAction<boolean>>;
     setFishingInput: React.Dispatch<React.SetStateAction<number>>;
-    setRaceSelectionOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setRaceOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setRaceComplete: React.Dispatch<React.SetStateAction<boolean>>;
     setSprintActive: React.Dispatch<React.SetStateAction<boolean>>;
     setRaceSteeringInput: React.Dispatch<React.SetStateAction<{ direction: -1 | 1; sequence: number }>>;
-    setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerAttack: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerSpecial: React.Dispatch<React.SetStateAction<boolean>>;
@@ -266,11 +253,7 @@ export interface BattleSelectionScreenProps {
     isLoading: boolean;
     battlesWon: number;
     currentHealth: number;
-    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowBattleSelection: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowBattleScreen: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectedEnemyLevel: React.Dispatch<React.SetStateAction<number>>;
-    setInCombat: React.Dispatch<React.SetStateAction<boolean>>;
+    onStartBattle: (level: number) => void;
 }
 
 export interface BattleScreenProps {

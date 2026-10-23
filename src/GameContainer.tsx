@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChocoboSaveData, GameContainerProps, RaceDifficulty } from './types';
+import { ChocoboSaveData, GameActivity, GameContainerProps, RaceDifficulty } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
@@ -52,8 +52,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
   const [optionSelected, setOptionSelected] = useState<number>(0);
   const [showMenuScreen, setShowMenuScreen] = useState<boolean>(false);
-  const [showBattleSelection, setShowBattleSelection] = useState<boolean>(false);
-  const [showBattleScreen, setShowBattleScreen] = useState<boolean>(false);
+  const [activity, setActivity] = useState<GameActivity>('pet');
   const [selectedEnemyLevel, setSelectedEnemyLevel] = useState<number>(1);
   const [showStatusScreen, setShowStatusScreen] = useState<boolean>(false);
   const [showShopScreen, setShowShopScreen] = useState<boolean>(false);
@@ -65,12 +64,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentMoney, setCurrentMoney] = useState<number>(0);
   const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [fishingOpen, setFishingOpen] = useState<boolean>(false);
   const [fishingComplete, setFishingComplete] = useState<boolean>(false);
   const [fishingInput, setFishingInput] = useState<number>(0);
   const [fishingEarnedCurrency, setFishingEarnedCurrency] = useState<number>(0);
-  const [raceSelectionOpen, setRaceSelectionOpen] = useState<boolean>(false);
-  const [raceOpen, setRaceOpen] = useState<boolean>(false);
   const [raceDifficulty, setRaceDifficulty] = useState<RaceDifficulty>(2);
   const [raceComplete, setRaceComplete] = useState<boolean>(false);
   const [raceSteeringInput, setRaceSteeringInput] = useState<{ direction: -1 | 1; sequence: number }>({ direction: 1, sequence: 0 });
@@ -169,7 +165,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   };
 
   useEffect(() => {
-    if (showBattleScreen) {
+    if (activity === 'battle') {
       const nextEnemy = createEnemyForDifficulty(selectedEnemyLevel);
       setEnemyInfo(nextEnemy);
       setCurrentEnemyHealth(nextEnemy.health);
@@ -183,7 +179,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     setCurrentEnemyHealth(0);
     setBattleResult(null);
     setBattleLocked(false);
-  }, [selectedEnemyLevel, showBattleScreen]);
+  }, [selectedEnemyLevel, activity]);
 
   useEffect(() => {
     if (battleResult !== null) {
@@ -487,9 +483,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             currentTime={currentTime} currentlyBusy={currentlyBusy}
             actionFailureTrigger={actionFailureTrigger}
             showMenuScreen={showMenuScreen} 
-            showBattleSelection={showBattleSelection} showBattleScreen={showBattleScreen}
-            raceSelectionOpen={raceSelectionOpen}
-            fishingOpen={fishingOpen}
+            activity={activity}
+            onStartBattle={(level) => {
+              setSelectedEnemyLevel(level);
+              setIsLoading(true);
+              setInCombat(true);
+              setActivity('battle');
+            }}
             fishingInput={fishingInput}
             fishingEarnedCurrency={fishingEarnedCurrency}
             onFishingComplete={(caughtCount) => {
@@ -503,12 +503,11 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               setFishingComplete(true);
             }}
             onFishingClose={() => {
-              setFishingOpen(false);
+              setActivity('pet');
               setFishingComplete(false);
               setFishingInput(0);
               setCurrentlyBusy(false);
             }}
-            raceOpen={raceOpen}
             raceDifficulty={raceDifficulty}
             currentSpeed={currentSpeed}
             currentEndurance={currentEndurance}
@@ -524,28 +523,24 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               setCurrentMoney((money) => money + getRaceReward(place));
             }}
             onRaceClose={() => {
-              setRaceOpen(false);
+              setActivity('pet');
               setRaceComplete(false);
               setSprintActive(false);
               setCurrentlyBusy(false);
             }}
             onSelectRaceDifficulty={(difficulty) => {
               setRaceDifficulty(difficulty);
-              setRaceSelectionOpen(false);
               setRaceSteeringInput({ direction: 1, sequence: 0 });
               setRaceComplete(false);
               setSprintActive(false);
-              setRaceOpen(true);
+              setActivity('race');
             }}
             selectedEnemyLevel={selectedEnemyLevel}
             isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
             setIsLoading={setIsLoading} 
-            setShowBattleSelection={setShowBattleSelection}
-            setShowBattleScreen={setShowBattleScreen}
-            setSelectedEnemyLevel={setSelectedEnemyLevel}
             playerAttack={playerAttack} enemyAttack={enemyAttack} 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
-            playerRunning={playerRunning} setInCombat={setInCombat}      
+            playerRunning={playerRunning}
             damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
             specialCharge={specialCharge}
             />
@@ -618,6 +613,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         {/* Bottom panel containing the main menu and game controls */}
         <div className='bottom-panel'>
           <Menu 
+            activity={activity} onActivityChange={setActivity}
             inCombat={inCombat} currentStatus={currentStatus} currentHealth={currentHealth} maxHealth={maxHealth}
             onAttack={handleAttack} onSpecial={handleSpecial} specialCharge={specialCharge}
             currentEnemyHealth={currentEnemyHealth}
@@ -628,18 +624,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setCurrentlyBusy={setCurrentlyBusy} currentlyBusy={currentlyBusy}
             setOptionSelected={setOptionSelected} setQuestionWindowOpen={setQuestionWindowOpen}
             questionWindowOpen={questionWindowOpen} setCurrentQuestionType={setCurrentQuestionType}
-            setFishingOpen={setFishingOpen}
             setFishingComplete={setFishingComplete}
             setFishingInput={setFishingInput}
-            fishingOpen={fishingOpen}
             fishingComplete={fishingComplete}
-            setRaceSelectionOpen={setRaceSelectionOpen}
-            setRaceOpen={setRaceOpen}
             setRaceComplete={setRaceComplete}
             setSprintActive={setSprintActive}
             setRaceSteeringInput={setRaceSteeringInput}
-            raceSelectionOpen={raceSelectionOpen}
-            raceOpen={raceOpen}
             raceComplete={raceComplete}
             sprintActive={sprintActive}
             setShowMenuScreen={setShowMenuScreen} showMenuScreen={showMenuScreen}
@@ -649,8 +639,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             setShowAchievementsScreen={setShowAchievementsScreen}
             showInfoScreen={showInfoScreen} setShowInfoScreen={setShowInfoScreen}
             welcomeFormHidden={hideWelcome}
-            showBattleSelection={showBattleSelection} setShowBattleSelection={setShowBattleSelection}
-            showBattleScreen={showBattleScreen} setShowBattleScreen={setShowBattleScreen} 
             playerAttack={playerAttack} enemyAttack={enemyAttack}
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} playerRunning={playerRunning}
             setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 

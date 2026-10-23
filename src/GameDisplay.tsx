@@ -30,15 +30,12 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     currentTime,
     actionFailureTrigger,
     showMenuScreen,
-    showBattleSelection,
-    showBattleScreen,
-    raceSelectionOpen,
-    fishingOpen,
+    activity,
+    onStartBattle,
     fishingInput,
     fishingEarnedCurrency,
     onFishingComplete,
     onFishingClose,
-    raceOpen,
     raceDifficulty,
     currentSpeed,
     currentEndurance,
@@ -53,11 +50,6 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     isLoading,
     setCurrentlyBusy,
     setIsLoading,
-    setShowBattleSelection,
-    setShowBattleScreen,
-    setSelectedEnemyLevel,
-    setInCombat,
-
     // Props for battle & race functions:
     playerAttack,
     enemyAttack,
@@ -84,8 +76,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
       {/* Displayed game content */}
       {
-        !showMenuScreen && !showBattleScreen && !showBattleSelection && !raceSelectionOpen &&
-        !fishingOpen && !raceOpen &&
+        !showMenuScreen && activity === 'pet' &&
         <>
           <GameCanvas currentStatus={currentStatus} currentMoodIcon={currentMoodIcon} setCurrentlyBusy={setCurrentlyBusy} actionFailureTrigger={actionFailureTrigger} />
           <MoodDisplay currentMoodIcon={currentMoodIcon} />
@@ -95,23 +86,19 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
 
       {/* Displayed battle selection content */}
       {
-        !showMenuScreen && showBattleSelection &&
+        !showMenuScreen && activity === 'battle-selection' &&
         <BattleSelectionScreen isLoading={isLoading} 
           battlesWon={battlesWon} 
           currentHealth={currentHealth} 
-          setIsLoading={setIsLoading} 
-          setShowBattleSelection={setShowBattleSelection}
-          setShowBattleScreen={setShowBattleScreen}
-          setSelectedEnemyLevel={setSelectedEnemyLevel}
-          setInCombat={setInCombat}
+          onStartBattle={onStartBattle}
         />
       } 
 
-      {!showMenuScreen && raceSelectionOpen && 
+      {!showMenuScreen && activity === 'race-selection' &&
         <RaceSelectionScreen onSelect={onSelectRaceDifficulty} />
       }
 
-      {!showMenuScreen && fishingOpen &&
+      {!showMenuScreen && activity === 'fishing' &&
         <FishingMinigame
           inputTrigger={fishingInput}
           earnedCurrency={fishingEarnedCurrency}
@@ -122,7 +109,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
         />
       }
 
-      {!showMenuScreen && raceOpen &&
+      {!showMenuScreen && activity === 'race' &&
         <RacingMinigame
           difficulty={raceDifficulty}
           currentSpeed={currentSpeed}
@@ -138,7 +125,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
 
       {/* Displayed battle content */}
       {
-        !showMenuScreen && showBattleScreen &&
+        !showMenuScreen && activity === 'battle' &&
         <BattleScreen selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
           playerAttack={playerAttack} enemyAttack={enemyAttack} 
           playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
