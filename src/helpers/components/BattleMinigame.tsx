@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { BattleScreenProps } from '../types';
-import '../../styles/components/battle-screen.scss';
-import BattleCanvas from '../helpers/canvas/BattleCanvas';
+import React from 'react';
+import { BattleMinigameProps } from '../../types';
+import '../../../styles/components/battle-minigame.scss';
+import BattleCanvas from '../canvas/BattleCanvas';
 
-const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => {
+const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProps) => {
     // Destructure props for ease of access & documentation
     const {
         selectedEnemyLevel,
@@ -26,7 +26,7 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
     } = props;
 
     return (
-        <div id='BattleScreen' className='additional-screen'>
+        <div id='BattleMinigame' className='additional-screen'>
             <div className='battle-display'>
                 <div className='message-box'>
                     {battleMessage}
@@ -65,4 +65,4 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
     );
 };
 
-export default BattleScreen;
+export default BattleMinigame;

@@ -4,7 +4,7 @@ import '../styles/components/game-display.scss';
 import MoodDisplay from './MoodDisplay';
 import StatusDisplay from './StatusDisplay';
 import GameCanvas from './helpers/canvas/GameCanvas';
-import BattleScreen from './additional_screens/BattleScreen';
+import BattleMinigame from './helpers/components/BattleMinigame';
 import BattleSelectionScreen from './additional_screens/BattleSelectionScreen';
 import RaceSelectionScreen from './additional_screens/RaceSelectionScreen';
 import FishingMinigame from './helpers/components/FishingMinigame';
@@ -37,6 +37,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     onFishingComplete,
     onFishingClose,
     raceDifficulty,
+    raceEarnedCurrency,
     currentSpeed,
     currentEndurance,
     raceSteeringInput,
@@ -112,6 +113,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {!showMenuScreen && activity === 'race' &&
         <RacingMinigame
           difficulty={raceDifficulty}
+          earnedCurrency={raceEarnedCurrency}
           currentSpeed={currentSpeed}
           currentEndurance={currentEndurance}
           creatureName={creatureName}
@@ -126,7 +128,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {/* Displayed battle content */}
       {
         !showMenuScreen && activity === 'battle' &&
-        <BattleScreen selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
+        <BattleMinigame selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
           playerAttack={playerAttack} enemyAttack={enemyAttack} 
           playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
           playerRunning={playerRunning} currentHealth={currentHealth}

@@ -1,4 +1,4 @@
-import { ChocoboSaveData } from '../../types';
+import { ChocoboSaveData } from '../../../types';
 
 const SHELL_COLORS = new Set(['orange', 'red', 'green', 'blue', 'pink', 'purple', 'gray', 'yellow']);
 const MOOD_ICONS = new Set(['happy', 'normal', 'sad', 'Happy', 'Normal', 'Sad']);

@@ -53,6 +53,7 @@ export interface GameDisplayProps {
     onFishingComplete: (caughtCount: number) => void;
     onFishingClose: () => void;
     raceDifficulty: RaceDifficulty;
+    raceEarnedCurrency: number;
     currentSpeed: number;
     currentEndurance: number;
     raceSteeringInput: { direction: -1 | 1; sequence: number };
@@ -256,7 +257,7 @@ export interface BattleSelectionScreenProps {
     onStartBattle: (level: number) => void;
 }
 
-export interface BattleScreenProps {
+export interface BattleMinigameProps {
     selectedEnemyLevel: number;
     isLoading: boolean;
     playerAttack: boolean;
@@ -272,6 +273,6 @@ export interface BattleScreenProps {
     battleResult: 'victory' | 'defeat' | null;
     damageToEnemy: number;
     damageToPlayer: number;
-        specialCharge: number;
+    specialCharge: number;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

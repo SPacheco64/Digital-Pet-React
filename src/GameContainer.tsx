@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChocoboSaveData, GameActivity, GameContainerProps, RaceDifficulty } from './types';
+import { GameActivity, GameContainerProps, RaceDifficulty } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
 import ImagePreloader from './helpers/components/ImagePreloader';
 import ExternalUI from './ExternalUI';
-import { eatFunction, hatchingEvent, resetFunction, saveFunction, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
+import { eatFunction, hatchingEvent, saveFunction, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
 import QuestionWindow from './helpers/components/QuestionWindow';
 import MenuScreen from './additional_screens/MenuScreen';
 import StatusScreen from './additional_screens/StatusScreen';
@@ -13,19 +13,11 @@ import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
-import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/BattleLogic';
-import { parseChocoboSaveData } from './helpers/functions/SaveData';
-
-// Energy & Hunger changes after playing a minigame
-const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
-const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 10);
-
-// Currency rewards for completing minigames
-const getFishingReward = (caughtCount: number) => (
-  Array.from({ length: caughtCount }, () => 7 + Math.floor(Math.random() * 7))
-    .reduce((totalReward, reward) => totalReward + reward, 0)
-);
-const getRaceReward = (place: number) => [0, 24, 14, 8, 4][place] ?? 0;
+import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/MinigameLogic/BattleLogic';
+import { fishingEndFunction } from './helpers/functions/MinigameLogic/FishingLogic';
+import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
+import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
+import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -67,6 +59,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [fishingComplete, setFishingComplete] = useState<boolean>(false);
   const [fishingInput, setFishingInput] = useState<number>(0);
   const [fishingEarnedCurrency, setFishingEarnedCurrency] = useState<number>(0);
+  const [raceEarnedCurrency, setRaceEarnedCurrency] = useState<number>(0);
   const [raceDifficulty, setRaceDifficulty] = useState<RaceDifficulty>(2);
   const [raceComplete, setRaceComplete] = useState<boolean>(false);
   const [raceSteeringInput, setRaceSteeringInput] = useState<{ direction: -1 | 1; sequence: number }>({ direction: 1, sequence: 0 });
@@ -90,6 +83,29 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
 
+  const saveData = createSaveData({
+    playerName,
+    chocoboName,
+    currentShellColor,
+    currentHealth,
+    maxHealth,
+    currentEnergy,
+    maxEnergy,
+    currentHappiness,
+    currentHunger,
+    currentPower,
+    currentDefense,
+    currentSpeed,
+    currentEndurance,
+    currentMoodIcon,
+    currentMoney,
+    alreadyPurchased,
+    battlesWon,
+    battlesLost,
+    racesWon,
+    specialCharge,
+  });
+
   // Battle State Values
   const [playerAttack, setPlayerAttack] = useState<boolean>(false);
   const [enemyAttack, setEnemyAttack] = useState<boolean>(false);
@@ -103,6 +119,30 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [battleResult, setBattleResult] = useState<'victory' | 'defeat' | null>(null);
   const [damageToEnemy, setDamageToEnemy] = useState<number>(0);
   const [damageToPlayer, setDamageToPlayer] = useState<number>(0);
+
+  const handleFishingComplete = (caughtCount: number) => fishingEndFunction({
+    caughtCount,
+    setCurrentHappiness,
+    setCurrentHunger,
+    setCurrentEnergy,
+    setCurrentMoney,
+    setFishingEarnedCurrency,
+    setFishingComplete,
+  });
+
+  const handleRaceComplete = (place: number) => raceEndFunction({
+    place,
+    difficulty: raceDifficulty,
+    setRacesWon,
+    setCurrentHappiness,
+    setCurrentHunger,
+    setCurrentEnergy,
+    setCurrentMoney,
+    setCurrentSpeed,
+    setCurrentEndurance,
+    setRaceEarnedCurrency,
+    setRaceComplete,
+  });
 
   const handleAttack = () => {
     if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
@@ -194,34 +234,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     console.log('Battles lost: ', battlesLost);
   }, [battlesLost])
 
-  const createSaveData = (): ChocoboSaveData => ({
-    playerName,
-    chocoboName,
-    currentShellColor,
-    currentHealth,
-    maxHealth,
-    currentEnergy,
-    maxEnergy,
-    currentHappiness,
-    currentHunger,
-    currentPower,
-    currentDefense,
-    currentSpeed,
-    currentEndurance,
-    currentMoodIcon,
-    currentMoney,
-    alreadyPurchased,
-    battlesWon,
-    battlesLost,
-    racesWon,
-    specialCharge,
-  });
-
-  const reportSaveError = (message: string, error: unknown) => {
-    console.error(message, error);
-    setSaveError(message);
-  };
-
   useEffect(() => {
     let savedData: string | null;
 
@@ -233,7 +245,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
       savedData = localStorage.getItem('digitalPetSave');
     } catch (error) {
-      reportSaveError('Unable to read browser storage. Existing progress could not be loaded, and changes may not be saved.', error);
+      reportSaveError('Unable to read browser storage. Existing progress could not be loaded, and changes may not be saved.', error, setSaveError);
       setStorageReadFailed(true);
       setStorageHydrated(true);
       return;
@@ -283,7 +295,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     try {
       localStorage.setItem('digitalPetAutosaveEnabled', String(autosaveEnabled));
     } catch (error) {
-      reportSaveError('Unable to save the autosave preference. Browser storage may be unavailable or full.', error);
+      reportSaveError('Unable to save the autosave preference. Browser storage may be unavailable or full.', error, setSaveError);
     }
   }, [autosaveEnabled, storageHydrated]);
 
@@ -293,10 +305,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
 
     try {
-      saveFunction(createSaveData());
+      saveFunction(saveData);
       setSaveError(null);
     } catch (error) {
-      reportSaveError('Unable to autosave game progress. Check browser storage availability and space.', error);
+      reportSaveError('Unable to autosave game progress. Check browser storage availability and space.', error, setSaveError);
     }
   }, [
     alreadyPurchased,
@@ -325,49 +337,6 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     storageReadFailed,
     saveRecoveryRequired,
   ]);
-
-  const handleSave = () => {
-    if (!storageHydrated) {
-      setSaveError('Game storage is still loading. Try saving again in a moment.');
-      return;
-    }
-
-    if (storageReadFailed) {
-      setSaveError('Game progress cannot be saved because existing browser storage could not be read. Reload and try again.');
-      return;
-    }
-
-    if (saveRecoveryRequired) {
-      setSaveError('Reset the damaged save before saving a new game.');
-      return;
-    }
-
-    try {
-      saveFunction(createSaveData());
-      setSaveError(null);
-    } catch (error) {
-      reportSaveError('Unable to save game progress. Check browser storage availability and space.', error);
-    }
-  };
-
-  const handleReset = () => {
-    try {
-      if (resetFunction()) {
-        window.location.reload();
-      }
-    } catch (error) {
-      reportSaveError('Unable to reset saved game data. Browser storage may be unavailable.', error);
-    }
-  };
-
-  const handleSaveRecovery = () => {
-    try {
-      localStorage.removeItem('digitalPetSave');
-      window.location.reload();
-    } catch (error) {
-      reportSaveError('Unable to remove the damaged save. Browser storage may be unavailable.', error);
-    }
-  };
 
   useEffect(() => {
     if (currentStatus === 'Egg') {
@@ -448,7 +417,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   return (
     <ImagePreloader>
       <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime}
-        onSave={handleSave} onReset={handleReset} autosaveEnabled={autosaveEnabled}
+        onSave={() => handleSave({ saveData, storageHydrated, storageReadFailed, saveRecoveryRequired, setSaveError })}
+        onReset={() => handleReset(setSaveError)} autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled} />
 
       <div id='GameContainer' className={currentShellColor}>
@@ -463,7 +433,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             saveRecoveryRequired ? (
               <section className='save-recovery' role='alert'>
                 <p>{saveError}</p>
-                <button type='button' onClick={handleSaveRecovery}>Reset save and start over</button>
+                <button type='button' onClick={() => handleSaveRecovery(setSaveError)}>Reset save and start over</button>
               </section>
             ) : !hideWelcome &&
             <WelcomeForm welcomeMessage='Welcome! Are you ready to raise your very own Chocobo?' 
@@ -496,16 +466,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             }}
             fishingInput={fishingInput}
             fishingEarnedCurrency={fishingEarnedCurrency}
-            onFishingComplete={(caughtCount) => {
-              const happinessChange = (caughtCount > 0) ? caughtCount * (3 + Math.floor(Math.random() * 6)) : -(5 + Math.floor(Math.random() * 6));
-              const earnedCurrency = getFishingReward(caughtCount);
-              setCurrentHappiness(prevHappiness => Math.min(prevHappiness + happinessChange, 100));
-              setCurrentHunger(prevHunger => Math.min(prevHunger + getPlayHungerGain(), 100));
-              setCurrentEnergy(prevEnergy => Math.max(prevEnergy - getPlayEnergyCost(), 0));
-              setCurrentMoney(prevMoney => prevMoney + earnedCurrency);
-              setFishingEarnedCurrency(earnedCurrency);
-              setFishingComplete(true);
-            }}
+            onFishingComplete={handleFishingComplete}
             onFishingClose={() => {
               setActivity('pet');
               setFishingComplete(false);
@@ -513,19 +474,13 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               setCurrentlyBusy(false);
             }}
             raceDifficulty={raceDifficulty}
+            raceEarnedCurrency={raceEarnedCurrency}
             currentSpeed={currentSpeed}
             currentEndurance={currentEndurance}
             raceSteeringInput={raceSteeringInput}
             sprintActive={sprintActive}
             setSprintActive={setSprintActive}
-            onRaceComplete={(place) => {
-              setRaceComplete(true);
-              if (place === 1) setRacesWon((wins) => wins + 1);
-              setCurrentHappiness((happiness) => Math.min(100, happiness + (place === 1 ? 12 : 5)));
-              setCurrentHunger((hunger) => Math.min(100, hunger + getPlayHungerGain()));
-              setCurrentEnergy((energy) => Math.max(0, energy - getPlayEnergyCost()));
-              setCurrentMoney((money) => money + getRaceReward(place));
-            }}
+            onRaceComplete={handleRaceComplete}
             onRaceClose={() => {
               setActivity('pet');
               setRaceComplete(false);

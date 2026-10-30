@@ -21,7 +21,7 @@ import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
-import { escapeFunction } from './helpers/functions/BattleLogic';
+import { escapeFunction } from './helpers/functions/MinigameLogic/BattleLogic';
 
 const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;
