@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { OptionsMenuProps } from '../../types';
-import { githubFunction, retroFunction, websiteFunction, lightOrDarkFunction } from '../functions/OperationalFunctions';
+import { githubFunction, websiteFunction } from '../functions/OperationalFunctions';
 import closedMenuIcon from '../../graphics/icons/external_ui/closed-menu.svg';
 import openedMenuIcon from '../../graphics/icons/external_ui/opened-menu.svg';
 import saveIcon from '../../graphics/icons/external_ui/save.svg';
@@ -15,21 +15,24 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
     onReset,
     autosaveEnabled,
     setAutosaveEnabled,
+    retroMode,
+    setRetroMode,
 }: OptionsMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const optionsArray = [
-        {optionName: 'Save', function: onSave, icon: saveIcon, isToggle: false},
-        {optionName: 'Reset', function: onReset, icon: resetIcon, isToggle: false},
+        {optionName: 'Save', function: onSave, icon: saveIcon, isToggle: false, isActive: false},
+        {optionName: 'Reset', function: onReset, icon: resetIcon, isToggle: false, isActive: false},
         {
                 optionName: `Autosave: ${autosaveEnabled ? 'On' : 'Off'}`,
                 function: () => setAutosaveEnabled((enabled) => !enabled),
                 icon: autosaveIcon,
                 isToggle: true,
+                isActive: autosaveEnabled,
         },
-        {optionName: 'Retro', function: retroFunction, icon: retroIcon, isToggle: false},
-        {optionName: 'Repo', function: githubFunction, icon: githubIcon, isToggle: false},
-        {optionName: 'Portfolio', function: websiteFunction, icon: webIcon, isToggle: false},
+        {optionName: `Retro: ${retroMode ? 'On' : 'Off'}`, function: () => setRetroMode((enabled) => !enabled), icon: retroIcon, isToggle: true, isActive: retroMode},
+        {optionName: 'Repo', function: githubFunction, icon: githubIcon, isToggle: false, isActive: false},
+        {optionName: 'Portfolio', function: websiteFunction, icon: webIcon, isToggle: false, isActive: false},
   ];
 
   return (
@@ -57,7 +60,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                         <div className='option-container' key={index}>
                             <button
                                 onClick={option.function}
-                                aria-pressed={option.isToggle ? autosaveEnabled : undefined}
+                                aria-pressed={option.isToggle ? option.isActive : undefined}
                                 onMouseEnter={() => {
                                 const optionEle = document.getElementById(`option-${index}`);
                                 if (optionEle) {

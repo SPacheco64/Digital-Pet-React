@@ -9,6 +9,8 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
   // Destructure props for ease of access & documentation
   const {
         setCurrentShellColor,
+        retroMode,
+        setRetroMode,
         currentTime,
         setCurrentTime,
         onSave,
@@ -22,7 +24,8 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
       <div className='ui-container'>
         <ColorPicker setCurrentShellColor={setCurrentShellColor} />
         <OptionsMenu onSave={onSave} onReset={onReset}
-          autosaveEnabled={autosaveEnabled} setAutosaveEnabled={setAutosaveEnabled} />
+          autosaveEnabled={autosaveEnabled} setAutosaveEnabled={setAutosaveEnabled}
+          retroMode={retroMode} setRetroMode={setRetroMode} />
         <TimeOfDay currentTime={currentTime} setCurrentTime={setCurrentTime} />
       </div>
     </div>

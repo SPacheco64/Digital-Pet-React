@@ -39,6 +39,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [storageReadFailed, setStorageReadFailed] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
+  const [retroMode, setRetroMode] = useState<boolean>(false);
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
   const [questionWindowOpen, setQuestionWindowOpen] = useState<boolean>(false);
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
@@ -87,6 +88,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     playerName,
     chocoboName,
     currentShellColor,
+    retroMode,
     currentHealth,
     maxHealth,
     currentEnergy,
@@ -293,6 +295,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setPlayerName(data.playerName);
         setChocoboName(data.chocoboName);
         setCurrentShellColor(data.currentShellColor);
+        setRetroMode(data.retroMode);
         setCurrentHealth(data.currentHealth);
         setMaxHealth(data.maxHealth);
         setCurrentEnergy(data.currentEnergy);
@@ -321,6 +324,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     setStorageHydrated(true);
   }, []);
+
+  useEffect(() => {
+    document.getElementById('DigipetRoot')?.classList.toggle('retro', retroMode);
+  }, [retroMode]);
 
   useEffect(() => {
     if (!storageHydrated) {
@@ -365,6 +372,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     maxEnergy,
     maxHealth,
     playerName,
+    retroMode,
     racesWon,
     specialCharge,
     autosaveEnabled,
@@ -451,7 +459,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   return (
     <ImagePreloader>
-      <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor} setCurrentTime={setCurrentTime}
+      <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor}
+        retroMode={retroMode} setRetroMode={setRetroMode} setCurrentTime={setCurrentTime}
         onSave={() => handleSave({ saveData, storageHydrated, storageReadFailed, saveRecoveryRequired, setSaveError })}
         onReset={() => handleReset(setSaveError)} autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled} />

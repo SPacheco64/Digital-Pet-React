@@ -20,9 +20,6 @@ export const resetFunction = () => {
 export const lightOrDarkFunction = () => {
     document.getElementById('DigipetRoot')?.classList.toggle('dark-mode');
 };
-export const retroFunction = () => {
-    document.getElementById('DigipetRoot')?.classList.toggle('retro');
-}
 export const githubFunction = () => {
     window.open('https://github.com/SPacheco64/Digital-Pet-React', '_blank');
 };

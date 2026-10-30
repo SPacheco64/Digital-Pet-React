@@ -69,10 +69,16 @@ export const parseChocoboSaveData = (value: unknown): ChocoboSaveData => {
         throw new Error('Invalid save field: currentShellColor');
     }
 
+    const retroMode = value.retroMode ?? false;
+    if (typeof retroMode !== 'boolean') {
+        throw new Error('Invalid save field: retroMode');
+    }
+
     return {
         playerName: requireString(value, 'playerName'),
         chocoboName: requireString(value, 'chocoboName'),
         currentShellColor: shellColor,
+        retroMode,
         currentHealth: Math.min(maxHealth, Math.max(0, requireNumber(value, 'currentHealth'))),
         maxHealth,
         currentEnergy: Math.min(maxEnergy, Math.max(0, requireNumber(value, 'currentEnergy'))),
