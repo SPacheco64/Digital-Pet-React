@@ -51,6 +51,8 @@ export const useFishingLogic = ({
       ? caughtCount > 0 ? successBackground : failBackground
       : gameState === 'caught' ? successBackground : failBackground;
 
+  // Handles the logic for when the player presses the input key/button
+  // Either ends the game, checks for a catch, or prepares for the next attempt
   const handleInput = useCallback(() => {
     if (gameState === 'complete') {
       handleClose();
@@ -85,6 +87,7 @@ export const useFishingLogic = ({
     }
   }, [attemptCount, caughtCount, gameState, handleClose, lurePosition, onComplete, targetWidth]);
 
+  // Handles the movement of the lure and checks for user input
   useEffect(() => {
     let lastFrameTime = performance.now();
 
@@ -115,6 +118,7 @@ export const useFishingLogic = ({
     };
   }, [gameState]);
 
+  // Handles user input via keyboard events and external triggers
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code !== 'Space' || event.repeat || isLoading) return;
@@ -126,6 +130,7 @@ export const useFishingLogic = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleInput, isLoading]);
 
+  // Handles user input via external triggers (e.g., button clicks)
   useEffect(() => {
     if (inputTrigger !== lastInputTrigger.current) {
       lastInputTrigger.current = inputTrigger;
@@ -153,6 +158,8 @@ interface FishingEndOptions {
   setFishingComplete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// Handles the end of the fishing minigame, updating the player's stats and currency 
+// based on the number of successful catches.
 export const fishingEndFunction = ({
   caughtCount,
   setCurrentHappiness,

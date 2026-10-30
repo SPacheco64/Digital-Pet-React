@@ -1,13 +1,16 @@
 import { ChocoboSaveData } from '../../../types';
 
+// Constants for valid shell colors, mood icons, and shop item count
 const SHELL_COLORS = new Set(['orange', 'red', 'green', 'blue', 'pink', 'purple', 'gray', 'yellow']);
 const MOOD_ICONS = new Set(['happy', 'normal', 'sad', 'Happy', 'Normal', 'Sad']);
 const SHOP_ITEM_COUNT = 12;
 
+// Type guard to check if a value is a non-null object (excluding arrays)
 const isRecord = (value: unknown): value is Record<string, unknown> => (
     typeof value === 'object' && value !== null && !Array.isArray(value)
 );
 
+// Helper function to validate and retrieve a required string field from the save data
 const requireString = (data: Record<string, unknown>, key: string): string => {
     const value = data[key];
     if (typeof value !== 'string' || value.trim().length === 0 || value.trim().length > 10) {
@@ -16,6 +19,7 @@ const requireString = (data: Record<string, unknown>, key: string): string => {
     return value.trim();
 };
 
+// Helper function to validate and retrieve a required number field from the save data
 const requireNumber = (data: Record<string, unknown>, key: string): number => {
     const value = data[key];
     if (typeof value !== 'number' || !Number.isFinite(value)) {
@@ -24,6 +28,7 @@ const requireNumber = (data: Record<string, unknown>, key: string): number => {
     return value;
 };
 
+// Helper function to validate and retrieve an optional counter field from the save data
 const optionalCounter = (data: Record<string, unknown>, key: string): number => {
     const value = data[key] ?? 0;
     if (typeof value !== 'number' || !Number.isFinite(value) || value < 0) {
@@ -32,6 +37,7 @@ const optionalCounter = (data: Record<string, unknown>, key: string): number => 
     return Math.floor(value);
 };
 
+// Helper function to validate and retrieve an optional number field from the save data
 const optionalNumber = (data: Record<string, unknown>, key: string): number => {
     const value = data[key] ?? 0;
     if (typeof value !== 'number' || !Number.isFinite(value)) {
@@ -40,6 +46,7 @@ const optionalNumber = (data: Record<string, unknown>, key: string): number => {
     return value;
 };
 
+// Parses and validates the saved game data, ensuring all required fields are present and within valid ranges
 export const parseChocoboSaveData = (value: unknown): ChocoboSaveData => {
     if (!isRecord(value)) {
         throw new Error('Saved game data must be an object.');

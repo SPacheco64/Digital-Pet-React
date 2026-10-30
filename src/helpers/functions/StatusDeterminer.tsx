@@ -10,6 +10,7 @@ import sleepingIcon from '../../graphics/icons/status/sleeping.svg';
 import tiredIcon from '../../graphics/icons/status/tired.svg';
 import trainingIcon from '../../graphics/icons/status/training.svg';
 
+// Determines the appropriate status icon based on the current status of the chocobo.
 export const determineStatus = (status: string) => {
   switch (status) {
     case 'dead':

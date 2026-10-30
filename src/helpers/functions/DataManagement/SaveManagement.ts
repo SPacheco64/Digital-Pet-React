@@ -12,13 +12,16 @@ interface SaveOptions {
   setSaveError: SetSaveError;
 }
 
+// Creates a new save data object by copying the provided save data.
 export const createSaveData = (saveData: ChocoboSaveData): ChocoboSaveData => ({ ...saveData });
 
+// Reports a save error to the console and updates the save error state.
 export const reportSaveError = (message: string, error: unknown, setSaveError: SetSaveError) => {
   console.error(message, error);
   setSaveError(message);
 };
 
+// Handles the save operation, checking for storage readiness and errors before attempting to save the game data.
 export const handleSave = ({
   saveData,
   storageHydrated,
@@ -49,6 +52,7 @@ export const handleSave = ({
   }
 };
 
+// Handles the reset operation, confirming with the user before clearing the saved game data and reloading the page.
 export const handleReset = (setSaveError: SetSaveError) => {
   try {
     if (resetFunction()) {
@@ -59,6 +63,7 @@ export const handleReset = (setSaveError: SetSaveError) => {
   }
 };
 
+// Handles the recovery of a damaged save, attempting to remove the corrupted data and reload the page.
 export const handleSaveRecovery = (setSaveError: SetSaveError) => {
   try {
     localStorage.removeItem('digitalPetSave');

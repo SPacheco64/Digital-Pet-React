@@ -53,6 +53,9 @@ interface RacingLogicOptions {
   onComplete: (place: number) => void;
 }
 
+// Constants/variables for the racing minigame.
+// Updating these will update the overall gameplay experience of 
+// the racing minigame.
 export const RACE_DISTANCE = 1500;
 const RACE_LANE_COUNT = 4;
 const STARTING_RIVAL_LANES = [0, 2, 3] as const;
@@ -73,6 +76,7 @@ const RIVAL_SPRINT_CHANCE: Record<RaceDifficulty, number> = {
   3: 0.5,
 };
 
+// Maps enemy racer colors to CSS filter strings for visually different opponents.
 export const COLOR_FILTERS: Record<string, string> = {
   '#d93636': 'hue-rotate(-45deg) saturate(1.5)',
   '#3886db': 'hue-rotate(165deg) saturate(1.4)',
@@ -83,6 +87,7 @@ export const COLOR_FILTERS: Record<string, string> = {
   player: 'hue-rotate(-10deg) saturate(1.1)',
 };
 
+// Generates the racers and obstacles for a race based on the selected difficulty level.
 const createRaceModel = (difficulty: RaceDifficulty): RaceModel => {
   const availableColors = [...RACER_COLORS];
   const obstacles = [
@@ -154,11 +159,13 @@ export const useRacingLogic = ({
     winded: false,
   }));
 
+  // Handles the player's lane change based on input direction (-1 for left, 1 for right)
   const steer = useCallback((direction: -1 | 1) => {
     if (completed.current) return;
     raceModel.playerLane = Math.max(0, Math.min(RACE_LANE_COUNT - 1, raceModel.playerLane + direction));
   }, []);
 
+  // Handles the countdown timer before the race starts
   useEffect(() => {
     if (countdown === null) return;
     const countdownTimer = window.setTimeout(() => {
@@ -167,12 +174,14 @@ export const useRacingLogic = ({
     return () => window.clearTimeout(countdownTimer);
   }, [countdown]);
 
+  // Handles the player's steering input and updates the player's lane accordingly
   useEffect(() => {
     if (steeringInput.sequence === lastSteeringSequence.current) return;
     lastSteeringSequence.current = steeringInput.sequence;
     steer(steeringInput.direction);
   }, [steer, steeringInput]);
 
+  // Handles keyboard input for steering and sprinting, as well as releasing the sprint key
   useEffect(() => {
     const handleSpaceRelease = () => {
       spaceHeld.current = false;
@@ -209,6 +218,7 @@ export const useRacingLogic = ({
     };
   }, [steer, setSprintActive]);
 
+  // Handles the main game loop, updating the race state, player and rival positions, stamina, and checking for race completion.
   useEffect(() => {
     let frameId = 0;
     let previousTime = performance.now();
@@ -325,6 +335,7 @@ export const useRacingLogic = ({
     return () => cancelAnimationFrame(frameId);
   }, [countdown, currentEndurance, currentSpeed, difficulty, raceModel, setSprintActive]);
 
+  // Calculates the player's progress percentage, stamina percentage, and determines which racers are visible on the track.
   const progress = Math.min(100, (frame.playerProgress / RACE_DISTANCE) * 100);
   const staminaPercent = (frame.stamina / Math.max(10, Math.min(100, currentEndurance * 10))) * 100;
   const visibleRacers = frame.racers.filter((racer) => Math.abs(racer.progress - frame.playerProgress) < 430);
@@ -366,6 +377,8 @@ interface RaceEndOptions {
   setRaceComplete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// Handles the end of the racing minigame, updating the player's stats and 
+// currency based on their finishing place and the race difficulty.
 export const raceEndFunction = ({
   place,
   difficulty,

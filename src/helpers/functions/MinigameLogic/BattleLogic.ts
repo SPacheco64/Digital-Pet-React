@@ -38,6 +38,7 @@ const determineLevelScale = (difficulty: number) => {
     }
 };
 
+// Generates an enemy with stats based on the difficulty level of the battle
 export const createEnemyForDifficulty = (difficultyLevel: number): EnemyInformation => {
     const clampedDifficulty = Math.min(Math.max(difficultyLevel, 1), 5);
 
