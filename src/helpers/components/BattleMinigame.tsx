@@ -19,6 +19,7 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
         playerSpecial,
         enemySpecial,
         playerRunning,
+        escapeComplete,
         damageToEnemy,
         damageToPlayer,
         specialCharge,
@@ -59,6 +60,7 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
                 playerAttack={playerAttack} enemyAttack={enemyAttack} 
                 playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
                 playerRunning={playerRunning} 
+                escapeComplete={escapeComplete}
                 battleResult={battleResult}
             />
         </div>

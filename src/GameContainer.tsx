@@ -13,7 +13,7 @@ import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
-import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, specialFunction } from './helpers/functions/MinigameLogic/BattleLogic';
+import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, escapeFunction, specialFunction } from './helpers/functions/MinigameLogic/BattleLogic';
 import { fishingEndFunction } from './helpers/functions/MinigameLogic/FishingLogic';
 import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
@@ -117,6 +117,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentEnemyHealth, setCurrentEnemyHealth] = useState<number>(0);
   const [battleMessage, setBattleMessage] = useState<string>('What will you do?');
   const [battleResult, setBattleResult] = useState<'victory' | 'defeat' | null>(null);
+  const [escapeComplete, setEscapeComplete] = useState<boolean>(false);
   const [damageToEnemy, setDamageToEnemy] = useState<number>(0);
   const [damageToPlayer, setDamageToPlayer] = useState<number>(0);
 
@@ -196,6 +197,40 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       currentHealth,
       currentEnemyHealth,
       enemyInfo,
+      onComplete: (result) => {
+        setBattleLocked(false);
+        setBattleResult(result);
+        setInCombat(false);
+      },
+    });
+  };
+
+  const handleEscape = () => {
+    if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
+      return;
+    }
+
+    escapeFunction({
+      setPlayerRunning,
+      setBattleLocked,
+      setBattleMessage,
+      setEnemyAttack,
+      setCurrentHealth,
+      setDamageToPlayer,
+      setSpecialCharge,
+      setCurrentEnergy,
+      setCurrentHunger,
+      setCurrentHappiness,
+      currentBattleMessage: battleMessage,
+      currentSpeed,
+      currentHealth,
+      currentDefense,
+      enemyInfo,
+      difficultyLevel: selectedEnemyLevel,
+      onEscapeSuccess: () => {
+        setInCombat(false);
+        setEscapeComplete(true);
+      },
       onComplete: (result) => {
         setBattleLocked(false);
         setBattleResult(result);
@@ -454,6 +489,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
             battleMessage={battleMessage}
             battleResult={battleResult}
+            escapeComplete={escapeComplete}
             currentTime={currentTime} currentlyBusy={currentlyBusy}
             actionFailureTrigger={actionFailureTrigger}
             showMenuScreen={showMenuScreen} 
@@ -462,6 +498,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               setSelectedEnemyLevel(level);
               setIsLoading(true);
               setInCombat(true);
+              setEscapeComplete(false);
               setActivity('battle');
             }}
             fishingInput={fishingInput}
@@ -574,7 +611,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           <Menu 
             activity={activity} onActivityChange={setActivity}
             inCombat={inCombat} currentStatus={currentStatus} currentHealth={currentHealth} maxHealth={maxHealth}
-            onAttack={handleAttack} onSpecial={handleSpecial} specialCharge={specialCharge}
+            onAttack={handleAttack} onSpecial={handleSpecial} onEscape={handleEscape} specialCharge={specialCharge}
+            escapeComplete={escapeComplete}
             currentEnemyHealth={currentEnemyHealth}
             battleLocked={battleLocked}
             currentEnergy={currentEnergy} maxEnergy={maxEnergy} currentHunger={currentHunger}

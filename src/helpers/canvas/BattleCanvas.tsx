@@ -28,6 +28,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         playerSpecial,
         enemySpecial,
         playerRunning,
+        escapeComplete,
         battleResult,
         setIsLoading,
     } = props;
@@ -355,6 +356,29 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         return () => fadeSprite.destroy();
     }, [battleResult]);
 
+    useEffect(() => {
+        if (!playerRunning) {
+            return;
+        }
+
+        const playerSprite = spriteRef2.current;
+        if (!playerSprite) {
+            return;
+        }
+
+        const leaveBattlefield = new Konva.Tween({
+            node: playerSprite,
+            x: 320,
+            duration: 0.65,
+            easing: Konva.Easings.EaseIn,
+        });
+        leaveBattlefield.play();
+
+        return () => {
+            leaveBattlefield.destroy();
+        };
+    }, [playerRunning]);
+
     // When enemy attacks, change their x value by +10
     return (
         <BattleLoader selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading}>
@@ -376,15 +400,15 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                     />}
 
                     {/* Chocobo Sprite */}
-                    {chocoSheetImg && <Sprite
+                    {chocoSheetImg && !escapeComplete && <Sprite
                         ref={spriteRef2}
-                        x={chocoAttrToUse.x}
+                        x={chocoAttrToUse.x + (playerRunning ? 80 * chocoAttrToUse.scale : 0)}
                         y={chocoAttrToUse.y}
                         image={chocoSheetImg}
                         animation={chocoAttrToUse.anim}
                         animations={animations}
                         frameRate={chocoAttrToUse.frameRate}
-                        scaleX={chocoAttrToUse.scale}
+                        scaleX={playerRunning ? -chocoAttrToUse.scale : chocoAttrToUse.scale}
                         scaleY={chocoAttrToUse.scale}
                     />}
 

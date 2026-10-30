@@ -57,6 +57,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     playerSpecial,
     enemySpecial,
     playerRunning,
+    escapeComplete,
     damageToEnemy,
     damageToPlayer,
     specialCharge
@@ -132,6 +133,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           playerAttack={playerAttack} enemyAttack={enemyAttack} 
           playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
           playerRunning={playerRunning} currentHealth={currentHealth}
+          escapeComplete={escapeComplete}
           maxHealth={maxHealth} currentPower={currentPower} 
           currentDefense={currentDefense} battleMessage={battleMessage}
           battleResult={battleResult} damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}

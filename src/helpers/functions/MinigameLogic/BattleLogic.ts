@@ -260,19 +260,104 @@ export const specialFunction = (options: {
     }, ATTACK_ANIMATION_DELAY + 200);
 };
 
-// When trying to run from battle, determines if the player succeeds or fails
-export const escapeFunction = (
-    setPlayerRunning?: React.Dispatch<React.SetStateAction<boolean>>,
-    currentSpeed?: number,
-    currentHealth?: number,
-    enemyInfo?: EnemyInformation,
-) => {
-    console.log('Run function triggered.');
+// When trying to run from battle, either leave safely or give the enemy a free attack.
+export const escapeFunction = (options: {
+    setPlayerRunning: React.Dispatch<React.SetStateAction<boolean>>;
+    setBattleLocked: React.Dispatch<React.SetStateAction<boolean>>;
+    setBattleMessage: React.Dispatch<React.SetStateAction<string>>;
+    setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
+    setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
+    setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentHunger: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>;
+    currentBattleMessage: string;
+    currentSpeed: number;
+    currentHealth: number;
+    currentDefense: number;
+    enemyInfo: EnemyInformation;
+    difficultyLevel: number;
+    onEscapeSuccess: () => void;
+    onComplete: (result: 'victory' | 'defeat') => void;
+}) => {
+    const {
+        setPlayerRunning,
+        setBattleLocked,
+        setBattleMessage,
+        setEnemyAttack,
+        setCurrentHealth,
+        setDamageToPlayer,
+        setSpecialCharge,
+        setCurrentEnergy,
+        setCurrentHunger,
+        setCurrentHappiness,
+        currentBattleMessage,
+        currentSpeed,
+        currentHealth,
+        currentDefense,
+        enemyInfo,
+        difficultyLevel,
+        onEscapeSuccess,
+        onComplete,
+    } = options;
 
-    setTimeout(() => {
-        setPlayerRunning?.(false);
+    // Randomly generate hunger, happiness loss, and energy changes based on difficulty level.
+    // These apply on a successful escape.
+    const randomHungerGain = (3*difficultyLevel) + Math.floor(Math.random() * 5);
+    const randomHappinessLoss = (3*difficultyLevel) + Math.floor(Math.random() * 5);
+    const randomEnergyLoss = (5*difficultyLevel) + Math.floor(Math.random() * 10);
+
+    // Calculate escape chance based on player speed and enemy speed.
+    // Escape chance is between 10% and 80%.
+    const escapeChance = Math.min(.8, Math.max(0.1, currentSpeed / (enemyInfo.speed * 1.5)));
+    const escapeSuccess = Math.random() < escapeChance;
+
+    setPlayerRunning(true);
+    setBattleLocked(true);
+
+    // On successful escape, display a message and call the onEscapeSuccess callback 
+    // after a short delay.
+    if (escapeSuccess) {
+        setBattleMessage('Escape successful! You got away safely.');
+        window.setTimeout(() => {
+            setPlayerRunning(false);
+            setBattleLocked(false);
+            setCurrentHunger((prevHunger: number) => Math.min(prevHunger + randomHungerGain, 100));
+            setCurrentHappiness((prevHappy: number) => Math.max(prevHappy - randomHappinessLoss, 0));
+            setCurrentEnergy((prevEnergy: number) => Math.max(prevEnergy - randomEnergyLoss, 0));
+            onEscapeSuccess();
+        }, 800);
+        return;
+    }
+
+    // On failed escape, display a failure message and trigger the enemy's 
+    // counterattack after a short delay.
+    setBattleMessage('Escape failed! The enemy attacks!');
+    window.setTimeout(() => {
+        setPlayerRunning(false);
+        setEnemyAttack(true);
+
+        const criticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
+        const damage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
+        const finalDamage = Math.round(criticalHit ? damage * 1.25 : damage);
+        const remainingHealth = Math.max(currentHealth - finalDamage, 0);
+
+        setDamageToPlayer(finalDamage);
+        setSpecialCharge(prevCharge => Math.min(prevCharge + finalDamage, 100));
+        setCurrentHealth(remainingHealth);
+
+        window.setTimeout(() => {
+            setEnemyAttack(false);
+            setBattleMessage(currentBattleMessage);
+            if (remainingHealth === 0) {
+                onComplete('defeat');
+                return;
+            }
+            setBattleLocked(false);
+        }, ATTACK_ANIMATION_DELAY);
     }, 400);
-}
+};
 
 // Implements the results of a finished battle (victory vs. loss)
 export const battleEndFunction = (

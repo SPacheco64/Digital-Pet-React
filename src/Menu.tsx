@@ -21,7 +21,6 @@ import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
-import { escapeFunction } from './helpers/functions/MinigameLogic/BattleLogic';
 
 const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;
@@ -37,6 +36,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     maxHealth,
     onAttack,
     onSpecial,
+    onEscape,
     specialCharge,
     currentEnemyHealth,
     battleLocked,
@@ -55,6 +55,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     playerSpecial,
     enemySpecial,
     playerRunning,
+    escapeComplete,
     fishingComplete,
     raceComplete,
     sprintActive,
@@ -89,7 +90,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     inCombat,
   } = props;
 
-  const battleEnded = activity === 'battle' && (currentEnemyHealth <= 0 || currentHealth <= 0);
+  const battleEnded = activity === 'battle' && (currentEnemyHealth <= 0 || currentHealth <= 0 || escapeComplete);
 
   const checkIfDisabled = (index: number) => {
     return (showStatusScreen && index > 0) || (showAchievementsScreen && index !== 2)
@@ -133,7 +134,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: 'Attack', buttonIcon: attackIcon, buttonFunction: onAttack},
     {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: onSpecial},
-    {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: ()=>{setPlayerRunning(true); escapeFunction(setPlayerRunning)}},
+    {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: onEscape},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
       onActivityChange('pet');
       setCurrentlyBusy(false);
