@@ -47,12 +47,12 @@
             .color-circle {
                 display: inline-block;
                 margin: 0 .15rem;
-                background: #fff;
+                background: $white;
                 border-radius: 10rem;
                 height: 1.25rem;
                 width: 1.25rem;
                 overflow: hidden;
-                border: .1rem solid #fff;
+                border: .1rem solid $white;
                 cursor: pointer;
                 color: transparent;
 
@@ -91,7 +91,7 @@
                         left: -6rem;
                         width: 6rem;
                         min-width: fit-content;
-                        background: #fff;
+                        background: $white;
                         text-align: center;
                         border-radius: .5rem;
                         padding: .5rem;

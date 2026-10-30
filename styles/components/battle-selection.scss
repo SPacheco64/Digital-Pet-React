@@ -5,7 +5,7 @@
     top: 0;
     display: flex;
     justify-content: center;
-    background-color: #76f5f8;
+    background-color: $menu-screen-bg;
     background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
     z-index: 5;
@@ -17,8 +17,8 @@
         padding: .5rem;
         border: 0.1rem solid;
         margin: 0.5rem 0;
-        color: #fff;
-        background: #00008f;
+        color: $white;
+    background: $dark-blue;
         font-size: .5rem;
         align-items: center;
 
@@ -52,10 +52,10 @@
         width: 95%;
         max-height: 65%;
         margin-bottom: .5rem;
-        background: #141470;
+        background: $dark-blue;
     }
     .difficulty-header {
-        color: #fff;
+        color: $white;
         text-align: center;
         padding-top: .5rem;
     }
@@ -72,13 +72,13 @@
             padding: 0.25rem;
             border: 0.1rem solid;
             margin: 0.5rem 0;
-            color: #fff;
-            background: #00008f;
+            color: $white;
+            background: $dark-blue;
             cursor: pointer;
 
             &:hover:not(:disabled) {
-                background-color: #222;
-                color: #fff;
+                background-color: $hover-black;
+                color: $white;
             }
 
             &:disabled {

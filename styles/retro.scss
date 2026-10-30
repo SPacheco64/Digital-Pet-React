@@ -1,10 +1,10 @@
 #DigipetRoot {
     &.retro {
-        background-color: #222222;
+        background-color: $retro-page-bg;
         background-image: none;
 
         .warning {
-            color: #fff;
+            color: $white;
         }
 
         .mood-icon {
@@ -16,21 +16,21 @@
         #GameContainer {
             background-image: url('../src/graphics/backgrounds/tracks-bg.png');
 
-            &.orange { background-color: #fa953c; }
-            &.red { background-color: #fa3c3c; }
-            &.green { background-color: #3cfa55; }
-            &.blue { background-color: #3c9bfa; }
-            &.pink { background-color: #eb9de8; }
-            &.purple { background-color: #ae6afc; }
-            &.gray { background-color: #c8c4cc; }
-            &.yellow { background-color: #f8e33d; }
+            &.orange { background-color: $retro-shell-orange; }
+            &.red { background-color: $retro-shell-red; }
+            &.green { background-color: $retro-shell-green; }
+            &.blue { background-color: $retro-shell-blue; }
+            &.pink { background-color: $retro-shell-pink; }
+            &.purple { background-color: $retro-shell-purple; }
+            &.gray { background-color: $retro-shell-gray; }
+            &.yellow { background-color: $retro-shell-yellow; }
         }
 
         #Menu {
             button {
-                background-color: #9d0341;
-                color: #f4f4f4;
-                border-color: #6d022d;
+                background-color: $retro-btn-bg;
+                color: $retro-btn-color;
+                border-color: $retro-btn-border;
 
                 img {
                     filter: brightness(0) saturate(100%) invert(7%) sepia(48%) saturate(4185%) hue-rotate(316deg) brightness(91%) contrast(105%);                  
@@ -39,9 +39,9 @@
         }
 
         .top-panel {
-            background-color: #0ca816;
+            background-color: $retro-screen-green;
             border-radius: 1.25rem;
-            border: .25rem solid #555;
+            border: .25rem solid $game-screen-border;
             overflow: hidden;
             filter: blur(.03rem);
         }
@@ -75,7 +75,7 @@
             .fishing-minigame {
                 .fishing {
                     &-meter, &-hint, &-result {
-                        background: #000;
+                        background: $black;
                     }
                 }
             }

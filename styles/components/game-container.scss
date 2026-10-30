@@ -13,7 +13,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #faebd7;
+    background-color: $game-shell-default-bg;
     box-shadow: inset 1px 3px 7px rgba(0,0,0,.4);
 
     &::before {
@@ -26,14 +26,14 @@
     }
 
     // List of possible Game Shell color classes
-    &.orange { background-color: #ffa500; .menu-btn { background-color: #ff9a27; border-color: #bc7a2e;}}
-    &.red { background-color: #ff0000; .menu-btn { background-color: #ff8596; border-color: #d75d6e;}}
-    &.green { background-color: #008000; .menu-btn { background-color: #ffdc2c; border-color: #caae23;}}
-    &.blue { background-color: #0000ff; .menu-btn { background-color: #8d8dff; border-color: #6f6fdb;}}
-    &.pink { background-color: #ffc0cb; .menu-btn { background-color: #ffcdf0; border-color: #d2aac6;}}
-    &.purple { background-color: #800080; .menu-btn { background-color: #ffcdf0; border-color: #d2aac6;}}
-    &.gray { background-color: #808080; .menu-btn { background-color: #b3b3b3; border-color: #838383;}}
-    &.yellow { background-color: #ffcb00; .menu-btn { background-color: #f5f5f5; border-color: #dbcfcf;}}
+    &.orange { background-color: $shell-orange; .menu-btn { background-color: $orange-btn-bg; border-color: $orange-btn-border;}}
+    &.red { background-color: $shell-red; .menu-btn { background-color: $red-btn-bg; border-color: $red-btn-border;}}
+    &.green { background-color: $shell-green; .menu-btn { background-color: $green-btn-bg; border-color: $green-btn-border;}}
+    &.blue { background-color: $shell-blue; .menu-btn { background-color: $blue-btn-bg; border-color: $blue-btn-border;}}
+    &.pink { background-color: $shell-pink; .menu-btn { background-color: $pink-btn-bg; border-color: $pink-btn-border;}}
+    &.purple { background-color: $shell-purple; .menu-btn { background-color: $purple-btn-bg; border-color: $purple-btn-border;}}
+    &.gray { background-color: $shell-gray; .menu-btn { background-color: $gray-btn-bg; border-color: $gray-btn-border;}}
+    &.yellow { background-color: $shell-yellow; .menu-btn { background-color: $yellow-btn-bg; border-color: $yellow-btn-border;}}
 
     #GameDisplay {
         flex: auto;
@@ -48,10 +48,10 @@
 .save-recovery {
     z-index: 20;
     padding: .75rem;
-    color: #ff0000;
-    background: #111;
+    color: $warning-color;
+    background: $black;
     border-radius: 1rem;
-    border: 0.25rem solid #555;
+    border: 0.25rem solid $game-screen-border;
     font-size: .65rem;
     line-height: 1.5;
 }
@@ -79,9 +79,9 @@
 
     button {
         padding: .6rem;
-        color: #fff;
-        background: #ff0000;
-        border: .1rem solid #fff;
+        color: $white;
+        background: $warning-color;
+        border: .1rem solid $white;
         border-radius: .25rem;
         font: inherit;
         cursor: pointer;

@@ -5,11 +5,11 @@
     justify-content: center;
     background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
-    background-color: #76f5f8;;
+    background-color: $menu-screen-bg;
     height: 100%;
     border-radius: 1rem;
     padding: 1rem 0;
-    border: .25rem solid #555;
+    border: .25rem solid $game-screen-border;
     font-style: normal;
     position: relative;
 
@@ -30,12 +30,10 @@
         padding: .5rem;
         font-size: .65rem;
         overflow: scroll;
-
-        // FOR FF Style Menu
         border: 0.1rem solid;
         margin: 0.5rem 0;
-        color: #fff;
-        background: #00008f;
+        color: $white;
+        background: $dark-blue;
     }
 
     .choco-icon {

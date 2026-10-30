@@ -1,6 +1,6 @@
 #DigipetRoot {
-    background: #9b752a;
-    background: linear-gradient(314deg, rgba(155, 117, 42, 1) 0%, rgba(252, 217, 61, 1) 50%, rgba(237, 221, 83, 1) 100%);
+    background: $page-bg-color;
+    background: $page-bg-gradient;
     background-size: cover;
     background-position: center;
     font-family: "Press Start 2P", system-ui;
@@ -20,12 +20,12 @@
         height: 15.5rem;
         width: 16rem;
         margin: 1.5rem 0 .5rem 0;
-        background-color: #333;
+        background-color: $dark-gray;
     }
 
     .warning {
-        color: #FF0000;
-        border-color: #FF0000;
+        color: $warning-color;
+        border-color: $warning-color;
     }
 }
 

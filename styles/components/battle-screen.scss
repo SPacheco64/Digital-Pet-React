@@ -10,7 +10,7 @@
         position: absolute;
         z-index: 999;
         top: 4rem;
-        text-shadow: 2px 0px 0px #000;
+        text-shadow: 2px 0px 0px $black;
         opacity: 0;
         animation: fadeIn .5s ease-out forwards;
 
@@ -34,8 +34,8 @@
 
     .battle-display {
         width: 95%;
-        color: #fff;
-        background: #00008f;
+        color: $white;
+        background: $dark-blue;
         height: fit-content;
         max-height: 4rem;
         position: absolute;
@@ -82,17 +82,17 @@
             .special-meter-track {
                 height: .35rem;
                 width: 100%;
-                border: 1px solid #fff;
-                background: #292929;
+                border: 1px solid $white;
+                background: $special-meter-empty;
             }
 
             .special-meter-fill {
                 height: 100%;
-                background: #ffdd1e;
+                background: $special-meter-fill;
                 transition: width .2s ease-out;
 
                 &.charged {
-                    background: #ff627e;
+                    background: $special-meter-charged;
                     animation: specialMeterBlink 2s ease-in-out infinite;
                 }
             }

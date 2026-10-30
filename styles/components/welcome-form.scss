@@ -11,7 +11,7 @@
     input { margin-bottom: .5rem; }
 
     input:focus-visible, button:focus-visible {
-        outline: 2px solid #fff;
+        outline: 2px solid $white;
         outline-offset: 2px;
     }
 
@@ -20,8 +20,8 @@
         font-size: inherit;
         font-family: inherit;
         border: 0.1rem solid;
-        color: #fff;
-        background: #00008f;
+        color: $white;
+        background: $dark-blue;
         padding: .25rem; 
         width: 4rem; 
 

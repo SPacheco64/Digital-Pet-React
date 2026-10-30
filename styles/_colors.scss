@@ -1,0 +1,93 @@
+// Global Colors
+$page-bg-color: #9b752a;
+$page-bg-gradient: linear-gradient(314deg, rgba(155, 117, 42, 1) 0%, rgba(252, 217, 61, 1) 50%, rgba(237, 221, 83, 1) 100%);
+$black: #000;
+$white: #fff;
+$hover-black: #222;
+$dark-gray: #333;
+$dark-blue: #00008f;
+$main-blue: #0000ff;
+$warning-color: #ff0000;
+
+// Game Screens
+$game-screen-bg: #222;
+$game-screen-border: #555;
+$menu-screen-bg: #76f5f8;
+
+// Game Buttons
+$default-menu-btn-color: #777;
+$default-menu-btn-border: #555;
+$disabled-bg: #7f7a7e;
+$disabled-border: #444;
+$menu-btn-bg: #ede3c2;
+
+// Game Shell Colors
+$game-shell-default-bg: #faebd7;
+// === Orange ===
+$shell-orange: #ffa500;
+$orange-btn-bg: #ff9a27;
+$orange-btn-border: #bc7a2e;
+// === Red ===
+$shell-red: #ff0000;
+$red-btn-bg: #ff8596;
+$red-btn-border: #d75d6e;
+// === Green ===
+$shell-green: #008000;
+$green-btn-bg: #ffdc2c;
+$green-btn-border: #caae23;
+// === Blue ===
+$shell-blue: #3c9bfa;
+$blue-btn-bg: #8d8dff;
+$blue-btn-border: #6f6fdb;
+// === Pink ===
+$shell-pink: #ffc0cb;
+$pink-btn-bg: #ffcdf0;
+$pink-btn-border: #d2aac6;
+// === Purple ===
+$shell-purple: #800080;
+$purple-btn-bg: #ae6afc;
+$purple-btn-border: #8a5a9c;
+// === Gray ===
+$shell-gray: #808080;
+$gray-btn-bg: #b3b3b3;
+$gray-btn-border: #838383;
+// === Yellow ===
+$shell-yellow: #ffcb00;
+$yellow-btn-bg: #f5f5f5;
+$yellow-btn-border: #dbcfcf;
+
+// Battle Colors
+$special-meter-empty: #292929;
+$special-meter-fill: #ffdd1e;
+$special-meter-charged: #ff627e;
+
+// Racing Colors
+$race-gradient: linear-gradient(to top,#768a45,#418147);
+$race-green: #428349;
+$race-road-color: #e29451;
+$sprint-message-on: #f2df5c;
+$sprint-btn-active-border: #a99b37;
+$sprint-btn-active-bg: #e9dc72;
+$race-tracker-fill: #f3e27c;
+$finish-line-bg: #e6e6e6;
+$endurance-meter-fill: #ffdd1e;
+
+// Fishing Colors
+$fishing-meter-gradient: linear-gradient(90deg, #1CB5E0 0%, #00008f 100%);
+$fishing-lure-gradient: linear-gradient(to bottom, #e85454 0 50%, #fff 50% 100%);
+$fishing-green: #52ba5c;
+
+// Retro Mode Colors
+$retro-screen-green: #0ca816;
+$retro-btn-bg: #9d0341;
+$retro-btn-border: #6d022d;
+$retro-btn-color: #f4f4f4;
+$retro-page-bg: #222;
+$retro-shell-orange: #fa953c;
+$retro-shell-red: #fa3c3c;
+$retro-shell-green: #3cfa55;
+$retro-shell-blue: #3c9bfa;
+$retro-shell-pink: #eb9de8;
+$retro-shell-purple: #ae6afc;
+$retro-shell-gray: #c8c4cc;
+$retro-shell-yellow: #f8e33d;

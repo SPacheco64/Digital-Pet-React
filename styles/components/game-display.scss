@@ -5,9 +5,9 @@
     justify-content: center;
     background-size: cover;
     background-position: center;
-    background-color: #222;
+    background-color: $game-screen-bg;
     height: 100%;
-    border: .25rem solid #555;
+    border: .25rem solid $game-screen-border;
     align-items: flex-end; 
     border-radius: 1rem;
     position: relative;
@@ -31,7 +31,7 @@
         padding: .25rem;
         top: .25rem;
         left: .25rem;
-        background-color: #fff;
+        background-color: $white;
         pointer-events: none;
         .mood-icon, img {
             height: 1rem;
@@ -46,7 +46,7 @@
         padding: .25rem;
         top: .25rem;
         right: .25rem;
-        background-color: #fff;
+        background-color: $white;
         pointer-events: none;
         .status-icon, img {
             height: 1rem;

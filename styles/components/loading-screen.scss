@@ -12,14 +12,14 @@
         font-size: 2rem;
         text-transform: uppercase;
         padding-bottom: 1rem;
-        color: #fff;
+        color: $white;
     }
 
     .loader {
         margin: 0 auto;
         width: 2.5rem;
         height: 2.5rem;
-        border: .25rem solid #FFF;
+        border: .25rem solid $white;
         border-bottom-color: transparent;
         border-radius: 50%;
         display: inline-block;
@@ -30,7 +30,7 @@
 
 #BattleScreen {
     .loading-screen {
-        background-color: #76f5f8;
+        background-color: $menu-screen-bg;
         background: url(../../src/graphics/backgrounds/status-window-bg.png);
         background-size: contain;
         border-radius: .75rem;
@@ -39,12 +39,10 @@
 }
 
 .minigame-loading-screen {
-    background-color: #76f5f8;
+    background-color: $menu-screen-bg;
     background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
-    // border-radius: 1rem;
     z-index: 5;
-    // border: 0.25rem solid #555;
 }
 
 @keyframes rotation {

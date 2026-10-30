@@ -5,11 +5,11 @@
     justify-content: center;
     background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
-    background-color: #76f5f8;;
+    background-color: $menu-screen-bg;
     height: 100%;
     border-radius: 1rem;
     padding: 1rem 0;
-    border: .25rem solid #555;
+    border: .25rem solid $game-screen-border;
     font-style: normal;
     position: relative;
 
@@ -36,10 +36,10 @@
         font-size: 0.5rem;
         max-height: 75%;
         overflow: scroll;
-        border: .2rem solid #fff;
+        border: .2rem solid $white;
         width: 95%;
         margin-top: .5rem;
-        background: #141470;
+        background: $dark-blue;
 
         .shop-item {
             display: block;
@@ -47,8 +47,8 @@
             padding: 0.25rem;
             border: 0.1rem solid;
             margin: 0.5rem 0;
-            color: #fff;
-            background: #00008f;
+            color: $white;
+            background: $dark-blue;
             cursor: pointer;
             font: inherit;
             text-align: left;
@@ -56,12 +56,12 @@
             user-select: none;
 
             &:hover {
-                background-color: #222;
-                color: #fff;
+                background-color: $hover-black;
+                color: $white;
             }
 
             &:focus-visible {
-                outline: 2px solid #fff;
+                outline: 2px solid $white;
                 outline-offset: 2px;
             }
 
@@ -73,8 +73,8 @@
             .cost {
                 position: absolute;
                 right: 0.25rem;
-                background: #ff0000;
-                color: #fff;
+                background: $warning-color;
+                color: $white;
                 padding: .1rem;
 
                 .currency-symbol {

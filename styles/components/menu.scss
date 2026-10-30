@@ -41,17 +41,14 @@
     }
 
     .menu-option {
-        // padding-right: .5rem;
-
         .menu-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            background-color: #ede3c2;
-            background-color: #777;
-            border: .15rem solid #555;
-            color: #222;
+            background-color: $menu-btn-bg;
+            border: .15rem solid $dark-gray;
+            color: $hover-black;
             border-radius: 10rem;
             padding: .2rem;
             margin: .25rem;
@@ -81,9 +78,8 @@
 
             button {
                 pointer-events: none;
-                background-color: #7f7a7e;
-                border-color: #444;
-                color: #3e3d8d;
+                background-color: $disabled-bg;
+                border-color: $disabled-border;
                 filter: none;
             }
         }
