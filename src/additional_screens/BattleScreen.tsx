@@ -4,32 +4,29 @@ import '../../styles/components/battle-screen.scss';
 import BattleCanvas from '../helpers/canvas/BattleCanvas';
 
 const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => {
-  // Destructure props for ease of access & documentation
-  const {
-    selectedEnemyLevel,
-    currentHealth,
-    maxHealth,
-    currentPower,
-    currentDefense,
-    battleMessage,
-    battleResult,
-    isLoading,
-    playerAttack,
-    enemyAttack,
-    playerSpecial,
-    enemySpecial,
-    playerRunning,
-    damageToEnemy,
-    damageToPlayer,
-    specialCharge,
-    setIsLoading
-  } = props;
-
-    const powerCount = '★'.repeat(currentPower);
-    const defenseCount = '★'.repeat(currentDefense);
+    // Destructure props for ease of access & documentation
+    const {
+        selectedEnemyLevel,
+        currentHealth,
+        maxHealth,
+        currentPower,
+        currentDefense,
+        battleMessage,
+        battleResult,
+        isLoading,
+        playerAttack,
+        enemyAttack,
+        playerSpecial,
+        enemySpecial,
+        playerRunning,
+        damageToEnemy,
+        damageToPlayer,
+        specialCharge,
+        setIsLoading
+    } = props;
 
     return (
-        <div id='BattleScreen' className='game-screen additional-screen'>
+        <div id='BattleScreen' className='additional-screen'>
             <div className='battle-display'>
                 <div className='message-box'>
                     {battleMessage}
@@ -39,14 +36,6 @@ const BattleScreen: React.FC<BattleScreenProps> = (props: BattleScreenProps) => 
                         HP:<br/>
                         {currentHealth}/{maxHealth}
                     </div>
-                    {/* <div className='power'>
-                        POW:<br/>
-                        {powerCount}
-                    </div>
-                    <div className='defense'>
-                        DEF:<br/>
-                        {defenseCount}
-                    </div> */}
                     <div className='special-meter' aria-label={`Special charge ${specialCharge}%`}>
                         <div className='special-meter-label'>LIMIT</div>
                         <div className='special-meter-track' role='progressbar' aria-valuenow={specialCharge} aria-valuemin={0} aria-valuemax={100}>

@@ -368,7 +368,7 @@ const RacingGame: React.FC<RacingMinigameProps> = ({
   };
 
   return (
-    <section id='RacingScreen' className={`game-screen additional-screen ${frame.slowed ? 'is-slowed' : ''}`} aria-label='Chocobo race'>
+    <section id='RacingScreen' className={`additional-screen ${frame.slowed ? 'is-slowed' : ''}`} aria-label='Chocobo race'>
       <header className='race-hud'>
         <div className='race-distance'>
           <span>TO FINISH</span>

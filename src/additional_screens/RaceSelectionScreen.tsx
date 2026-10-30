@@ -12,7 +12,7 @@ const difficultyOptions: Array<{ level: RaceDifficulty; label: string; descripti
 ];
 
 const RaceSelectionScreen: React.FC<RaceSelectionScreenProps> = ({ onSelect }) => (
-  <section id='RaceSelectionScreen' className='game-screen additional-screen' aria-label='Choose race difficulty'>
+  <section id='RaceSelectionScreen' className='additional-screen' aria-label='Choose race difficulty'>
     <div className='race-selection-panel'>
       <h2>Race Difficulty</h2>
       <div className='race-difficulty-options'>

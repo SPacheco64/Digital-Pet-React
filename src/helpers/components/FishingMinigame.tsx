@@ -170,10 +170,10 @@ const FishingMinigame: React.FC<FishingMinigameProps> = ({ onComplete, onClose, 
 
   return (
     <FishingLoader isLoading={isLoading} setIsLoading={setIsLoading}>
-      <div id='FishingScreen' className='game-screen additional-screen'
+      <div id='FishingScreen' className='additional-screen'
         style={{ backgroundImage: `url(${currentBackground})` }}>
         <section
-        className='fishing-minigame game-screen additional-screen'
+        className='fishing-minigame additional-screen'
         aria-live='polite'
         onClick={handleInput}
       >

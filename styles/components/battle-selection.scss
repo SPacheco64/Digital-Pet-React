@@ -8,7 +8,7 @@
     background-color: $menu-screen-bg;
     background: url(../../src/graphics/backgrounds/status-window-bg.png);
     background-size: contain;
-    z-index: 5;
+    z-index: 1;
 
     .battle-selection-header {
         display: flex;
