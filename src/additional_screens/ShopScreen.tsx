@@ -5,8 +5,8 @@ import shopItems from '../graphics/icons/shop/shop-items.png';
 
 // Positions of the shop item icons within the sprite sheet
 const shopIconPositions = [
-  [0, 0],
-  [48, 0],
+  [3, 0],
+  [44, 0],
   [94, 0],
   [141, 0],
   [182, 0],
