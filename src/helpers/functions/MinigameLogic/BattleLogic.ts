@@ -144,6 +144,7 @@ export const turnOrderFunction = (
     return totalBattleSpeed >= enemyInfo.speed ? 'player' : 'enemy';
 };
 
+// Interface for the enemy attack options
 interface EnemyAttackOptions {
     setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;

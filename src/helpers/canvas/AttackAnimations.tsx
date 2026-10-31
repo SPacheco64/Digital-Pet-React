@@ -6,6 +6,9 @@ import attackSheet from '../../graphics/canvas_sprites/attack-spritesheet.png';
 import type { EnemySpecialAttackType } from '../../types';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 
+// Interface for the attributes of an attack animation.
+// An animation attribute defines the position (x/y), animation type, 
+// frame rate, and scale of an attack animation.
 export interface AnimAttr {
     x: number;
     y: number;
@@ -82,6 +85,7 @@ const attackAnimations = {
     ],
 };
 
+// Mapping of enemy special attack types to their corresponding animation names.
 const enemySpecialAnimations: Record<EnemySpecialAttackType, string> = {
     power: 'powerHit',
     paralysis: 'paralysisHit',
@@ -89,6 +93,8 @@ const enemySpecialAnimations: Record<EnemySpecialAttackType, string> = {
     'instant-kill': 'instantKillHit',
 };
 
+// Component responsible for rendering attack animations for both the player and 
+// enemy sprites.
 const AttackAnimations: React.FC<AttackAnimationsProps> = ({
     enemySpriteRef,
     playerSpriteRef,

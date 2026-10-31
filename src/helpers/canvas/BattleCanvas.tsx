@@ -28,6 +28,9 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         battleResult,
         setIsLoading,
     } = props;
+
+    // Provides the tints for the player sprite based on their status in battle
+    // Burned (red) or Paralyzed (yellow).
     const statusTint = burnTurns > 0
         ? 'rgba(255, 0, 0, 0.6)'
         : paralysisTurns > 0
@@ -58,6 +61,9 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         {x: 15, y: 35, anim: 'malboro', frameRate: 5, scale: 1}, // Malboro
         {x: 15, y: 45, anim: 'ultros', frameRate: 5, scale: 1}, // Ultros
     ];
+
+    // Mapping of enemy IDs to their corresponding sprite indexes in the 
+    // enemyAttrs array.
     const enemySpriteIndexes: Record<BattleEnemyId, number> = {
         cactuar: 0,
         flan: 1,
@@ -76,14 +82,18 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         ultros: 14,
     };
 
+    // Refs for the Konva stage and sprite components.
     const stageRef = useRef<Konva.Stage>(null);
     const spriteRef1 = useRef<Konva.Sprite>(null);
     const spriteRef2 = useRef<Konva.Sprite>(null);
 
+    // Load the sprite sheets for the Chocobo and enemy sprites.
     const [chocoSheetImg] = useImage(chocoSheet);
     const [enemySheetImg] = useImage(enemySheet);
     const [tintedChocoSheetImg, setTintedChocoSheetImg] = useState<HTMLImageElement | null>(null);
 
+    // Effect to create a tinted version of the Chocobo sprite sheet based on 
+    // the current status tint.
     useEffect(() => {
         if (!chocoSheetImg || !statusTint) {
             setTintedChocoSheetImg(null);
@@ -114,11 +124,14 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         };
     }, [chocoSheetImg, statusTint]);
 
+    // States for the Chocobo and enemy animation attributes to be used in the 
+    // battle scene.
     const [chocoAttrToUse, setChocoAttrToUse] = useState<AnimAttr>({x: 190, y: 110, anim: 'miniChocoStand', frameRate: 5, scale: .6});
     const getEnemyAnimation = (id: BattleEnemyId): AnimAttr =>
         enemyAttrs[enemySpriteIndexes[id] ?? enemySpriteIndexes.cactuar];
     const [enemyAttrToUse, setEnemyAttrToUse] = useState<AnimAttr>(() => getEnemyAnimation(enemyId));
 
+    // Effect to update the enemy animation attribute when the enemy ID changes.
     useEffect(() => {
         setEnemyAttrToUse(getEnemyAnimation(enemyId));
     }, [enemyId]);
@@ -190,6 +203,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     useSpriteAnimation(spriteRef1, enemyAttrToUse.anim, enemyAttrToUse.frameRate, animations, !isLoading && !!enemySheetImg);
     useSpriteAnimation(spriteRef2, chocoAttrToUse.anim, chocoAttrToUse.frameRate, animations, !isLoading && !!chocoSheetImg);
 
+    // Effect to handle the battle result and fade out the appropriate sprite.
     useEffect(() => {
         if (!battleResult) { return; }
 
@@ -209,6 +223,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         return () => fadeSprite.destroy();
     }, [battleResult]);
 
+    // Effect to handle the player running away from the battle.
     useEffect(() => {
         if (!playerRunning) {
             return;
@@ -232,7 +247,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         };
     }, [playerRunning]);
 
-    // When enemy attacks, change their x value by +10
     return (
         <BattleLoader selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading}>
             <Stage id='BattleStage' className='battle-canvas' height={248} width={256} ref={stageRef}>
@@ -266,7 +280,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                     />}
 
                     <AttackAnimations
-                        stageRef={stageRef}
                         enemySpriteRef={spriteRef1}
                         playerSpriteRef={spriteRef2}
                         chocoAttr={chocoAttrToUse}
