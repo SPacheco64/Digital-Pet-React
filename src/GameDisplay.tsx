@@ -56,11 +56,16 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
     enemyAttack,
     playerSpecial,
     enemySpecial,
+    enemySpecialType,
     playerRunning,
+    paralysisTurns,
+    burnTurns,
     escapeComplete,
     damageToEnemy,
     damageToPlayer,
-    specialCharge
+    burnDamageActive,
+    specialCharge,
+    enemyId
   } = props;
 
   const determineTimeClass = () => {
@@ -129,14 +134,17 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
       {/* Displayed battle content */}
       {
         !showMenuScreen && activity === 'battle' &&
-        <BattleMinigame selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
+        <BattleMinigame selectedEnemyLevel={selectedEnemyLevel} enemyId={enemyId ?? 'cactuar'} isLoading={isLoading} setIsLoading={setIsLoading}
           playerAttack={playerAttack} enemyAttack={enemyAttack} 
-          playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
-          playerRunning={playerRunning} currentHealth={currentHealth}
+          playerSpecial={playerSpecial} enemySpecial={enemySpecial}
+          enemySpecialType={enemySpecialType}
+          playerRunning={playerRunning} paralysisTurns={paralysisTurns} burnTurns={burnTurns}
+          currentHealth={currentHealth}
           escapeComplete={escapeComplete}
           maxHealth={maxHealth} currentPower={currentPower} 
           currentDefense={currentDefense} battleMessage={battleMessage}
           battleResult={battleResult} damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
+          burnDamageActive={burnDamageActive}
           specialCharge={specialCharge}
         />
       }

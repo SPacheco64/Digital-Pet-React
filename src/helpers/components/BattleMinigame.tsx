@@ -7,6 +7,7 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
     // Destructure props for ease of access & documentation
     const {
         selectedEnemyLevel,
+        enemyId,
         currentHealth,
         maxHealth,
         currentPower,
@@ -18,10 +19,14 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
         enemyAttack,
         playerSpecial,
         enemySpecial,
+        enemySpecialType,
         playerRunning,
+        paralysisTurns,
+        burnTurns,
         escapeComplete,
         damageToEnemy,
         damageToPlayer,
+        burnDamageActive,
         specialCharge,
         setIsLoading
     } = props;
@@ -52,14 +57,20 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
                 <div className='damage-number to-enemy warning'> {damageToEnemy} </div>
             }
             {
-                enemyAttack && damageToPlayer &&
-                <div className='damage-number to-player warning'> {damageToPlayer} </div>
+                (enemyAttack || enemySpecial || burnDamageActive) && damageToPlayer > 0 &&
+                <div
+                    key={`${burnDamageActive ? 'burn' : 'attack'}-${damageToPlayer}`}
+                    className='damage-number to-player warning'
+                >
+                    {damageToPlayer}
+                </div>
             }
 
-            <BattleCanvas selectedEnemyLevel={selectedEnemyLevel} isLoading={isLoading} setIsLoading={setIsLoading} 
+            <BattleCanvas selectedEnemyLevel={selectedEnemyLevel} enemyId={enemyId} isLoading={isLoading} setIsLoading={setIsLoading}
                 playerAttack={playerAttack} enemyAttack={enemyAttack} 
-                playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
-                playerRunning={playerRunning} 
+                playerSpecial={playerSpecial} enemySpecial={enemySpecial}
+                enemySpecialType={enemySpecialType}
+                playerRunning={playerRunning} paralysisTurns={paralysisTurns} burnTurns={burnTurns}
                 escapeComplete={escapeComplete}
                 battleResult={battleResult}
             />

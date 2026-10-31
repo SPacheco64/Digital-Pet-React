@@ -1,52 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Circle, Group, Layer, Ring, Sprite, Stage, Star } from 'react-konva';
+import { Layer, Sprite, Stage } from 'react-konva';
 import useImage from 'use-image';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import enemySheet from '../../graphics/canvas_sprites/enemy-spritesheet.png';
-import attackSheet from '../../graphics/canvas_sprites/attack-spritesheet.png';
-import { BattleCanvasProps } from '../../types';
+import type { BattleCanvasProps, BattleEnemyId } from '../../types';
 import '../../../styles/components/battle-canvas.scss';
 import BattleLoader from '../components/BattleLoader';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import Konva from 'konva';
-
-type AnimAttr = {
-  x: number;
-  y: number;
-  anim: string;
-  frameRate: number;
-  scale: number;
-};
+import AttackAnimations, { type AnimAttr } from './AttackAnimations';
 
 const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => {
     // Destructure props for ease of access & documentation
     const {
         selectedEnemyLevel,
+        enemyId,
         isLoading,
         playerAttack,
         enemyAttack,
         playerSpecial,
         enemySpecial,
+        enemySpecialType,
         playerRunning,
+        paralysisTurns,
+        burnTurns,
         escapeComplete,
         battleResult,
         setIsLoading,
     } = props;
-
-    const determineEnemy = () => {
-        switch (selectedEnemyLevel) {
-            case 1:
-                return Math.floor(Math.random() * 3);
-            case 2:
-                return Math.floor(Math.random() * 3) + 3;
-            case 3:
-                return Math.floor(Math.random() * 3) + 6;
-            case 4:
-                return Math.floor(Math.random() * 3) + 9;
-            default:
-                return Math.floor(Math.random() * 3) + 12;
-        }
-    };
+    const statusTint = burnTurns > 0
+        ? 'rgba(255, 0, 0, 0.6)'
+        : paralysisTurns > 0
+            ? 'rgba(255, 215, 0, 0.6)'
+            : null;
 
     // All animation settings for each chocobo animation shown in this canvas
     const chocoboAttrs = [
@@ -72,26 +58,70 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         {x: 15, y: 35, anim: 'malboro', frameRate: 5, scale: 1}, // Malboro
         {x: 15, y: 45, anim: 'ultros', frameRate: 5, scale: 1}, // Ultros
     ];
-
-    // Attack/Effect animation settings
-    const attackAttrs = [
-        {x: 40, y: 105, anim: 'normalHit', frameRate: 13, scale: .7}, // Normal Attack on Enemy
-        {x: 190, y: 105, anim: 'normalHit', frameRate: 13, scale: .7}, // Normal Attack on Player
-    ];
+    const enemySpriteIndexes: Record<BattleEnemyId, number> = {
+        cactuar: 0,
+        flan: 1,
+        mu: 2,
+        leapFrog: 3,
+        bomb: 4,
+        deepEye: 5,
+        goldCactuar: 6,
+        tonberry: 7,
+        magicPot: 8,
+        blackChocobo: 9,
+        mysteryBox: 10,
+        ahriman: 11,
+        ifrit: 12,
+        malboro: 13,
+        ultros: 14,
+    };
 
     const stageRef = useRef<Konva.Stage>(null);
     const spriteRef1 = useRef<Konva.Sprite>(null);
     const spriteRef2 = useRef<Konva.Sprite>(null);
-    const spriteRef3 = useRef<Konva.Sprite>(null);
-    const specialImpactRefs = [useRef<Konva.Group>(null), useRef<Konva.Group>(null), useRef<Konva.Group>(null)];
 
     const [chocoSheetImg] = useImage(chocoSheet);
     const [enemySheetImg] = useImage(enemySheet);
-    const [attackSheetImg] = useImage(attackSheet);
+    const [tintedChocoSheetImg, setTintedChocoSheetImg] = useState<HTMLImageElement | null>(null);
+
+    useEffect(() => {
+        if (!chocoSheetImg || !statusTint) {
+            setTintedChocoSheetImg(null);
+            return;
+        }
+
+        const tintedSheet = document.createElement('canvas');
+        tintedSheet.width = chocoSheetImg.width;
+        tintedSheet.height = chocoSheetImg.height;
+        const context = tintedSheet.getContext('2d');
+        if (!context) {
+            throw new Error('Unable to create the Chocobo status tint canvas.');
+        }
+
+        context.drawImage(chocoSheetImg, 0, 0);
+        context.globalCompositeOperation = 'source-atop';
+        context.fillStyle = statusTint;
+        context.fillRect(0, 0, tintedSheet.width, tintedSheet.height);
+        const tintedImage = new Image();
+        tintedImage.onload = () => setTintedChocoSheetImg(tintedImage);
+        tintedImage.onerror = () => {
+            console.error('Unable to load the tinted Chocobo sprite sheet.');
+        };
+        tintedImage.src = tintedSheet.toDataURL();
+
+        return () => {
+            tintedImage.onload = null;
+        };
+    }, [chocoSheetImg, statusTint]);
 
     const [chocoAttrToUse, setChocoAttrToUse] = useState<AnimAttr>({x: 190, y: 110, anim: 'miniChocoStand', frameRate: 5, scale: .6});
-    const [enemyAttrToUse, setEnemyAttrToUse] = useState<AnimAttr>(enemyAttrs[determineEnemy()]);
-    const [attackAttrToUse, setAttackAttrToUse] = useState<AnimAttr>({x: 40, y: 105, anim: 'normalHit', frameRate: 13, scale: .7});
+    const getEnemyAnimation = (id: BattleEnemyId): AnimAttr =>
+        enemyAttrs[enemySpriteIndexes[id] ?? enemySpriteIndexes.cactuar];
+    const [enemyAttrToUse, setEnemyAttrToUse] = useState<AnimAttr>(() => getEnemyAnimation(enemyId));
+
+    useEffect(() => {
+        setEnemyAttrToUse(getEnemyAnimation(enemyId));
+    }, [enemyId]);
 
     // The actual animations used pulled from the Chocobo Spritesheet
     const animations = useRef({
@@ -154,188 +184,11 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
             285, 570, 150, 140,
         ],
 
-        // Attacks/Effects:
-        normalHit: [
-            0, 0, 49, 60,
-            62, 0, 49, 60,
-            124, 0, 49, 60,
-            124, 0, 49, 60,
-        ],
     }).current;
 
     // Battle sprites use the custom loop so one-frame and multi-frame definitions never enter invalid indexes.
     useSpriteAnimation(spriteRef1, enemyAttrToUse.anim, enemyAttrToUse.frameRate, animations, !isLoading && !!enemySheetImg);
     useSpriteAnimation(spriteRef2, chocoAttrToUse.anim, chocoAttrToUse.frameRate, animations, !isLoading && !!chocoSheetImg);
-    useSpriteAnimation(
-        spriteRef3,
-        attackAttrToUse.anim,
-        attackAttrToUse.frameRate,
-        animations,
-        !isLoading && !!attackSheetImg && (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial,
-    );
-
-    useEffect(() => {
-        const playerAction = playerAttack || playerSpecial;
-        const enemyAction = enemyAttack || enemySpecial;
-        if (!playerAction && !enemyAction) {
-            return;
-        }
-
-        const isSpecialAction = playerSpecial || enemySpecial;
-        const ogChocoState = chocoAttrToUse;
-        const ogEnemyState = enemyAttrToUse;
-        const ogAttackState = attackAttrToUse;
-        const targetNode = playerAction ? spriteRef1.current : spriteRef2.current;
-
-        if (!targetNode) {
-            return;
-        }
-
-        const actionTimers: number[] = [];
-        const actionTweens: Konva.Tween[] = [];
-        const flashSprite = new Konva.Tween({
-            node: targetNode,
-            opacity: 0.5,
-            duration: .1,
-            easing: Konva.Easings.Linear,
-            onFinish: () => {
-                const restoreFlash = new Konva.Tween({
-                    node: targetNode,
-                    opacity: 1,
-                    duration: 0.01,
-                    easing: Konva.Easings.Linear,
-                });
-                actionTweens.push(restoreFlash);
-                restoreFlash.play();
-            }
-        });
-        actionTweens.push(flashSprite);
-
-        if (playerAction) {
-            setAttackAttrToUse(isSpecialAction ? { ...attackAttrs[0], x: 28, y: 78, scale: 1.25 } : attackAttrs[0]);
-            flashSprite.play();
-
-            setChocoAttrToUse(prevState => ({
-                ...prevState,
-                x: prevState.x - (isSpecialAction ? 24 : 10),
-                y: prevState.y - (isSpecialAction ? 12 : 4),
-                scale: prevState.scale + (isSpecialAction ? .12 : 0),
-                anim: isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack'
-            }));
-
-            setEnemyAttrToUse(prevState => ({
-                ...prevState,
-                x: prevState.x - (isSpecialAction ? 12 : 5),
-                y: prevState.y + (isSpecialAction ? 5 : 1),
-                scale: prevState.scale - (isSpecialAction ? .12 : .05)
-            }));
-
-            actionTimers.push(window.setTimeout(() => {
-                setChocoAttrToUse(ogChocoState);
-                setEnemyAttrToUse(ogEnemyState);
-            }, isSpecialAction ? 600 : 400));
-        }
-
-        if (enemyAction) {
-            setAttackAttrToUse(isSpecialAction ? { ...attackAttrs[1], x: 174, y: 78, scale: 1.25 } : attackAttrs[1]);
-            flashSprite.play();
-
-            setChocoAttrToUse(prevState => ({
-                ...prevState,
-                x: prevState.x + (isSpecialAction ? 20 : 10),
-                y: prevState.y + (isSpecialAction ? 8 : 0),
-                scale: prevState.scale + (isSpecialAction ? .1 : 0),
-                anim: isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack'
-            }));
-
-            setEnemyAttrToUse(prevState => ({
-                ...prevState,
-                x: prevState.x + (isSpecialAction ? 12 : 5),
-                y: prevState.y,
-                scale: prevState.scale + (isSpecialAction ? .12 : .05)
-            }));
-
-            actionTimers.push(window.setTimeout(() => {
-                setChocoAttrToUse(ogChocoState);
-                setEnemyAttrToUse(ogEnemyState);
-            }, 400));
-        }
-
-        return () => {
-            actionTimers.forEach((timer) => window.clearTimeout(timer));
-            actionTweens.forEach((tween) => tween.destroy());
-            setChocoAttrToUse(ogChocoState);
-            setEnemyAttrToUse(ogEnemyState);
-            setAttackAttrToUse(ogAttackState);
-        };
-    }, [playerAttack, enemyAttack, playerSpecial, enemySpecial]);
-
-    useEffect(() => {
-        if (!playerSpecial && !enemySpecial) {
-            return;
-        }
-
-        const stageNode = stageRef.current;
-        const impactNodes = specialImpactRefs.map((impactRef) => impactRef.current);
-
-        if (!stageNode || impactNodes.some((impactNode) => impactNode === null)) {
-            return;
-        }
-
-        const [firstImpactNode, secondImpactNode, thirdImpactNode] = impactNodes;
-        if (!firstImpactNode || !secondImpactNode || !thirdImpactNode) {
-            return;
-        }
-        const validImpactNodes = [firstImpactNode, secondImpactNode, thirdImpactNode];
-
-        const impactTweens: Konva.Tween[] = [];
-        let shakeResetTween: Konva.Tween | null = null;
-        const impactTimers = validImpactNodes.map((impactNode, index) => {
-            impactNode.opacity(0);
-            impactNode.scale({ x: 0.3, y: 0.3 });
-            impactNode.rotation(0);
-
-            return window.setTimeout(() => {
-                impactNode.opacity(0.95);
-                const impactTween = new Konva.Tween({
-                    node: impactNode,
-                    opacity: 0,
-                    scaleX: [1.15, 1.55, 1.3][index],
-                    scaleY: [1.15, 1.55, 1.3][index],
-                    rotation: index % 2 === 0 ? 45 : -35,
-                    duration: 0.32,
-                    easing: Konva.Easings.EaseOut,
-                });
-                impactTweens[index] = impactTween;
-                impactTween.play();
-            }, index * 180);
-        });
-
-        const shakeTween = new Konva.Tween({
-            node: stageNode,
-            x: playerSpecial ? -4 : 4,
-            duration: 0.06,
-            easing: Konva.Easings.Linear,
-            onFinish: () => {
-                shakeResetTween = new Konva.Tween({
-                    node: stageNode,
-                    x: 0,
-                    duration: 0.18,
-                    easing: Konva.Easings.EaseOut,
-                });
-                shakeResetTween.play();
-            },
-        });
-        shakeTween.play();
-
-        return () => {
-            impactTimers.forEach((impactTimer) => window.clearTimeout(impactTimer));
-            impactTweens.forEach((impactTween) => impactTween?.destroy());
-            shakeTween.destroy();
-            shakeResetTween?.destroy();
-            stageNode.x(0);
-        };
-    }, [playerSpecial, enemySpecial]);
 
     useEffect(() => {
         if (!battleResult) { return; }
@@ -404,7 +257,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                         ref={spriteRef2}
                         x={chocoAttrToUse.x + (playerRunning ? 80 * chocoAttrToUse.scale : 0)}
                         y={chocoAttrToUse.y}
-                        image={chocoSheetImg}
+                        image={tintedChocoSheetImg ?? chocoSheetImg}
                         animation={chocoAttrToUse.anim}
                         animations={animations}
                         frameRate={chocoAttrToUse.frameRate}
@@ -412,93 +265,21 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                         scaleY={chocoAttrToUse.scale}
                     />}
 
-                    {/* Regular attack effect; Special uses only the burst below. */}
-
-                    {
-                        (playerAttack || enemyAttack) && !playerSpecial && !enemySpecial && attackSheetImg &&
-                        <Sprite
-                            ref={spriteRef3}
-                            x={attackAttrToUse.x}
-                            y={attackAttrToUse.y}
-                            image={attackSheetImg}
-                            animation={attackAttrToUse.anim}
-                            animations={animations}
-                            frameRate={attackAttrToUse.frameRate}
-                            scaleX={attackAttrToUse.scale}
-                            scaleY={attackAttrToUse.scale}
-                        />
-                    }
-
-                    {(playerSpecial || enemySpecial) &&
-                        <Group listening={false}>
-                            <Group
-                                ref={specialImpactRefs[0]}
-                                x={attackAttrToUse.x + 10}
-                                y={attackAttrToUse.y + 38}
-                                listening={false}
-                            >
-                                <Star
-                                    numPoints={10}
-                                    innerRadius={14}
-                                    outerRadius={34}
-                                    fill='#ffd34e'
-                                    stroke='#fff4ae'
-                                    strokeWidth={2}
-                                />
-                                <Ring
-                                    innerRadius={18}
-                                    outerRadius={22}
-                                    stroke='#fff4ae'
-                                    strokeWidth={2}
-                                />
-                                <Circle radius={11} fill='#fff4ae' opacity={0.8} />
-                            </Group>
-                            <Group
-                                ref={specialImpactRefs[1]}
-                                x={attackAttrToUse.x + 24}
-                                y={attackAttrToUse.y + 22}
-                                listening={false}
-                            >
-                                <Star
-                                    numPoints={14}
-                                    innerRadius={22}
-                                    outerRadius={58}
-                                    fill='#ffb52e'
-                                    stroke='#fff4ae'
-                                    strokeWidth={2}
-                                />
-                                <Ring
-                                    innerRadius={30}
-                                    outerRadius={36}
-                                    stroke='#fff4ae'
-                                    strokeWidth={2}
-                                />
-                                <Circle radius={17} fill='#fff4ae' opacity={0.8} />
-                            </Group>
-                            <Group
-                                ref={specialImpactRefs[2]}
-                                x={attackAttrToUse.x + 38}
-                                y={attackAttrToUse.y + 34}
-                                listening={false}
-                            >
-                                <Star
-                                    numPoints={12}
-                                    innerRadius={17}
-                                    outerRadius={44}
-                                    fill='#ffd34e'
-                                    stroke='#fff4ae'
-                                    strokeWidth={2}
-                                />
-                                <Ring
-                                    innerRadius={23}
-                                    outerRadius={28}
-                                    stroke='#fff4ae'
-                                    strokeWidth={2}
-                                />
-                                <Circle radius={13} fill='#fff4ae' opacity={0.8} />
-                            </Group>
-                        </Group>
-                    }
+                    <AttackAnimations
+                        stageRef={stageRef}
+                        enemySpriteRef={spriteRef1}
+                        playerSpriteRef={spriteRef2}
+                        chocoAttr={chocoAttrToUse}
+                        setChocoAttr={setChocoAttrToUse}
+                        enemyAttr={enemyAttrToUse}
+                        setEnemyAttr={setEnemyAttrToUse}
+                        playerAttack={playerAttack}
+                        enemyAttack={enemyAttack}
+                        playerSpecial={playerSpecial}
+                        enemySpecial={enemySpecial}
+                        enemySpecialType={enemySpecialType}
+                        isLoading={isLoading}
+                    />
                 </Layer>
             </Stage>
         </BattleLoader>

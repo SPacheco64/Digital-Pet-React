@@ -7,6 +7,7 @@ export const useSpriteAnimation = (
   frameRate: number,
   animations: Record<string, number[]>,
   enabled = true,
+  loop = true,
 ) => {
   useEffect(() => {
     const sprite = spriteRef.current;
@@ -25,7 +26,12 @@ export const useSpriteAnimation = (
     sprite.frameIndex(0);
 
     const interval = window.setInterval(() => {
-      frameIndex = (frameIndex + 1) % frameCount;
+      if (!loop && frameIndex === frameCount - 1) {
+        window.clearInterval(interval);
+        return;
+      }
+
+      frameIndex = loop ? (frameIndex + 1) % frameCount : frameIndex + 1;
       sprite.frameIndex(frameIndex);
       sprite.getLayer()?.batchDraw();
     }, 1000 / frameRate);
@@ -34,5 +40,5 @@ export const useSpriteAnimation = (
       window.clearInterval(interval);
       sprite.stop();
     };
-  }, [animation, animations, enabled, frameRate, spriteRef]);
+  }, [animation, animations, enabled, frameRate, loop, spriteRef]);
 };

@@ -27,6 +27,13 @@ export interface ChocoboSaveData {
 }
 
 export type GameActivity = 'pet' | 'battle-selection' | 'battle' | 'fishing' | 'race-selection' | 'race';
+export type EnemySpecialAttackType = 'power' | 'paralysis' | 'burn' | 'instant-kill';
+export type BattleEnemyId =
+    | 'cactuar' | 'flan' | 'mu'
+    | 'leapFrog' | 'bomb' | 'deepEye'
+    | 'goldCactuar' | 'tonberry' | 'magicPot'
+    | 'blackChocobo' | 'mysteryBox' | 'ahriman'
+    | 'ifrit' | 'malboro' | 'ultros';
 
 export interface GameDisplayProps {
     inCombat: boolean;
@@ -64,14 +71,19 @@ export interface GameDisplayProps {
     onRaceComplete: (place: number) => void;
     onRaceClose: () => void;
     selectedEnemyLevel: number;
+    enemyId: BattleEnemyId | null;
     isLoading: boolean;
     playerAttack: boolean;
     enemyAttack: boolean; 
     playerSpecial: boolean; 
     enemySpecial: boolean; 
+    enemySpecialType: EnemySpecialAttackType;
     playerRunning: boolean; 
+    paralysisTurns: number;
+    burnTurns: number;
     damageToEnemy: number;
     damageToPlayer: number;
+    burnDamageActive: boolean;
     specialCharge: number;
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -249,12 +261,16 @@ export interface MenuCanvasProps {
 
 export interface BattleCanvasProps {
     selectedEnemyLevel: number;
+    enemyId: BattleEnemyId;
     isLoading: boolean;
     playerAttack: boolean;
     enemyAttack: boolean; 
     playerSpecial: boolean; 
     enemySpecial: boolean; 
+    enemySpecialType: EnemySpecialAttackType;
     playerRunning: boolean; 
+    paralysisTurns: number;
+    burnTurns: number;
     escapeComplete: boolean;
     battleResult: 'victory' | 'defeat' | null;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -268,12 +284,16 @@ export interface BattleSelectionScreenProps {
 
 export interface BattleMinigameProps {
     selectedEnemyLevel: number;
+    enemyId: BattleEnemyId;
     isLoading: boolean;
     playerAttack: boolean;
     enemyAttack: boolean; 
     playerSpecial: boolean; 
     enemySpecial: boolean; 
+    enemySpecialType: EnemySpecialAttackType;
     playerRunning: boolean; 
+    paralysisTurns: number;
+    burnTurns: number;
     escapeComplete: boolean;
     currentHealth: number;
     maxHealth: number;
@@ -283,6 +303,7 @@ export interface BattleMinigameProps {
     battleResult: 'victory' | 'defeat' | null;
     damageToEnemy: number;
     damageToPlayer: number;
+    burnDamageActive: boolean;
     specialCharge: number;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

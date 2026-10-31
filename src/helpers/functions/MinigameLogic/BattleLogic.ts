@@ -1,15 +1,19 @@
 import React from "react";
+import type { BattleEnemyId, EnemySpecialAttackType } from "../../../types";
 
 export interface EnemyInformation {
+    id: BattleEnemyId;
     name: string;
     sprite: string;
     power: number;
     defense: number;
     speed: number;
     health: number;
-    specialAttacks: Array<object>;
+    specialAttack: EnemySpecialAttackType;
     difficultyLevel: number; // 1 (easy) -> 5 (difficult) 
 }
+
+export type { EnemySpecialAttackType } from "../../../types";
 
 export type BattleTurn = 'player' | 'enemy';
 
@@ -17,7 +21,51 @@ const ATTACK_ANIMATION_DELAY = 400;
 const ENEMY_RESPONSE_DELAY = 700;
 const PLAYER_ACTION_DELAY = 700;
 
-const enemyNames = ['Cactuar', 'Flan', 'Mu', 'Bomb', 'Tonberry', ''];
+const ENEMIES_BY_DIFFICULTY: Record<number, BattleEnemyId[]> = {
+    1: ['cactuar', 'flan', 'mu'],
+    2: ['leapFrog', 'bomb', 'deepEye'],
+    3: ['goldCactuar', 'tonberry', 'magicPot'],
+    4: ['blackChocobo', 'mysteryBox', 'ahriman'],
+    5: ['ifrit', 'malboro', 'ultros'],
+};
+
+const ENEMY_NAMES: Record<BattleEnemyId, string> = {
+    cactuar: 'Cactuar',
+    flan: 'Flan',
+    mu: 'Mu',
+    leapFrog: 'Leap Frog',
+    bomb: 'Bomb',
+    deepEye: 'Deep Eye',
+    goldCactuar: 'Gold Cactuar',
+    tonberry: 'Tonberry',
+    magicPot: 'Magic Pot',
+    blackChocobo: 'Black Chocobo',
+    mysteryBox: 'Mystery Box',
+    ahriman: 'Ahriman',
+    ifrit: 'Ifrit',
+    malboro: 'Malboro',
+    ultros: 'Ultros',
+};
+
+// Edit this table to assign special attacks to individual enemy sprites.
+// Available values: 'power', 'paralysis', 'burn', and 'instant-kill'.
+export const ENEMY_SPECIAL_ATTACKS: Record<BattleEnemyId, EnemySpecialAttackType> = {
+    cactuar: 'paralysis',
+    flan: 'power',
+    mu: 'power',
+    leapFrog: 'power',
+    bomb: 'burn',
+    deepEye: 'paralysis',
+    goldCactuar: 'paralysis',
+    tonberry: 'instant-kill',
+    magicPot: 'power',
+    blackChocobo: 'power',
+    mysteryBox: 'power',
+    ahriman: 'paralysis',
+    ifrit: 'burn',
+    malboro: 'paralysis',
+    ultros: 'power',
+};
 
 // Used to modify damage and enemy stats based on difficulty level.
 // Generally keeps values from getting out of hand.
@@ -41,6 +89,9 @@ const determineLevelScale = (difficulty: number) => {
 // Generates an enemy with stats based on the difficulty level of the battle
 export const createEnemyForDifficulty = (difficultyLevel: number): EnemyInformation => {
     const clampedDifficulty = Math.min(Math.max(difficultyLevel, 1), 5);
+    const enemyId = ENEMIES_BY_DIFFICULTY[clampedDifficulty][
+        Math.floor(Math.random() * ENEMIES_BY_DIFFICULTY[clampedDifficulty].length)
+    ];
 
     // Currently set to generate a random number between 1-2 at a single decimal point
     const randomPwrMod = Math.max(1, (Math.round(((Math.random() * 2)) * 10) / 10));
@@ -51,13 +102,14 @@ export const createEnemyForDifficulty = (difficultyLevel: number): EnemyInformat
     const levelScaleDecrease = determineLevelScale(clampedDifficulty);
 
     const enemyInfo = {
-        name: 'Enemy',
-        sprite: '',
+        id: enemyId,
+        name: ENEMY_NAMES[enemyId],
+        sprite: enemyId,
         power: Math.max(.75, Math.min(10, clampedDifficulty * randomPwrMod + difficultyBaseStatIncrease) - levelScaleDecrease * 1.25),
         defense: Math.max(.75, Math.min(10, clampedDifficulty * randomDefMod + difficultyBaseStatIncrease) - levelScaleDecrease * 1.25),
         speed: Math.max(.75, Math.min(10, clampedDifficulty * randomSpdMod + difficultyBaseStatIncrease) - levelScaleDecrease * 1.25),
         health: clampedDifficulty === 5 ? 170 : 10 + randomHealthMod,
-        specialAttacks: [],
+        specialAttack: ENEMY_SPECIAL_ATTACKS[enemyId],
         difficultyLevel: clampedDifficulty,
     };
 
@@ -92,14 +144,100 @@ export const turnOrderFunction = (
     return totalBattleSpeed >= enemyInfo.speed ? 'player' : 'enemy';
 };
 
+interface EnemyAttackOptions {
+    setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
+    setBattleLocked: React.Dispatch<React.SetStateAction<boolean>>;
+    setBattleMessage: React.Dispatch<React.SetStateAction<string>>;
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
+    setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
+    setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
+    setParalysisTurns: React.Dispatch<React.SetStateAction<number>>;
+    setBurnTurns: React.Dispatch<React.SetStateAction<number>>;
+    applyParalysis?: boolean;
+    currentHealth: number;
+    currentDefense: number;
+    enemyInfo: EnemyInformation;
+    specialChargeGainMultiplier?: number;
+    onComplete: (result: 'defeat' | null, paralyzed: boolean, remainingHealth: number) => void;
+}
+
+// Resolves every enemy attack so special attacks can occur on any enemy action.
+export const enemyAttackFunction = (options: EnemyAttackOptions) => {
+    const {
+        setEnemyAttack,
+        setEnemySpecial,
+        setBattleLocked,
+        setBattleMessage,
+        setCurrentHealth,
+        setDamageToPlayer,
+        setSpecialCharge,
+        setParalysisTurns,
+        setBurnTurns,
+        applyParalysis = true,
+        currentHealth,
+        currentDefense,
+        enemyInfo,
+        specialChargeGainMultiplier = 1,
+        onComplete,
+    } = options;
+    setBattleLocked(true);
+    const usesSpecial = Math.random() < enemyInfo.difficultyLevel * 0.05;
+    const specialType = usesSpecial ? enemyInfo.specialAttack : null;
+    const criticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
+    const baseDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
+    const specialDmgModifier = specialType === 'power' ? 1.75 : 1.25;
+    const attackDamage = usesSpecial ? baseDamage * specialDmgModifier : baseDamage;
+    const instantlyKills = usesSpecial && specialType === 'instant-kill' && Math.random() < 0.1;
+    const damage = instantlyKills
+        ? currentHealth
+        : Math.round(criticalHit ? attackDamage * 1.25 : attackDamage);
+    const remainingHealth = Math.max(currentHealth - damage, 0);
+
+    setEnemyAttack(!usesSpecial);
+    setEnemySpecial(usesSpecial);
+    setDamageToPlayer(damage);
+    setSpecialCharge((charge) => Math.min(charge + damage * specialChargeGainMultiplier, 100));
+    setCurrentHealth(remainingHealth);
+
+    if (specialType === 'power') {
+        setBattleMessage(`${enemyInfo.name} uses a truly powerful attack!`);
+    } else if (specialType === 'paralysis') {
+        if (applyParalysis) {
+            const turns = 1 + Math.floor(Math.random() * 3);
+            console.log('Paralysis turns: ', turns);
+            setParalysisTurns((current) => Math.max(current, turns));
+        }
+        setBattleMessage(`${enemyInfo.name} paralyzes you!`);
+    } else if (specialType === 'burn') {
+        const turns = 1 + Math.floor(Math.random() * 5);
+        setBurnTurns((current) => Math.max(current, turns));
+        setBattleMessage(`${enemyInfo.name} burns you!`);
+    } else if (instantlyKills) {
+        setBattleMessage(`${enemyInfo.name}'s lands a OHKO!`);
+    } else if (specialType === 'instant-kill') {
+        setBattleMessage(`${enemyInfo.name} attempts to OHKO and fails...`);
+    }
+
+    window.setTimeout(() => {
+        setEnemyAttack(false);
+        setEnemySpecial(false);
+        onComplete(remainingHealth === 0 ? 'defeat' : null, specialType === 'paralysis', remainingHealth);
+    }, specialType ? ATTACK_ANIMATION_DELAY + 200 : ATTACK_ANIMATION_DELAY);
+};
+
 // Handles the calculation of damage from an attack
 export const attackFunction = (
     options: {
         setPlayerAttack: React.Dispatch<React.SetStateAction<boolean>>;
         setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+        setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
         setBattleLocked: React.Dispatch<React.SetStateAction<boolean>>;
+        setBattleMessage: React.Dispatch<React.SetStateAction<string>>;
         setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
         setEnemyHealth: React.Dispatch<React.SetStateAction<number>>;
+        setParalysisTurns: React.Dispatch<React.SetStateAction<number>>;
+        setBurnTurns: React.Dispatch<React.SetStateAction<number>>;
         currentPower: number;
         currentDefense: number;
         currentHealth: number;
@@ -108,6 +246,7 @@ export const attackFunction = (
         currentEnemyHealth: number;
         enemyInfo: EnemyInformation;
         onComplete: (result: 'victory' | 'defeat') => void;
+        onTurnComplete?: (remainingHealth: number) => boolean;
         setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
         setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
         setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
@@ -116,9 +255,13 @@ export const attackFunction = (
     const {
         setPlayerAttack,
         setEnemyAttack,
+        setEnemySpecial,
         setBattleLocked,
+        setBattleMessage,
         setCurrentHealth,
         setEnemyHealth,
+        setParalysisTurns,
+        setBurnTurns,
         currentPower,
         currentDefense,
         currentHealth,
@@ -127,14 +270,23 @@ export const attackFunction = (
         currentEnemyHealth,
         enemyInfo,
         onComplete,
+        onTurnComplete,
         setDamageToEnemy,
         setDamageToPlayer,
         setSpecialCharge,
     } = options;
     const firstTurn = turnOrderFunction(currentSpeed, currentHappiness, enemyInfo);
+    let enemyDefeated = currentEnemyHealth <= 0;
+    const finishTurn = (remainingHealth: number) => {
+        if (onTurnComplete?.(remainingHealth)) {
+            onComplete('defeat');
+            return;
+        }
+        setBattleLocked(false);
+    };
 
     // Triggers player attack animation and calculates damage to the enemy
-    const performPlayerAttack = (onFinished?: () => void) => {
+    const performPlayerAttack = (onFinished?: (remainingHealth: number) => void, remainingHealth = currentHealth) => {
         setPlayerAttack(true);
         const criticalHit = Math.random() < ((currentSpeed/2)/10);
         const initDamage = calculateDamage(currentPower, enemyInfo.defense, enemyInfo.difficultyLevel);
@@ -142,6 +294,7 @@ export const attackFunction = (
         
         setDamageToEnemy(finalDamage);
         const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
+        enemyDefeated = remainingEnemyHealth === 0;
         setEnemyHealth(remainingEnemyHealth);
 
         setTimeout(() => {
@@ -152,50 +305,80 @@ export const attackFunction = (
                 return;
             }
 
-            setTimeout(() => onFinished?.(), ENEMY_RESPONSE_DELAY);
+            if (onFinished) {
+                setTimeout(() => onFinished(remainingHealth), ENEMY_RESPONSE_DELAY);
+            } else {
+                finishTurn(remainingHealth);
+            }
         }, ATTACK_ANIMATION_DELAY);
     };
 
     // Triggers enemy attack animation and calculates damage to the player
-    const performEnemyAttack = (onFinished?: () => void) => {
-        setEnemyAttack(true);
-        const criticalHit = Math.random() < ((enemyInfo.speed/2)/10);
-        const initDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
-        const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
-        
-        setDamageToPlayer(finalDamage);
-        setSpecialCharge(prevCharge => Math.min(prevCharge + finalDamage, 100));
-        const remainingHealth = Math.max(currentHealth - finalDamage, 0);
-        setCurrentHealth(remainingHealth);
+    const performEnemyAttack = (
+        onFinished?: (remainingHealth: number) => void,
+        remainingHealth = currentHealth,
+    ) => {
+        if (enemyDefeated) {
+            setBattleLocked(false);
+            return;
+        }
 
-        setTimeout(() => {
-            setEnemyAttack(false);
-            if (remainingHealth === 0) {
-                onComplete('defeat');
-                return;
-            }
-
-            setTimeout(() => {setBattleLocked(false); onFinished?.();}, PLAYER_ACTION_DELAY);
-        }, ATTACK_ANIMATION_DELAY);
+        enemyAttackFunction({
+            setEnemyAttack,
+            setEnemySpecial,
+            setBattleLocked,
+            setBattleMessage,
+            setCurrentHealth,
+            setDamageToPlayer,
+            setSpecialCharge,
+            setParalysisTurns,
+            setBurnTurns,
+            currentHealth: remainingHealth,
+            currentDefense,
+            enemyInfo,
+            onComplete: (result, paralyzed, healthAfterAttack) => {
+                if (result) {
+                    onComplete(result);
+                    return;
+                }
+                if (paralyzed) {
+                    if (onFinished) {
+                        setParalysisTurns((turns) => Math.max(0, turns - 1));
+                    }
+                    finishTurn(healthAfterAttack);
+                    return;
+                }
+                if (onFinished) {
+                    window.setTimeout(() => onFinished(healthAfterAttack), PLAYER_ACTION_DELAY);
+                } else {
+                    finishTurn(healthAfterAttack);
+                }
+            },
+        });
     };
 
     if (firstTurn === 'player') {
-        performPlayerAttack(performEnemyAttack);
+        performPlayerAttack((health) => performEnemyAttack(undefined, health));
         return;
     }
-    performEnemyAttack(performPlayerAttack);
+    performEnemyAttack((health) => performPlayerAttack(undefined, health));
 };
 
 // Handles the calculation of damage/the result of a special action
 export const specialFunction = (options: {
     setPlayerSpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setBattleLocked: React.Dispatch<React.SetStateAction<boolean>>;
+    setBattleMessage: React.Dispatch<React.SetStateAction<string>>;
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
     setEnemyHealth: React.Dispatch<React.SetStateAction<number>>;
     setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
     setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
     setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
+    setParalysisTurns: React.Dispatch<React.SetStateAction<number>>;
+    setBurnTurns: React.Dispatch<React.SetStateAction<number>>;
+    onTurnComplete?: (remainingHealth: number) => boolean;
     currentPower: number;
     currentDefense: number;
     currentSpeed: number;
@@ -207,12 +390,17 @@ export const specialFunction = (options: {
     const {
         setPlayerSpecial,
         setEnemyAttack,
+        setEnemySpecial,
         setBattleLocked,
+        setBattleMessage,
         setCurrentHealth,
         setEnemyHealth,
         setSpecialCharge,
         setDamageToEnemy,
         setDamageToPlayer,
+        setParalysisTurns,
+        setBurnTurns,
+        onTurnComplete,
         currentPower,
         currentDefense,
         currentSpeed,
@@ -238,25 +426,30 @@ export const specialFunction = (options: {
             return;
         }
 
-        setTimeout(() => {
-            setEnemyAttack(true);
-            const enemyCriticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
-            const enemyDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
-            const finalEnemyDamage = Math.round(enemyCriticalHit ? enemyDamage * 1.25 : enemyDamage);
-            const remainingHealth = Math.max(currentHealth - finalEnemyDamage, 0);
-
-            setDamageToPlayer(finalEnemyDamage);
-            setSpecialCharge(prevCharge => Math.min(prevCharge + finalEnemyDamage / 3, 100));
-            setCurrentHealth(remainingHealth);
-
-            setTimeout(() => {
-                setEnemyAttack(false);
-                setBattleLocked(false);
-                if (remainingHealth === 0) {
+        setTimeout(() => enemyAttackFunction({
+            setEnemyAttack,
+            setEnemySpecial,
+            setBattleLocked,
+            setBattleMessage,
+            setCurrentHealth,
+            setDamageToPlayer,
+            setSpecialCharge,
+            setParalysisTurns,
+            setBurnTurns,
+            currentHealth,
+            currentDefense,
+            enemyInfo,
+            specialChargeGainMultiplier: 1 / 3,
+            onComplete: (result, _paralyzed, remainingHealth) => {
+                if (result) {
+                    onComplete(result);
+                } else if (onTurnComplete?.(remainingHealth)) {
                     onComplete('defeat');
+                } else {
+                    setBattleLocked(false);
                 }
-            }, ATTACK_ANIMATION_DELAY);
-        }, ENEMY_RESPONSE_DELAY);
+            },
+        }), ENEMY_RESPONSE_DELAY);
     }, ATTACK_ANIMATION_DELAY + 200);
 };
 
@@ -266,13 +459,15 @@ export const escapeFunction = (options: {
     setBattleLocked: React.Dispatch<React.SetStateAction<boolean>>;
     setBattleMessage: React.Dispatch<React.SetStateAction<string>>;
     setEnemyAttack: React.Dispatch<React.SetStateAction<boolean>>;
+    setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
     setDamageToPlayer: React.Dispatch<React.SetStateAction<number>>;
     setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
+    setParalysisTurns: React.Dispatch<React.SetStateAction<number>>;
+    setBurnTurns: React.Dispatch<React.SetStateAction<number>>;
     setCurrentEnergy: React.Dispatch<React.SetStateAction<number>>;
     setCurrentHunger: React.Dispatch<React.SetStateAction<number>>;
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>;
-    currentBattleMessage: string;
     currentSpeed: number;
     currentHealth: number;
     currentDefense: number;
@@ -280,19 +475,22 @@ export const escapeFunction = (options: {
     difficultyLevel: number;
     onEscapeSuccess: () => void;
     onComplete: (result: 'victory' | 'defeat') => void;
+    onTurnComplete?: (remainingHealth: number) => boolean;
 }) => {
     const {
         setPlayerRunning,
         setBattleLocked,
         setBattleMessage,
         setEnemyAttack,
+        setEnemySpecial,
         setCurrentHealth,
         setDamageToPlayer,
         setSpecialCharge,
+        setParalysisTurns,
+        setBurnTurns,
         setCurrentEnergy,
         setCurrentHunger,
         setCurrentHappiness,
-        currentBattleMessage,
         currentSpeed,
         currentHealth,
         currentDefense,
@@ -300,6 +498,7 @@ export const escapeFunction = (options: {
         difficultyLevel,
         onEscapeSuccess,
         onComplete,
+        onTurnComplete,
     } = options;
 
     // Randomly generate hunger, happiness loss, and energy changes based on difficulty level.
@@ -336,26 +535,29 @@ export const escapeFunction = (options: {
     setBattleMessage('Escape failed! The enemy attacks!');
     window.setTimeout(() => {
         setPlayerRunning(false);
-        setEnemyAttack(true);
-
-        const criticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
-        const damage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
-        const finalDamage = Math.round(criticalHit ? damage * 1.25 : damage);
-        const remainingHealth = Math.max(currentHealth - finalDamage, 0);
-
-        setDamageToPlayer(finalDamage);
-        setSpecialCharge(prevCharge => Math.min(prevCharge + finalDamage, 100));
-        setCurrentHealth(remainingHealth);
-
-        window.setTimeout(() => {
-            setEnemyAttack(false);
-            setBattleMessage(currentBattleMessage);
-            if (remainingHealth === 0) {
-                onComplete('defeat');
-                return;
-            }
-            setBattleLocked(false);
-        }, ATTACK_ANIMATION_DELAY);
+        enemyAttackFunction({
+            setEnemyAttack,
+            setEnemySpecial,
+            setBattleLocked,
+            setBattleMessage,
+            setCurrentHealth,
+            setDamageToPlayer,
+            setSpecialCharge,
+            setParalysisTurns,
+            setBurnTurns,
+            currentHealth,
+            currentDefense,
+            enemyInfo,
+            onComplete: (result, _paralyzed, remainingHealth) => {
+                if (result) {
+                    onComplete(result);
+                } else if (onTurnComplete?.(remainingHealth)) {
+                    onComplete('defeat');
+                } else {
+                    setBattleLocked(false);
+                }
+            },
+        });
     }, 400);
 };
 

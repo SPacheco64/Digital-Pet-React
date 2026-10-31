@@ -13,11 +13,14 @@ import AchievementScreen from './additional_screens/AchievementScreen';
 import InfoScreen from './additional_screens/InfoScreen';
 import ShopScreen from './additional_screens/ShopScreen';
 import WelcomeForm from './helpers/components/WelcomeForm';
-import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, escapeFunction, specialFunction } from './helpers/functions/MinigameLogic/BattleLogic';
+import { attackFunction, battleEndFunction, createEnemyForDifficulty, EnemyInformation, enemyAttackFunction, escapeFunction, specialFunction } from './helpers/functions/MinigameLogic/BattleLogic';
 import { fishingEndFunction } from './helpers/functions/MinigameLogic/FishingLogic';
 import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
 import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
+
+const DEFAULT_BATTLE_MESSAGE = 'What will you do?';
+const BATTLE_MESSAGE_DURATION = 1000;
 
 const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) => {
   // Destructure props for ease of access & documentation
@@ -117,11 +120,15 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [battleLocked, setBattleLocked] = useState<boolean>(false);
   const [enemyInfo, setEnemyInfo] = useState<EnemyInformation | null>(null);
   const [currentEnemyHealth, setCurrentEnemyHealth] = useState<number>(0);
-  const [battleMessage, setBattleMessage] = useState<string>('What will you do?');
+  const [battleMessage, setBattleMessage] = useState<string>(DEFAULT_BATTLE_MESSAGE);
   const [battleResult, setBattleResult] = useState<'victory' | 'defeat' | null>(null);
   const [escapeComplete, setEscapeComplete] = useState<boolean>(false);
   const [damageToEnemy, setDamageToEnemy] = useState<number>(0);
   const [damageToPlayer, setDamageToPlayer] = useState<number>(0);
+  const [burnDamageActive, setBurnDamageActive] = useState<boolean>(false);
+  const [paralysisTurns, setParalysisTurns] = useState<number>(0);
+  const [burnTurns, setBurnTurns] = useState<number>(0);
+  const burnDamageTimeout = useRef<number | null>(null);
 
   const handleFishingComplete = (caughtCount: number) => fishingEndFunction({
     caughtCount,
@@ -147,25 +154,99 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     setRaceComplete,
   });
 
+  const applyBurnAtTurnEnd = (healthAtTurnEnd: number) => {
+    if (burnTurns <= 0) {
+      return false;
+    }
+
+    const burnDamage = Math.round(Math.min(healthAtTurnEnd / 10, healthAtTurnEnd));
+    const remainingHealth = Math.max(healthAtTurnEnd - burnDamage, 0);
+    setCurrentHealth(remainingHealth);
+    setDamageToPlayer(burnDamage);
+    setBurnDamageActive(true);
+    setBurnTurns((turns) => Math.max(0, turns - 1));
+    setBattleMessage(`Burn deals ${burnDamage} damage!`);
+
+    if (burnDamageTimeout.current !== null) {
+      window.clearTimeout(burnDamageTimeout.current);
+    }
+    burnDamageTimeout.current = window.setTimeout(() => {
+      setBurnDamageActive(false);
+      burnDamageTimeout.current = null;
+    }, 800);
+
+    return remainingHealth === 0;
+  };
+
+  const preparePlayerTurn = () => {
+
+    if (paralysisTurns > 0 && enemyInfo) {
+      setParalysisTurns((turns) => Math.max(0, turns - 1));
+      setBattleLocked(true);
+      enemyAttackFunction({
+        setEnemyAttack,
+        setEnemySpecial,
+        setBattleLocked,
+        setBattleMessage,
+        setCurrentHealth,
+        setDamageToPlayer,
+        setSpecialCharge,
+        setParalysisTurns,
+        setBurnTurns,
+        applyParalysis: false,
+        currentHealth,
+        currentDefense,
+        enemyInfo,
+        onComplete: (result, _paralyzed, remainingHealth) => {
+          if (result) {
+            setBattleLocked(false);
+            setBattleResult(result);
+            setInCombat(false);
+            return;
+          }
+          if (applyBurnAtTurnEnd(remainingHealth)) {
+            setBattleLocked(false);
+            setBattleResult('defeat');
+            setInCombat(false);
+            return;
+          }
+          setBattleMessage(`${chocoboName} can't move!`);
+          setBattleLocked(false);
+        },
+      });
+      return { canAct: false, health: currentHealth };
+    }
+
+    return { canAct: true, health: currentHealth };
+  };
+
   const handleAttack = () => {
     if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
       return;
     }
 
+    const turn = preparePlayerTurn();
+    if (!turn.canAct) return;
+
     setBattleLocked(true);
     attackFunction({
       setPlayerAttack,
       setEnemyAttack,
+      setEnemySpecial,
       setBattleLocked,
+      setBattleMessage,
       setCurrentHealth,
       setEnemyHealth: setCurrentEnemyHealth,
+      setParalysisTurns,
+      setBurnTurns,
       currentPower,
       currentDefense,
-      currentHealth,
+      currentHealth: turn.health,
       currentSpeed,
       currentHappiness,
       currentEnemyHealth,
       enemyInfo,
+      onTurnComplete: applyBurnAtTurnEnd,
       onComplete: (result) => {
         setBattleLocked(false);
         setBattleResult(result);
@@ -178,27 +259,36 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   };
 
   const handleSpecial = () => {
-    if (isLoading || battleLocked || specialCharge < 100 || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
+    if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0
+      || (specialCharge < 100 && paralysisTurns === 0)) {
       return;
     }
+
+    const turn = preparePlayerTurn();
+    if (!turn.canAct) return;
 
     setBattleLocked(true);
     setSpecialCharge(0);
     specialFunction({
       setPlayerSpecial,
       setEnemyAttack,
+      setEnemySpecial,
       setBattleLocked,
+      setBattleMessage,
       setCurrentHealth,
       setEnemyHealth: setCurrentEnemyHealth,
       setSpecialCharge,
       setDamageToEnemy,
       setDamageToPlayer,
+      setParalysisTurns,
+      setBurnTurns,
       currentPower,
       currentDefense,
       currentSpeed,
-      currentHealth,
+      currentHealth: turn.health,
       currentEnemyHealth,
       enemyInfo,
+      onTurnComplete: applyBurnAtTurnEnd,
       onComplete: (result) => {
         setBattleLocked(false);
         setBattleResult(result);
@@ -212,20 +302,25 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       return;
     }
 
+    const turn = preparePlayerTurn();
+    if (!turn.canAct) return;
+
     escapeFunction({
       setPlayerRunning,
       setBattleLocked,
       setBattleMessage,
       setEnemyAttack,
+      setEnemySpecial,
       setCurrentHealth,
       setDamageToPlayer,
       setSpecialCharge,
+      setParalysisTurns,
+      setBurnTurns,
       setCurrentEnergy,
       setCurrentHunger,
       setCurrentHappiness,
-      currentBattleMessage: battleMessage,
       currentSpeed,
-      currentHealth,
+      currentHealth: turn.health,
       currentDefense,
       enemyInfo,
       difficultyLevel: selectedEnemyLevel,
@@ -233,6 +328,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setInCombat(false);
         setEscapeComplete(true);
       },
+      onTurnComplete: applyBurnAtTurnEnd,
       onComplete: (result) => {
         setBattleLocked(false);
         setBattleResult(result);
@@ -242,11 +338,18 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   };
 
   useEffect(() => {
+    setParalysisTurns(0);
+    setBurnTurns(0);
+    setBurnDamageActive(false);
+    if (burnDamageTimeout.current !== null) {
+      window.clearTimeout(burnDamageTimeout.current);
+      burnDamageTimeout.current = null;
+    }
     if (activity === 'battle') {
       const nextEnemy = createEnemyForDifficulty(selectedEnemyLevel);
       setEnemyInfo(nextEnemy);
       setCurrentEnemyHealth(nextEnemy.health);
-      setBattleMessage('What will you do?');
+      setBattleMessage(DEFAULT_BATTLE_MESSAGE);
       setBattleResult(null);
       setBattleLocked(false);
       return;
@@ -257,6 +360,23 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     setBattleResult(null);
     setBattleLocked(false);
   }, [selectedEnemyLevel, activity]);
+
+  useEffect(() => {
+    if (
+      activity !== 'battle'
+      || battleMessage === DEFAULT_BATTLE_MESSAGE
+      || battleResult !== null
+      || escapeComplete
+    ) {
+      return;
+    }
+
+    const resetMessage = window.setTimeout(() => {
+      setBattleMessage(DEFAULT_BATTLE_MESSAGE);
+    }, BATTLE_MESSAGE_DURATION);
+
+    return () => window.clearTimeout(resetMessage);
+  }, [activity, battleMessage, battleResult, escapeComplete]);
 
   useEffect(() => {
     if (battleResult !== null) {
@@ -541,12 +661,16 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
               setActivity('race');
             }}
             selectedEnemyLevel={selectedEnemyLevel}
+            enemyId={enemyInfo?.id ?? null}
             isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
             setIsLoading={setIsLoading} 
             playerAttack={playerAttack} enemyAttack={enemyAttack} 
-            playerSpecial={playerSpecial} enemySpecial={enemySpecial} 
+            playerSpecial={playerSpecial} enemySpecial={enemySpecial}
+            enemySpecialType={enemyInfo?.specialAttack ?? 'power'}
             playerRunning={playerRunning}
+            paralysisTurns={paralysisTurns} burnTurns={burnTurns}
             damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
+            burnDamageActive={burnDamageActive}
             specialCharge={specialCharge}
             />
           }
