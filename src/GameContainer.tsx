@@ -154,6 +154,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     setRaceComplete,
   });
 
+  // Applies burn damage at the end of the player's turn, reducing health and 
+  // updating battle state.
   const applyBurnAtTurnEnd = (healthAtTurnEnd: number) => {
     if (burnTurns <= 0) {
       return false;
@@ -178,8 +180,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     return remainingHealth === 0;
   };
 
+  // Prepares the player's turn, handling paralysis and burn effects.
   const preparePlayerTurn = () => {
-
     if (paralysisTurns > 0 && enemyInfo) {
       setParalysisTurns((turns) => Math.max(0, turns - 1));
       setBattleLocked(true);
@@ -219,7 +221,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     return { canAct: true, health: currentHealth };
   };
-
+  // Handles the player's attack action, including turn preparation and 
+  // battle logic.
   const handleAttack = () => {
     if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
       return;
@@ -258,6 +261,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     });
   };
 
+  // Handles the player's special attack action, including turn preparation and 
+  // battle logic.
   const handleSpecial = () => {
     if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0
       || (specialCharge < 100 && paralysisTurns === 0)) {
@@ -297,6 +302,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     });
   };
 
+  // Handles the player's escape action, including turn preparation and 
+  // battle logic.
   const handleEscape = () => {
     if (isLoading || battleLocked || !enemyInfo || currentEnemyHealth <= 0 || currentHealth <= 0) {
       return;
@@ -337,6 +344,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     });
   };
 
+  // Effect to reset battle-related states and prepare for a new battle when 
+  // the selected enemy level or activity changes.
   useEffect(() => {
     setParalysisTurns(0);
     setBurnTurns(0);
@@ -361,10 +370,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     setBattleLocked(false);
   }, [selectedEnemyLevel, activity]);
 
+  // Effect to reset the battle message after a certain duration if no battle '
+  // result or escape has occurred.
   useEffect(() => {
     if (
       activity !== 'battle'
-      || battleMessage === DEFAULT_BATTLE_MESSAGE
+|| battleMessage === DEFAULT_BATTLE_MESSAGE
       || battleResult !== null
       || escapeComplete
     ) {
@@ -378,6 +389,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     return () => window.clearTimeout(resetMessage);
   }, [activity, battleMessage, battleResult, escapeComplete]);
 
+  // Effect to handle the battle result and update the player's status accordingly.
   useEffect(() => {
     if (battleResult !== null) {
       battleEndFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
@@ -449,6 +461,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     document.getElementById('DigipetRoot')?.classList.toggle('retro', retroMode);
   }, [retroMode]);
 
+  // Effect to handle the autosave preference and save it to local storage.
   useEffect(() => {
     if (!storageHydrated) {
       return;
@@ -461,6 +474,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [autosaveEnabled, storageHydrated]);
 
+  // Effect to handle the autosave of game progress to local storage.
   useEffect(() => {
     if (!autosaveEnabled || !storageHydrated || storageReadFailed || saveRecoveryRequired || !hideWelcome || !playerName || !chocoboName) {
       return;
@@ -501,6 +515,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     saveRecoveryRequired,
   ]);
 
+  // Effect to handle the chocobo's status changes and trigger the appropriate 
+  // actions.
   useEffect(() => {
     if (currentStatus === 'Egg') {
       setCurrentlyBusy(true);
@@ -518,6 +534,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
   }, [currentStatus, maxEnergy, maxHealth]);
 
+  // Effect to handle the training action when an option is selected.
   useEffect(() => {
     if (optionSelected === 0) {
       return;
