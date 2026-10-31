@@ -1,7 +1,23 @@
 import React, { useState } from 'react';
 import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
-import gysahlGreens from '../graphics/icons/shop/gysahl_greens.png';
+import shopItems from '../graphics/icons/shop/shop-items.png';
+
+// Positions of the shop item icons within the sprite sheet
+const shopIconPositions = [
+  [0, 0],
+  [48, 0],
+  [94, 0],
+  [141, 0],
+  [182, 0],
+  [225, 0],
+  [4, 46],
+  [44, 46],
+  [84, 46],
+  [124, 46],
+  [166, 46],
+  [212, 46],
+];
 
 const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   // Destructure props for ease of access & documentation
@@ -28,18 +44,18 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   }
 
   const shopList = [
-    {cost: 30, image: gysahlGreens, label: 'Healing Potion', description: 'Fully restores HP.'},
-    {cost: 30, image: gysahlGreens, label: 'Energy Potion', description: 'Fully restores Energy.'},
-    {cost: 50, image: gysahlGreens, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
-    {cost: 50, image: gysahlGreens, label: 'Cushy Pillow', description: 'Permanently increases the effectiveness of Sleeping.'},
-    {cost: 50, image: gysahlGreens, label: 'Soft Down', description: 'Permanently increases the speed of Sleeping.'},
-    {cost: 100, image: gysahlGreens, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
-    {cost: 100, image: gysahlGreens, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
-    {cost: 100, image: gysahlGreens, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
-    {cost: 100, image: gysahlGreens, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
-    {cost: 200, image: gysahlGreens, label: 'POW Materia', description: 'Increases POW in battles.'},
-    {cost: 200, image: gysahlGreens, label: 'DEF Materia', description: 'Increases DEF in battles.'},
-    {cost: 500, image: gysahlGreens, label: 'Moogle', description: 'Gain a Moogle companion. Might help in Battle...'}
+    {cost: 30, label: 'Healing Potion', description: 'Fully restores HP.'},
+    {cost: 30, label: 'Energy Potion', description: 'Fully restores Energy.'},
+    {cost: 50, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
+    {cost: 50, label: 'Soft Down', description: 'Permanently increases the effectiveness of Sleeping.'},
+    {cost: 50, label: 'Sleeping Cap', description: 'Permanently increases the speed of Sleeping.'},
+    {cost: 100, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
+    {cost: 100, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
+    {cost: 100, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
+    {cost: 100, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
+    {cost: 200, label: 'POW Materia', description: 'Increases POW in battles.'},
+    {cost: 200, label: 'DEF Materia', description: 'Increases DEF in battles.'},
+    {cost: 500, label: 'Moogle', description: 'Gain a Moogle companion. Might help in Battle...'}
   ];
 
   return (
@@ -54,7 +70,9 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
 
         <div className='shop-list'>
             {
-                shopList.map((item, index) => (
+                shopList.map((item, index) => {
+                    const [spriteX, spriteY] = shopIconPositions[index];
+                    return (
                     <button
                         type='button'
                         className={`shop-item ${(alreadyPurchased.includes(index) && index > 1) ? 'already-purchased' : ''}`}
@@ -84,7 +102,15 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                         </div>
 
                         <div className='item-top'>
-                            <span className='item-image'><img src={item.image} alt={item.label} /></span>
+                            <span
+                                className='item-image'
+                                role='img'
+                                aria-label={item.label}
+                                style={{
+                                    backgroundImage: `url(${shopItems})`,
+                                    backgroundPosition: `-${spriteX}px -${spriteY}px`,
+                                }}
+                            />
                             <span className='label'>{item.label}</span>
                         </div>
 
@@ -92,7 +118,8 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                             {item.description}
                         </div>
                     </button>
-                ))
+                    );
+                })
             }
         </div>
     </div>

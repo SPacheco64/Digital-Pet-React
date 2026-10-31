@@ -88,11 +88,12 @@
                     align-items: center;
                 }
                 &-image {
-                    padding-right: .5rem;
-                    img {
-                        height: 2rem;
-                        width: 2rem;
-                    }
+                    display: inline-block;
+                    flex: 0 0 2rem;
+                    height: 2rem;
+                    width: 2rem;
+                    margin-right: .5rem;
+                    background-repeat: no-repeat;
                 }
             }
         }
