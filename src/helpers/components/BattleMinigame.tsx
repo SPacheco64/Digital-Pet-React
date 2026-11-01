@@ -28,7 +28,8 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
         damageToPlayer,
         burnDamageActive,
         specialCharge,
-        setIsLoading
+        setIsLoading,
+        alreadyPurchased,
     } = props;
 
     return (
@@ -72,7 +73,7 @@ const BattleMinigame: React.FC<BattleMinigameProps> = (props: BattleMinigameProp
                 enemySpecialType={enemySpecialType}
                 playerRunning={playerRunning} paralysisTurns={paralysisTurns} burnTurns={burnTurns}
                 escapeComplete={escapeComplete}
-                battleResult={battleResult}
+                battleResult={battleResult} alreadyPurchased={alreadyPurchased}
             />
         </div>
     );

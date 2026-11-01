@@ -44,17 +44,17 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   }
 
   const shopList = [
-    {cost: 30, label: 'Healing Potion', description: 'Fully restores HP.'},
-    {cost: 30, label: 'Energy Potion', description: 'Fully restores Energy.'},
-    {cost: 50, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
-    {cost: 50, label: 'Soft Down', description: 'Permanently increases the effectiveness of Sleeping.'},
-    {cost: 50, label: 'Sleeping Cap', description: 'Permanently increases the speed of Sleeping.'},
-    {cost: 100, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
-    {cost: 100, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
-    {cost: 100, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
-    {cost: 100, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
-    {cost: 200, label: 'POW Materia', description: 'Increases POW in battles.'},
-    {cost: 200, label: 'DEF Materia', description: 'Increases DEF in battles.'},
+    {cost: 50, label: 'Healing Potion', description: 'Fully restores HP.'},
+    {cost: 50, label: 'Energy Potion', description: 'Fully restores Energy.'},
+    {cost: 100, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
+    {cost: 100, label: 'Soft Down', description: 'Permanently increases the effectiveness of Sleeping.'},
+    {cost: 100, label: 'Sleeping Cap', description: 'Permanently increases the speed of Sleeping.'},
+    {cost: 150, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
+    {cost: 150, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
+    {cost: 150, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
+    {cost: 150, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
+    {cost: 250, label: 'POW Materia', description: 'Increases POW in battles.'},
+    {cost: 250, label: 'DEF Materia', description: 'Increases DEF in battles.'},
     {cost: 500, label: 'Moogle', description: 'Gain a Moogle companion. Might help in Battle...'}
   ];
 

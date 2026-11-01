@@ -58,7 +58,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [battlesWon, setBattlesWon] = useState<number>(0);
   const [racesWon, setRacesWon] = useState<number>(0);
   const [currentMoney, setCurrentMoney] = useState<number>(0);
-  const [alreadyPurchased, setAlreadyPurchased] = useState<Array<number>>([]);
+  const [alreadyPurchased, setAlreadyPurchased] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fishingComplete, setFishingComplete] = useState<boolean>(false);
   const [fishingInput, setFishingInput] = useState<number>(0);
@@ -199,6 +199,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         currentHealth,
         currentDefense,
         enemyInfo,
+        alreadyPurchased,
         onComplete: (result, _paralyzed, remainingHealth) => {
           if (result) {
             setBattleLocked(false);
@@ -249,6 +250,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       currentHappiness,
       currentEnemyHealth,
       enemyInfo,
+      alreadyPurchased,
       onTurnComplete: applyBurnAtTurnEnd,
       onComplete: (result) => {
         setBattleLocked(false);
@@ -293,6 +295,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       currentHealth: turn.health,
       currentEnemyHealth,
       enemyInfo,
+      alreadyPurchased,
       onTurnComplete: applyBurnAtTurnEnd,
       onComplete: (result) => {
         setBattleLocked(false);
@@ -330,6 +333,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       currentHealth: turn.health,
       currentDefense,
       enemyInfo,
+      alreadyPurchased,
       difficultyLevel: selectedEnemyLevel,
       onEscapeSuccess: () => {
         setInCombat(false);
@@ -375,7 +379,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   useEffect(() => {
     if (
       activity !== 'battle'
-|| battleMessage === DEFAULT_BATTLE_MESSAGE
+      || battleMessage === DEFAULT_BATTLE_MESSAGE
       || battleResult !== null
       || escapeComplete
     ) {
@@ -626,69 +630,71 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
           {/* Main Game Display */}
           {
             !showMenuScreen && !questionWindowOpen && hideWelcome &&
-            <GameDisplay creatureName={chocoboName} inCombat={inCombat}
-            currentStatus={currentStatus} currentHealth={currentHealth}
-            battlesWon={battlesWon}
-            maxHealth={maxHealth} currentHappiness={currentHappiness} 
-            currentHunger={currentHunger}
-            currentEnergy={currentEnergy} currentPower={currentPower}
-            currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
-            battleMessage={battleMessage}
-            battleResult={battleResult}
-            escapeComplete={escapeComplete}
-            currentTime={currentTime} currentlyBusy={currentlyBusy}
-            actionFailureTrigger={actionFailureTrigger}
-            showMenuScreen={showMenuScreen} 
-            activity={activity}
-            onStartBattle={(level) => {
-              setSelectedEnemyLevel(level);
-              setIsLoading(true);
-              setInCombat(true);
-              setEscapeComplete(false);
-              setActivity('battle');
-            }}
-            fishingInput={fishingInput}
-            fishingEarnedCurrency={fishingEarnedCurrency}
-            onFishingComplete={handleFishingComplete}
-            onFishingClose={() => {
-              setActivity('pet');
-              setFishingComplete(false);
-              setFishingInput(0);
-              setCurrentlyBusy(false);
-            }}
-            raceDifficulty={raceDifficulty}
-            raceEarnedCurrency={raceEarnedCurrency}
-            currentSpeed={currentSpeed}
-            currentEndurance={currentEndurance}
-            raceSteeringInput={raceSteeringInput}
-            sprintActive={sprintActive}
-            setSprintActive={setSprintActive}
-            onRaceComplete={handleRaceComplete}
-            onRaceClose={() => {
-              setActivity('pet');
-              setRaceComplete(false);
-              setSprintActive(false);
-              setCurrentlyBusy(false);
-            }}
-            onSelectRaceDifficulty={(difficulty) => {
-              setRaceDifficulty(difficulty);
-              setRaceSteeringInput({ direction: 1, sequence: 0 });
-              setRaceComplete(false);
-              setSprintActive(false);
-              setActivity('race');
-            }}
-            selectedEnemyLevel={selectedEnemyLevel}
-            enemyId={enemyInfo?.id ?? null}
-            isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
-            setIsLoading={setIsLoading} 
-            playerAttack={playerAttack} enemyAttack={enemyAttack} 
-            playerSpecial={playerSpecial} enemySpecial={enemySpecial}
-            enemySpecialType={enemyInfo?.specialAttack ?? 'power'}
-            playerRunning={playerRunning}
-            paralysisTurns={paralysisTurns} burnTurns={burnTurns}
-            damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
-            burnDamageActive={burnDamageActive}
-            specialCharge={specialCharge}
+            <GameDisplay 
+              creatureName={chocoboName} inCombat={inCombat}
+              alreadyPurchased={alreadyPurchased}
+              currentStatus={currentStatus} currentHealth={currentHealth}
+              battlesWon={battlesWon}
+              maxHealth={maxHealth} currentHappiness={currentHappiness} 
+              currentHunger={currentHunger}
+              currentEnergy={currentEnergy} currentPower={currentPower}
+              currentDefense={currentDefense} currentMoodIcon={currentMoodIcon}
+              battleMessage={battleMessage}
+              battleResult={battleResult}
+              escapeComplete={escapeComplete}
+              currentTime={currentTime} currentlyBusy={currentlyBusy}
+              actionFailureTrigger={actionFailureTrigger}
+              showMenuScreen={showMenuScreen} 
+              activity={activity}
+              onStartBattle={(level) => {
+                setSelectedEnemyLevel(level);
+                setIsLoading(true);
+                setInCombat(true);
+                setEscapeComplete(false);
+                setActivity('battle');
+              }}
+              fishingInput={fishingInput}
+              fishingEarnedCurrency={fishingEarnedCurrency}
+              onFishingComplete={handleFishingComplete}
+              onFishingClose={() => {
+                setActivity('pet');
+                setFishingComplete(false);
+                setFishingInput(0);
+                setCurrentlyBusy(false);
+              }}
+              raceDifficulty={raceDifficulty}
+              raceEarnedCurrency={raceEarnedCurrency}
+              currentSpeed={currentSpeed}
+              currentEndurance={currentEndurance}
+              raceSteeringInput={raceSteeringInput}
+              sprintActive={sprintActive}
+              setSprintActive={setSprintActive}
+              onRaceComplete={handleRaceComplete}
+              onRaceClose={() => {
+                setActivity('pet');
+                setRaceComplete(false);
+                setSprintActive(false);
+                setCurrentlyBusy(false);
+              }}
+              onSelectRaceDifficulty={(difficulty) => {
+                setRaceDifficulty(difficulty);
+                setRaceSteeringInput({ direction: 1, sequence: 0 });
+                setRaceComplete(false);
+                setSprintActive(false);
+                setActivity('race');
+              }}
+              selectedEnemyLevel={selectedEnemyLevel}
+              enemyId={enemyInfo?.id ?? null}
+              isLoading={isLoading} setCurrentlyBusy={setCurrentlyBusy}
+              setIsLoading={setIsLoading} 
+              playerAttack={playerAttack} enemyAttack={enemyAttack} 
+              playerSpecial={playerSpecial} enemySpecial={enemySpecial}
+              enemySpecialType={enemyInfo?.specialAttack ?? 'power'}
+              playerRunning={playerRunning}
+              paralysisTurns={paralysisTurns} burnTurns={burnTurns}
+              damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
+              burnDamageActive={burnDamageActive}
+              specialCharge={specialCharge}
             />
           }
 

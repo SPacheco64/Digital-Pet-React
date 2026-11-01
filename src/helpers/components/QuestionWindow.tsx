@@ -5,7 +5,7 @@ import MenuCanvas from '../canvas/MenuCanvas';
 
 interface QuestionWindowProps {
   dialogue: string;
-  responsesArray: Array<string>;
+  responsesArray: string[];
 }
 
 const QuestionWindow: React.FC<QuestionWindowProps> = ({ dialogue, responsesArray }) => {

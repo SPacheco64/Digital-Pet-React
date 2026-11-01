@@ -30,6 +30,7 @@ interface AttackAnimationsProps {
     enemySpecial: boolean;
     enemySpecialType: EnemySpecialAttackType;
     isLoading: boolean;
+    alreadyPurchased: number[];
 }
 
 // Define the attack animations from the spritesheet.
@@ -108,7 +109,9 @@ const AttackAnimations: React.FC<AttackAnimationsProps> = ({
     enemySpecial,
     enemySpecialType,
     isLoading,
+    alreadyPurchased,
 }) => {
+    const hasMoogle = alreadyPurchased.includes(11);
     const attackSpriteRef = useRef<Konva.Sprite>(null);
     const [attackSheetImg] = useImage(attackSheet);
     const specialAnimation = playerSpecial
@@ -181,7 +184,7 @@ const AttackAnimations: React.FC<AttackAnimationsProps> = ({
                 x: state.x - 10,
                 y: state.y - 4,
                 scale: state.scale,
-                anim: isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack',
+                anim: hasMoogle ? 'miniChocoMoogleAttack' : (isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack'),
             }));
             setEnemyAttr((state) => ({
                 ...state,
@@ -202,7 +205,7 @@ const AttackAnimations: React.FC<AttackAnimationsProps> = ({
                 x: state.x + 10,
                 y: state.y,
                 scale: state.scale,
-                anim: isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack',
+                anim: hasMoogle ? 'miniChocoMoogleAttack' : (isSpecialAction ? 'miniChocoSpecial' : 'miniChocoAttack'),
             }));
             setEnemyAttr((state) => ({
                 ...state,

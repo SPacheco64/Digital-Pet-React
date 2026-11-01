@@ -15,6 +15,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   const {
     inCombat,
     creatureName,
+    alreadyPurchased,
     currentStatus,
     currentHealth,
     battlesWon,
@@ -146,6 +147,7 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
           battleResult={battleResult} damageToEnemy={damageToEnemy} damageToPlayer={damageToPlayer}
           burnDamageActive={burnDamageActive}
           specialCharge={specialCharge}
+          alreadyPurchased={alreadyPurchased}
         />
       }
     </div>

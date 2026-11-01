@@ -159,6 +159,7 @@ interface EnemyAttackOptions {
     currentHealth: number;
     currentDefense: number;
     enemyInfo: EnemyInformation;
+    alreadyPurchased: number[];
     specialChargeGainMultiplier?: number;
     onComplete: (result: 'defeat' | null, paralyzed: boolean, remainingHealth: number) => void;
 }
@@ -179,9 +180,14 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
         currentHealth,
         currentDefense,
         enemyInfo,
+        alreadyPurchased,
         specialChargeGainMultiplier = 1,
         onComplete,
     } = options;
+    const hasDefMateria = alreadyPurchased.includes(10);
+    const hasMoogle = alreadyPurchased.includes(11);
+    console.log('hasDEFMateria? ', hasDefMateria ? 'yes' : 'no');
+    console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     setBattleLocked(true);
     const usesSpecial = Math.random() < enemyInfo.difficultyLevel * 0.05;
     const specialType = usesSpecial ? enemyInfo.specialAttack : null;
@@ -192,7 +198,11 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
     const instantlyKills = usesSpecial && specialType === 'instant-kill' && Math.random() < 0.1;
     const damage = instantlyKills
         ? currentHealth
-        : Math.round(criticalHit ? attackDamage * 1.25 : attackDamage);
+        : Math.round(
+            (criticalHit ? attackDamage * 1.25 : attackDamage)
+            * (hasDefMateria ? 0.90 : 1)
+            * (hasMoogle ? 0.90 : 1),
+        );
     const remainingHealth = Math.max(currentHealth - damage, 0);
 
     setEnemyAttack(!usesSpecial);
@@ -246,6 +256,7 @@ export const attackFunction = (
         currentHappiness: number;
         currentEnemyHealth: number;
         enemyInfo: EnemyInformation;
+        alreadyPurchased: number[];
         onComplete: (result: 'victory' | 'defeat') => void;
         onTurnComplete?: (remainingHealth: number) => boolean;
         setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
@@ -270,12 +281,17 @@ export const attackFunction = (
         currentHappiness,
         currentEnemyHealth,
         enemyInfo,
+        alreadyPurchased,
         onComplete,
         onTurnComplete,
         setDamageToEnemy,
         setDamageToPlayer,
         setSpecialCharge,
     } = options;
+    const hasPowMateria = alreadyPurchased.includes(9);
+    const hasMoogle = alreadyPurchased.includes(11);
+    console.log('hasPowMateria? ', hasPowMateria ? 'yes' : 'no');
+    console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     const firstTurn = turnOrderFunction(currentSpeed, currentHappiness, enemyInfo);
     let enemyDefeated = currentEnemyHealth <= 0;
     const finishTurn = (remainingHealth: number) => {
@@ -291,7 +307,12 @@ export const attackFunction = (
         setPlayerAttack(true);
         const criticalHit = Math.random() < ((currentSpeed/2)/10);
         const initDamage = calculateDamage(currentPower, enemyInfo.defense, enemyInfo.difficultyLevel);
-        const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
+        const finalDamage = Math.round(
+            initDamage
+            * (criticalHit ? 1.25 : 1)
+            * (hasPowMateria ? 1.1 : 1)
+            * (hasMoogle ? 1.1 : 1),
+        );
         
         setDamageToEnemy(finalDamage);
         const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
@@ -337,6 +358,7 @@ export const attackFunction = (
             currentHealth: remainingHealth,
             currentDefense,
             enemyInfo,
+            alreadyPurchased,
             onComplete: (result, paralyzed, healthAfterAttack) => {
                 if (result) {
                     onComplete(result);
@@ -386,6 +408,7 @@ export const specialFunction = (options: {
     currentHealth: number;
     currentEnemyHealth: number;
     enemyInfo: EnemyInformation;
+    alreadyPurchased: number[];
     onComplete: (result: 'victory' | 'defeat') => void;
 }) => {
     const {
@@ -408,11 +431,21 @@ export const specialFunction = (options: {
         currentHealth,
         currentEnemyHealth,
         enemyInfo,
+        alreadyPurchased,
         onComplete,
     } = options;
+    const hasPowMateria = alreadyPurchased.includes(9);
+    const hasMoogle = alreadyPurchased.includes(11);
+    console.log('hasPowMateria? ', hasPowMateria ? 'yes' : 'no');
+    console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     const criticalHit = Math.random() < ((currentSpeed / 2) / 10);
     const initDamage = calculateDamage(currentPower, enemyInfo.defense, enemyInfo.difficultyLevel) * 2;
-    const finalDamage = Math.round(criticalHit ? initDamage * 1.25 : initDamage);
+    const finalDamage = Math.round(
+        initDamage
+        * (criticalHit ? 1.25 : 1)
+        * (hasPowMateria ? 1.1 : 1)
+        * (hasMoogle ? 1.1 : 1),
+    );
     const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
 
     setPlayerSpecial(true);
@@ -437,6 +470,7 @@ export const specialFunction = (options: {
             setSpecialCharge,
             setParalysisTurns,
             setBurnTurns,
+            alreadyPurchased,
             currentHealth,
             currentDefense,
             enemyInfo,
@@ -473,6 +507,7 @@ export const escapeFunction = (options: {
     currentHealth: number;
     currentDefense: number;
     enemyInfo: EnemyInformation;
+    alreadyPurchased: number[];
     difficultyLevel: number;
     onEscapeSuccess: () => void;
     onComplete: (result: 'victory' | 'defeat') => void;
@@ -496,6 +531,7 @@ export const escapeFunction = (options: {
         currentHealth,
         currentDefense,
         enemyInfo,
+        alreadyPurchased,
         difficultyLevel,
         onEscapeSuccess,
         onComplete,
@@ -549,6 +585,7 @@ export const escapeFunction = (options: {
             currentHealth,
             currentDefense,
             enemyInfo,
+            alreadyPurchased,
             onComplete: (result, _paralyzed, remainingHealth) => {
                 if (result) {
                     onComplete(result);

@@ -27,7 +27,12 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         escapeComplete,
         battleResult,
         setIsLoading,
+        alreadyPurchased,
     } = props;
+
+    // Check to see if the player has already purchased the Moogle item.
+    // Will determine the Chocobo's animations.
+    const hasMoogle = alreadyPurchased.includes(11);
 
     // Provides the tints for the player sprite based on their status in battle
     // Burned (red) or Paralyzed (yellow).
@@ -36,12 +41,6 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
         : paralysisTurns > 0
             ? 'rgba(255, 215, 0, 0.6)'
             : null;
-
-    // All animation settings for each chocobo animation shown in this canvas
-    const chocoboAttrs = [
-        {x: 190, y: 206, anim: 'miniChocoStand', frameRate: 5, scale: 1}, // Menu Choco Stand
-        {x: 180, y: 206, anim: 'miniChocoAttack', frameRate: 5, scale: 1}, // Menu Choco Attack
-    ];
 
     // All animation settings for each enemy shown in this canvas
     const enemyAttrs = [
@@ -126,7 +125,12 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
 
     // States for the Chocobo and enemy animation attributes to be used in the 
     // battle scene.
-    const [chocoAttrToUse, setChocoAttrToUse] = useState<AnimAttr>({x: 190, y: 110, anim: 'miniChocoStand', frameRate: 5, scale: .6});
+    const [chocoAttrToUse, setChocoAttrToUse] = useState<AnimAttr>(
+        hasMoogle ?
+        {x: 190, y: 110, anim: 'miniChocoMoogleStand', frameRate: 5, scale: .6}
+        :
+        {x: 190, y: 110, anim: 'miniChocoStand', frameRate: 5, scale: .6}
+    );
     const getEnemyAnimation = (id: BattleEnemyId): AnimAttr =>
         enemyAttrs[enemySpriteIndexes[id] ?? enemySpriteIndexes.cactuar];
     const [enemyAttrToUse, setEnemyAttrToUse] = useState<AnimAttr>(() => getEnemyAnimation(enemyId));
@@ -140,11 +144,18 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
     const animations = useRef({
         // Chocobo:
         miniChocoStand: [
-            299, 918, 80, 80,     // frame 1
-            405, 918, 80, 80,     // frame 2
+            299, 918, 80, 80,    // frame 1
+            405, 918, 80, 80,    // frame 2
         ],
         miniChocoAttack: [
-            405, 918, 80, 80,     // frame 1
+            405, 918, 80, 80,    // frame 1
+        ],
+        miniChocoMoogleStand: [
+            0, 1196, 80, 80,     // frame 1
+            106, 1196, 80, 80,   // frame 2
+        ],
+        miniChocoMoogleAttack: [
+            106, 1196, 80, 80,   // frame 1
         ],
         miniChocoSpecial: [
             405, 918, 80, 80,
@@ -267,17 +278,19 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                     />}
 
                     {/* Chocobo Sprite */}
-                    {chocoSheetImg && !escapeComplete && <Sprite
-                        ref={spriteRef2}
-                        x={chocoAttrToUse.x + (playerRunning ? 80 * chocoAttrToUse.scale : 0)}
-                        y={chocoAttrToUse.y}
-                        image={tintedChocoSheetImg ?? chocoSheetImg}
-                        animation={chocoAttrToUse.anim}
-                        animations={animations}
-                        frameRate={chocoAttrToUse.frameRate}
-                        scaleX={playerRunning ? -chocoAttrToUse.scale : chocoAttrToUse.scale}
-                        scaleY={chocoAttrToUse.scale}
-                    />}
+                    {chocoSheetImg && !escapeComplete && 
+                        <Sprite
+                            ref={spriteRef2}
+                            x={chocoAttrToUse.x + (playerRunning ? 80 * chocoAttrToUse.scale : 0)}
+                            y={chocoAttrToUse.y}
+                            image={tintedChocoSheetImg ?? chocoSheetImg}
+                            animation={chocoAttrToUse.anim}
+                            animations={animations}
+                            frameRate={chocoAttrToUse.frameRate}
+                            scaleX={playerRunning ? -chocoAttrToUse.scale : chocoAttrToUse.scale}
+                            scaleY={chocoAttrToUse.scale}
+                        />
+                    }
 
                     <AttackAnimations
                         enemySpriteRef={spriteRef1}
@@ -292,6 +305,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
                         enemySpecial={enemySpecial}
                         enemySpecialType={enemySpecialType}
                         isLoading={isLoading}
+                        alreadyPurchased={alreadyPurchased}
                     />
                 </Layer>
             </Stage>

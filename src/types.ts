@@ -38,6 +38,7 @@ export type BattleEnemyId =
 export interface GameDisplayProps {
     inCombat: boolean;
     creatureName: string;
+    alreadyPurchased: number[];
     currentStatus: string;
     currentHealth: number;
     battlesWon: number;
@@ -184,9 +185,9 @@ export interface StatusScreenProps {
 export interface ShopScreenProps {
     currentStatus: string;
     currentMoney: number;
-    alreadyPurchased: Array<number>;
+    alreadyPurchased: number[];
     setCurrentMoney: React.Dispatch<React.SetStateAction<number>>;
-    setAlreadyPurchased: React.Dispatch<React.SetStateAction<Array<number>>>
+    setAlreadyPurchased: React.Dispatch<React.SetStateAction<number[]>>
     currentHealth: number;
     currentEnergy: number;
     maxHealth: number;
@@ -274,6 +275,7 @@ export interface BattleCanvasProps {
     escapeComplete: boolean;
     battleResult: 'victory' | 'defeat' | null;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    alreadyPurchased: number[];
 }
 export interface BattleSelectionScreenProps {
     isLoading: boolean;
@@ -306,4 +308,5 @@ export interface BattleMinigameProps {
     burnDamageActive: boolean;
     specialCharge: number;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    alreadyPurchased: number[];
 }
