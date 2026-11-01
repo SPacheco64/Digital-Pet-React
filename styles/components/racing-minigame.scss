@@ -126,8 +126,7 @@
         height: 56px;
         transform: translateX(-50%);
         background-repeat: no-repeat;
-        background-position: 0 -642px;
-        background-size: 414px 790px;
+        background-size: 418px auto;
         animation: race-chocobo-run 480ms steps(1, end) infinite;
         image-rendering: pixelated;
         filter: var(--racer-filter, none);
