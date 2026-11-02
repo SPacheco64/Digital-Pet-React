@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
 import shopItems from '../graphics/icons/shop/shop-items.png';
+import { SHOP_ITEM_NAMES } from '../constants/shopItems';
 
 // Positions of the shop item icons within the sprite sheet
 const shopIconPositions = [
@@ -34,28 +35,30 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
     maxEnergy,
   } = props;
 
-  const purchaseHandler = (index: number, cost: number) => {
+  const purchaseHandler = (itemName: string, cost: number) => {
     if (cost <= currentMoney) {
         setCurrentMoney(prevMoney => (prevMoney - cost));
-        setAlreadyPurchased([...alreadyPurchased, index]);
+        setAlreadyPurchased(purchased => (
+            purchased.includes(itemName) ? purchased : [...purchased, itemName]
+        ));
     } else {
         // Play sound effect for failure to purchase
     }
   }
 
   const shopList = [
-    {cost: 50, label: 'Healing Potion', description: 'Fully restores HP.'},
-    {cost: 50, label: 'Energy Potion', description: 'Fully restores Energy.'},
-    {cost: 100, label: 'Gysahl Greens', description: 'Permanently increases the effectiveness of Feeding.'},
-    {cost: 100, label: 'Soft Down', description: 'Permanently increases the effectiveness of Sleeping.'},
-    {cost: 100, label: 'Sleeping Cap', description: 'Permanently increases the speed of Sleeping.'},
-    {cost: 150, label: 'POW Band', description: 'Permanently increases the effectiveness of Power training.'},
-    {cost: 150, label: 'DEF Band', description: 'Permanently increases the effectiveness of Defense training.'},
-    {cost: 150, label: 'SPD Band', description: 'Permanently increases the effectiveness of Speed training.'},
-    {cost: 150, label: 'END Band', description: 'Permanently increases the effectiveness of Endurance training.'},
-    {cost: 250, label: 'POW Materia', description: 'Increases POW in battles.'},
-    {cost: 250, label: 'DEF Materia', description: 'Increases DEF in battles.'},
-    {cost: 500, label: 'Moogle', description: 'Gain a Moogle companion. Might help in Battle...'}
+    {cost: 50, label: SHOP_ITEM_NAMES.healingPotion, description: 'Fully restores HP.', repeatable: true, effect: 'health'},
+    {cost: 50, label: SHOP_ITEM_NAMES.energyPotion, description: 'Fully restores Energy.', repeatable: true, effect: 'energy'},
+    {cost: 100, label: SHOP_ITEM_NAMES.gysahlGreens, description: 'Permanently increases the effectiveness of Feeding.'},
+    {cost: 100, label: SHOP_ITEM_NAMES.softDown, description: 'Permanently increases the effectiveness of Sleeping.'},
+    {cost: 100, label: SHOP_ITEM_NAMES.sleepingCap, description: 'Permanently increases the speed of Sleeping.'},
+    {cost: 150, label: SHOP_ITEM_NAMES.powBand, description: 'Permanently increases the effectiveness of Power training.'},
+    {cost: 150, label: SHOP_ITEM_NAMES.defBand, description: 'Permanently increases the effectiveness of Defense training.'},
+    {cost: 150, label: SHOP_ITEM_NAMES.spdBand, description: 'Permanently increases the effectiveness of Speed training.'},
+    {cost: 150, label: SHOP_ITEM_NAMES.endBand, description: 'Permanently increases the effectiveness of Endurance training.'},
+    {cost: 250, label: SHOP_ITEM_NAMES.powMateria, description: 'Increases POW in battles.'},
+    {cost: 250, label: SHOP_ITEM_NAMES.defMateria, description: 'Increases DEF in battles.'},
+    {cost: 500, label: SHOP_ITEM_NAMES.moogle, description: 'Gain a Moogle companion. Might help in Battle...'}
   ];
 
   return (
@@ -72,26 +75,27 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
             {
                 shopList.map((item, index) => {
                     const [spriteX, spriteY] = shopIconPositions[index];
+                    const isAlreadyPurchased = alreadyPurchased.includes(item.label);
                     return (
                     <button
                         type='button'
-                        className={`shop-item ${(alreadyPurchased.includes(index) && index > 1) ? 'already-purchased' : ''}`}
-                        key={index}
-                        disabled={alreadyPurchased.includes(index) && index > 1}
+                        className={`shop-item ${(isAlreadyPurchased && !item.repeatable) ? 'already-purchased' : ''}`}
+                        key={item.label}
+                        disabled={isAlreadyPurchased && !item.repeatable}
                         onClick={() => {
-                            if (index === 0) { // Healing potion purchased
+                            if (item.effect === 'health') {
                                 if (currentHealth === maxHealth || currentMoney < item.cost) return;
                                 setCurrentHealth(maxHealth);
-                            } else if (index === 1) { // Energy potion purchased
+                            } else if (item.effect === 'energy') {
                                 if (currentEnergy === maxEnergy || currentMoney < item.cost) return;
                                 setCurrentEnergy(maxEnergy);
                             }
 
-                            purchaseHandler(index, item.cost);
+                            purchaseHandler(item.label, item.cost);
                         }}>
                         <div className='cost'>
                             {
-                                (alreadyPurchased.includes(index) && index > 1) ?
+                                (isAlreadyPurchased && !item.repeatable) ?
                                 <>
                                     SOLD
                                 </> :

@@ -9,6 +9,7 @@ import BattleLoader from '../components/BattleLoader';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import Konva from 'konva';
 import AttackAnimations, { type AnimAttr } from './AttackAnimations';
+import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
 
 const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => {
     // Destructure props for ease of access & documentation
@@ -32,7 +33,7 @@ const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => 
 
     // Check to see if the player has already purchased the Moogle item.
     // Will determine the Chocobo's animations.
-    const hasMoogle = alreadyPurchased.includes(11);
+    const hasMoogle = alreadyPurchased.includes(SHOP_ITEM_NAMES.moogle);
 
     // Provides the tints for the player sprite based on their status in battle
     // Burned (red) or Paralyzed (yellow).

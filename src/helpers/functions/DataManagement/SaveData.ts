@@ -1,9 +1,8 @@
 import { ChocoboSaveData } from '../../../types';
 
-// Constants for valid shell colors, mood icons, and shop item count
+// Constants for valid shell colors and mood icons
 const SHELL_COLORS = new Set(['orange', 'red', 'green', 'blue', 'pink', 'purple', 'gray', 'yellow']);
 const MOOD_ICONS = new Set(['happy', 'normal', 'sad', 'Happy', 'Normal', 'Sad']);
-const SHOP_ITEM_COUNT = 12;
 
 // Type guard to check if a value is a non-null object (excluding arrays)
 const isRecord = (value: unknown): value is Record<string, unknown> => (
@@ -58,6 +57,10 @@ export const parseChocoboSaveData = (value: unknown): ChocoboSaveData => {
     if (!Array.isArray(alreadyPurchased)) {
         throw new Error('Invalid save field: alreadyPurchased');
     }
+    const purchasedItemNames = alreadyPurchased
+        .filter((item): item is string => typeof item === 'string')
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
 
     const moodIcon = value.currentMoodIcon ?? 'normal';
     if (typeof moodIcon !== 'string' || !MOOD_ICONS.has(moodIcon)) {
@@ -91,9 +94,7 @@ export const parseChocoboSaveData = (value: unknown): ChocoboSaveData => {
         currentEndurance: Math.min(10, Math.max(0, requireNumber(value, 'currentEndurance'))),
         currentMoodIcon: moodIcon.toLowerCase(),
         currentMoney: Math.max(0, requireNumber(value, 'currentMoney')),
-        alreadyPurchased: [...new Set(alreadyPurchased.filter(
-            (item): item is number => Number.isInteger(item) && item >= 0 && item < SHOP_ITEM_COUNT,
-        ))],
+        alreadyPurchased: [...new Set(purchasedItemNames)],
         battlesWon: optionalCounter(value, 'battlesWon'),
         battlesLost: optionalCounter(value, 'battlesLost'),
         racesWon: optionalCounter(value, 'racesWon'),

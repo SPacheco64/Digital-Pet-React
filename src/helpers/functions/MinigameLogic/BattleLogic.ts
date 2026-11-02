@@ -1,5 +1,6 @@
 import React from "react";
 import type { BattleEnemyId, EnemySpecialAttackType } from "../../../types";
+import { SHOP_ITEM_NAMES } from '../../../constants/shopItems';
 
 export interface EnemyInformation {
     id: BattleEnemyId;
@@ -159,7 +160,7 @@ interface EnemyAttackOptions {
     currentHealth: number;
     currentDefense: number;
     enemyInfo: EnemyInformation;
-    alreadyPurchased: number[];
+    alreadyPurchased: string[];
     specialChargeGainMultiplier?: number;
     onComplete: (result: 'defeat' | null, paralyzed: boolean, remainingHealth: number) => void;
 }
@@ -184,8 +185,8 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
         specialChargeGainMultiplier = 1,
         onComplete,
     } = options;
-    const hasDefMateria = alreadyPurchased.includes(10);
-    const hasMoogle = alreadyPurchased.includes(11);
+    const hasDefMateria = alreadyPurchased.includes(SHOP_ITEM_NAMES.defMateria);
+    const hasMoogle = alreadyPurchased.includes(SHOP_ITEM_NAMES.moogle);
     console.log('hasDEFMateria? ', hasDefMateria ? 'yes' : 'no');
     console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     setBattleLocked(true);
@@ -256,7 +257,7 @@ export const attackFunction = (
         currentHappiness: number;
         currentEnemyHealth: number;
         enemyInfo: EnemyInformation;
-        alreadyPurchased: number[];
+        alreadyPurchased: string[];
         onComplete: (result: 'victory' | 'defeat') => void;
         onTurnComplete?: (remainingHealth: number) => boolean;
         setDamageToEnemy: React.Dispatch<React.SetStateAction<number>>;
@@ -288,8 +289,8 @@ export const attackFunction = (
         setDamageToPlayer,
         setSpecialCharge,
     } = options;
-    const hasPowMateria = alreadyPurchased.includes(9);
-    const hasMoogle = alreadyPurchased.includes(11);
+    const hasPowMateria = alreadyPurchased.includes(SHOP_ITEM_NAMES.powMateria);
+    const hasMoogle = alreadyPurchased.includes(SHOP_ITEM_NAMES.moogle);
     console.log('hasPowMateria? ', hasPowMateria ? 'yes' : 'no');
     console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     const firstTurn = turnOrderFunction(currentSpeed, currentHappiness, enemyInfo);
@@ -408,7 +409,7 @@ export const specialFunction = (options: {
     currentHealth: number;
     currentEnemyHealth: number;
     enemyInfo: EnemyInformation;
-    alreadyPurchased: number[];
+    alreadyPurchased: string[];
     onComplete: (result: 'victory' | 'defeat') => void;
 }) => {
     const {
@@ -434,8 +435,8 @@ export const specialFunction = (options: {
         alreadyPurchased,
         onComplete,
     } = options;
-    const hasPowMateria = alreadyPurchased.includes(9);
-    const hasMoogle = alreadyPurchased.includes(11);
+    const hasPowMateria = alreadyPurchased.includes(SHOP_ITEM_NAMES.powMateria);
+    const hasMoogle = alreadyPurchased.includes(SHOP_ITEM_NAMES.moogle);
     console.log('hasPowMateria? ', hasPowMateria ? 'yes' : 'no');
     console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     const criticalHit = Math.random() < ((currentSpeed / 2) / 10);
@@ -507,7 +508,7 @@ export const escapeFunction = (options: {
     currentHealth: number;
     currentDefense: number;
     enemyInfo: EnemyInformation;
-    alreadyPurchased: number[];
+    alreadyPurchased: string[];
     difficultyLevel: number;
     onEscapeSuccess: () => void;
     onComplete: (result: 'victory' | 'defeat') => void;

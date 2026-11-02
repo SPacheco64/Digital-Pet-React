@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Sprite } from 'react-konva';
 import useImage from 'use-image';
 import Konva from 'konva';
+import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
 import attackSheet from '../../graphics/canvas_sprites/attack-spritesheet.png';
 import type { EnemySpecialAttackType } from '../../types';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
@@ -30,7 +31,7 @@ interface AttackAnimationsProps {
     enemySpecial: boolean;
     enemySpecialType: EnemySpecialAttackType;
     isLoading: boolean;
-    alreadyPurchased: number[];
+    alreadyPurchased: string[];
 }
 
 // Define the attack animations from the spritesheet.
@@ -111,7 +112,7 @@ const AttackAnimations: React.FC<AttackAnimationsProps> = ({
     isLoading,
     alreadyPurchased,
 }) => {
-    const hasMoogle = alreadyPurchased.includes(11);
+    const hasMoogle = alreadyPurchased.includes(SHOP_ITEM_NAMES.moogle);
     const attackSpriteRef = useRef<Konva.Sprite>(null);
     const [attackSheetImg] = useImage(attackSheet);
     const specialAnimation = playerSpecial
