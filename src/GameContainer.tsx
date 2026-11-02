@@ -161,7 +161,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       return false;
     }
 
-    const burnDamage = Math.round(Math.min(healthAtTurnEnd / 10, healthAtTurnEnd));
+    const burnDamage = Math.min(healthAtTurnEnd, Math.round(maxHealth * 0.1));
     const remainingHealth = Math.max(healthAtTurnEnd - burnDamage, 0);
     setCurrentHealth(remainingHealth);
     setDamageToPlayer(burnDamage);
