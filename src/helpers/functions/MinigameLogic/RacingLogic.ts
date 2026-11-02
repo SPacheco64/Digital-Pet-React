@@ -408,8 +408,8 @@ export const raceEndFunction = ({
   setCurrentHunger((hunger) => Math.min(100, hunger + getPlayHungerGain()));
   setCurrentEnergy((energy) => Math.max(0, energy - getPlayEnergyCost()));
   setCurrentMoney((money) => money + raceReward);
-  setCurrentSpeed((speed) => speed + speedIncrease);
-  setCurrentEndurance((endurance) => endurance + enduranceIncrease);
+  setCurrentSpeed((speed) =>  Math.min(speed + speedIncrease, 10));
+  setCurrentEndurance((endurance) => Math.min(endurance + enduranceIncrease, 10));
   setRaceEarnedCurrency(raceReward);
   setRaceComplete(true);
 };
