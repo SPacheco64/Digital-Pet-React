@@ -60,7 +60,7 @@ const StatusScreen: React.FC<StatusScreenProps> = (props: StatusScreenProps) => 
                 {
                     // If not currently an Egg, show the chocobo's stats
                     // Maps through stats array to show all values
-                    (currentStatus !== 'Egg') &&
+                    (currentStatus !== 'egg') &&
                     <>
                         {
                             statsArray.map((stat, index) => (

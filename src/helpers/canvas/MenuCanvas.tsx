@@ -61,7 +61,7 @@ const MenuCanvas: React.FC<MenuCanvasProps> = (props: MenuCanvasProps) => {
   }).current;
 
   useEffect(() => {
-    if (currentStatus === 'Egg') {
+    if (currentStatus === 'egg') {
       setAttrToUse(mainAnimationAttrs[0]);
     } else {
       setAttrToUse(mainAnimationAttrs[iconToUse]);

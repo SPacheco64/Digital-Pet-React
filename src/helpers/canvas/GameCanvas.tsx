@@ -38,7 +38,10 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
   // This function changes the Chocobo animation shown briefly
   // on user click of the game screen. Result based on Chocobo's mood.
   const touchReaction = (forceSadReaction = false) => {
-    const isUninteractable = currentStatus === 'training' || currentStatus === 'sleeping' || currentStatus === 'eating';
+    const isUninteractable = currentStatus === 'training'
+      || currentStatus === 'sleeping'
+      || currentStatus === 'eating'
+      || currentStatus === 'egg';
 
     // Prevents bugs where buttons would become enabled when they should be disabled
     // as the user touches the chocobo while it is busy with another action.
@@ -83,7 +86,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
     if (status === 'eating') return mainAnimationAttrs[1];
     if (status === 'training') return mainAnimationAttrs[2];
     if (status === 'sleeping') return mainAnimationAttrs[3];
-    if (status === 'Egg') return mainAnimationAttrs[4];
+    if (status === 'egg') return mainAnimationAttrs[4];
     return mainAnimationAttrs[0];
   };
 

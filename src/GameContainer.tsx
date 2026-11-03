@@ -522,7 +522,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   // Effect to handle the chocobo's status changes and trigger the appropriate 
   // actions.
   useEffect(() => {
-    if (currentStatus === 'Egg') {
+    if (currentStatus === 'egg') {
       setCurrentlyBusy(true);
       return hatchingEvent(currentStatus, setCurrentStatus, setCurrentlyBusy);
     }
@@ -572,7 +572,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
   // Set mood & status based on current happiness level
   useEffect(() => {
-    if (currentStatus !== 'Egg') {
+    if (currentStatus !== 'egg') {
       if (currentHappiness >= 70) {
         setCurrentMoodIcon('happy');
         setCurrentStatus('happy');
@@ -589,7 +589,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   // If no saved data for the user exists, start the chocobo as an Egg.
   useEffect(() => {
     if (hideWelcome && !dataExists) {
-      setCurrentStatus('Egg');
+      setCurrentStatus('egg');
     }
 
     // Following code prevents bug where user reloads page at 0 hp. Ensures that Chocobo is not
