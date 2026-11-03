@@ -51,11 +51,15 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     maxEnergy: number,
     maxHealth: number,
+    alreadyPurchased: string[],
 ) => {
+    // Checks if the Gysahl Greens items has been purchased for eating enhancement
+    const hasGysahlGreens = alreadyPurchased.includes('Gysahl Greens');
+
     const randomHappinessGain = 5 + Math.floor(Math.random() * 11);
-    const randomEnergyGain = 5 + Math.floor(Math.random() * 11);
-    const randomHealthGain = 10 + Math.floor(Math.random() * 6);
-    const hungerReduction = 20 + Math.floor(Math.random() * 10);
+    const randomEnergyGain = 5 + Math.floor(Math.random() * 11) + (hasGysahlGreens ? 5 : 0);
+    const randomHealthGain = 10 + Math.floor(Math.random() * 6) + (hasGysahlGreens ? 5 : 0);
+    const hungerReduction = 20 + Math.floor(Math.random() * 10) + (hasGysahlGreens ? 5 : 0);
     
     const eatingTimer = setTimeout(() => {
         setCurrentStatus('normal');
@@ -82,16 +86,23 @@ export const trainingFunction = (
     setCurrentQuestionType: React.Dispatch<React.SetStateAction<string>>,
     setQuestionWindowOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setCurrentHappiness: React.Dispatch<React.SetStateAction<number>>,
+    alreadyPurchased: string[],
     optionSelected: number,
     onComplete: () => void,
 ) => {
+    // Checks for if training enhancing items have been purchased
+    const hasPOWBand = alreadyPurchased.includes('POW Band');
+    const hasDEFBand = alreadyPurchased.includes('DEF Band');
+    const hasSPDBand = alreadyPurchased.includes('SPD Band');
+    const hasENDBand = alreadyPurchased.includes('END Band');
+
     const randomHungerGain = 15 + Math.floor(Math.random() * 15);
     const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
     const randomEnergyLoss = 25 + Math.floor(Math.random() * 15);
-    const randomPowerGain = Number((0.1 + Math.random() * .7).toFixed(1));
-    const randomDefGain = Number((0.1 + Math.random() * .7).toFixed(1));
-    const randomSpeedGain = Number((0.1 + Math.random() * .7).toFixed(1));
-    const randomEnduranceGain = Number((0.1 + Math.random() * .7).toFixed(1));
+    const randomPowerGain = Number((0.1 + Math.random() * 0.4).toFixed(1)) + (hasPOWBand ? 0.3 : 0);
+    const randomDefGain = Number((0.1 + Math.random() * 0.4).toFixed(1)) + (hasDEFBand ? 0.3 : 0);
+    const randomSpeedGain = Number((0.1 + Math.random() * 0.4).toFixed(1)) + (hasSPDBand ? 0.3 : 0);
+    const randomEnduranceGain = Number((0.1 + Math.random() * 0.4).toFixed(1)) + (hasENDBand ? 0.3 : 0);
     setCurrentStatus('training');
 
     const trainingTimer = setTimeout(() => {
@@ -129,11 +140,16 @@ export const sleepingFunction = (
     setCurrentlyBusy: React.Dispatch<React.SetStateAction<boolean>>,
     maxEnergy: number,
     maxHealth: number,
+    alreadyPurchased: string[],
     ) => {
+    // Checks for if sleep enhancing items are purchased
+    const hasSoftDown = alreadyPurchased.includes('Soft Down');
+    const hasSleepingCap = alreadyPurchased.includes('Sleeping Cap');
+
     const randomHungerGain = 5 + Math.floor(Math.random() * 15);
-    const randomEnergyGain = 40 + Math.floor(Math.random() * 21);
-    const randomHappinessGain = 5 + Math.floor(Math.random() * 11);
-    const randomHealthGain = 30 + Math.floor(Math.random() * 11);
+    const randomEnergyGain = 40 + Math.floor(Math.random() * 21) + (hasSoftDown ? 10 : 0);
+    const randomHappinessGain = 5 + Math.floor(Math.random() * 11) + (hasSoftDown ? 5 : 0);
+    const randomHealthGain = 30 + Math.floor(Math.random() * 11) + (hasSoftDown ? 10 : 0);
 
     const sleepingTimer = setTimeout(() => {
         setCurrentStatus('normal');
@@ -142,7 +158,7 @@ export const sleepingFunction = (
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100));
         setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, maxHealth));
         setCurrentlyBusy(false);
-    }, 60000);
+    }, (hasSleepingCap ? 30000 : 60000));
 
     return () => clearTimeout(sleepingTimer);
 }

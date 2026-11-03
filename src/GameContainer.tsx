@@ -528,12 +528,12 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
     if (currentStatus === 'eating') {
       return eatFunction(setCurrentStatus, setCurrentHunger, setCurrentHappiness, setCurrentEnergy, setCurrentHealth, setCurrentlyBusy,
-        maxEnergy, maxHealth
+        maxEnergy, maxHealth, alreadyPurchased
       );
     }
     if (currentStatus === 'sleeping') {
       return sleepingFunction(setCurrentStatus, setCurrentHunger, setCurrentEnergy, setCurrentHealth, setCurrentHappiness, setCurrentlyBusy,
-        maxEnergy, maxHealth
+        maxEnergy, maxHealth, alreadyPurchased
       );
     }
   }, [currentStatus, maxEnergy, maxHealth]);
@@ -552,7 +552,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     return trainingFunction(setCurrentStatus, setCurrentHunger,
       setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
       setCurrentEndurance, setCurrentlyBusy, setCurrentQuestionType, setQuestionWindowOpen,
-      setCurrentHappiness, optionSelected, () => setOptionSelected(0)
+      setCurrentHappiness, alreadyPurchased,
+      optionSelected, () => setOptionSelected(0)
     );
   }, [currentQuestionType, optionSelected]);
 
