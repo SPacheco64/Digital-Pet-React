@@ -1,3 +1,4 @@
+import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
 import { ChocoboSaveData } from '../../types';
 
 // External UI Functions
@@ -54,7 +55,7 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     alreadyPurchased: string[],
 ) => {
     // Checks if the Gysahl Greens items has been purchased for eating enhancement
-    const hasGysahlGreens = alreadyPurchased.includes('Gysahl Greens');
+    const hasGysahlGreens = alreadyPurchased.includes(SHOP_ITEM_NAMES.gysahlGreens);
 
     const randomHappinessGain = 5 + Math.floor(Math.random() * 11);
     const randomEnergyGain = 5 + Math.floor(Math.random() * 11) + (hasGysahlGreens ? 5 : 0);
@@ -91,10 +92,10 @@ export const trainingFunction = (
     onComplete: () => void,
 ) => {
     // Checks for if training enhancing items have been purchased
-    const hasPOWBand = alreadyPurchased.includes('POW Band');
-    const hasDEFBand = alreadyPurchased.includes('DEF Band');
-    const hasSPDBand = alreadyPurchased.includes('SPD Band');
-    const hasENDBand = alreadyPurchased.includes('END Band');
+    const hasPOWBand = alreadyPurchased.includes(SHOP_ITEM_NAMES.powBand);
+    const hasDEFBand = alreadyPurchased.includes(SHOP_ITEM_NAMES.defBand);
+    const hasSPDBand = alreadyPurchased.includes(SHOP_ITEM_NAMES.spdBand);
+    const hasENDBand = alreadyPurchased.includes(SHOP_ITEM_NAMES.endBand);
 
     const randomHungerGain = 15 + Math.floor(Math.random() * 15);
     const randomHappinessLoss = 5 + Math.floor(Math.random() * 5);
@@ -143,8 +144,8 @@ export const sleepingFunction = (
     alreadyPurchased: string[],
     ) => {
     // Checks for if sleep enhancing items are purchased
-    const hasSoftDown = alreadyPurchased.includes('Soft Down');
-    const hasSleepingCap = alreadyPurchased.includes('Sleeping Cap');
+    const hasSoftDown = alreadyPurchased.includes(SHOP_ITEM_NAMES.softDown);
+    const hasSleepingCap = alreadyPurchased.includes(SHOP_ITEM_NAMES.sleepingCap);
 
     const randomHungerGain = 5 + Math.floor(Math.random() * 15);
     const randomEnergyGain = 40 + Math.floor(Math.random() * 21) + (hasSoftDown ? 10 : 0);
