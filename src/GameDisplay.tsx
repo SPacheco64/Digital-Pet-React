@@ -1,6 +1,7 @@
 import React from 'react';
 import { GameDisplayProps } from './types';
 import '../styles/components/game-display.scss';
+import '../styles/components/loading-screen.scss';
 import MoodDisplay from './MoodDisplay';
 import StatusDisplay from './StatusDisplay';
 import GameCanvas from './helpers/canvas/GameCanvas';
@@ -81,7 +82,14 @@ const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
   }
 
   return (
-    <div id='GameDisplay' className={`${determineTimeClass()} game-screen`}>
+    <div id='GameDisplay' className={`${determineTimeClass()}${currentStatus === 'training' ? ' training-bg' : ''} game-screen`}>
+      {!showMenuScreen && activity === 'pet' && isLoading &&
+        <div className='minigame-loading-screen training-loading-overlay' role='status' aria-live='polite'>
+          <div className='loading-text'>Loading</div>
+          <span className='loader'></span>
+        </div>
+      }
+
       {/* Displayed game content */}
       {
         !showMenuScreen && activity === 'pet' &&

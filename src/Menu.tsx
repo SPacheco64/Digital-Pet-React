@@ -21,6 +21,7 @@ import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
+import { preloadGymBackground } from './helpers/functions/OperationalFunctions';
 
 const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;
@@ -114,9 +115,32 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setActionFailureTrigger(trigger => trigger + 1);
   };
 
+  const startTrainingSelection = async () => {
+    if (actionFailsWhileSad() || actionFailsWhileHungry()) {
+      actionFails();
+      return;
+    }
+
+    setCurrentlyBusy(true);
+    setIsLoading(true);
+    setPlayOpen(false);
+
+    try {
+      await preloadGymBackground();
+      setIsLoading(false);
+      setTrainingOpen(true);
+      setQuestionWindowOpen(true);
+      setCurrentQuestionType('training');
+    } catch (error) {
+      console.error('Failed to preload training background:', error);
+      setIsLoading(false);
+      setCurrentlyBusy(false);
+    }
+  };
+
   const normalButtonList = [
     {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{if (actionFailsWhileSad()) { actionFails(); return; } setCurrentStatus('eating'); setCurrentlyBusy(true);}},
-    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setPlayOpen(false); setTrainingOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('training');}},
+    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: startTrainingSelection},
     {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setTrainingOpen(false); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
     {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
     {buttonName: 'Menu', buttonIcon: menuIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
@@ -231,6 +255,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
           {
             normalButtonList.map((button, index) => (
               <span key={index} className={`normal-button-${index} ${(
+                isLoading ||
                 (currentlyBusy && index < 4) ||
                 !welcomeFormHidden ||
                 (index === 0 && currentHunger === 0) ||

@@ -23,6 +23,15 @@
     &.night-bg {
         background: url('../../src/graphics/backgrounds/pet-bg-night.png');
     }
+    &.training-bg {
+        background: url('../../src/graphics/backgrounds/gym-bg.png') center / cover no-repeat;
+    }
+
+    .training-loading-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+    }
 
     #MoodDisplay {
         position: absolute;
