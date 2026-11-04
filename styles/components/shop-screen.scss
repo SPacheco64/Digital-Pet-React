@@ -95,8 +95,22 @@
                     margin-right: .5rem;
                     background-repeat: no-repeat;
                 }
+                &-image-loading {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
             }
         }
+    }
+
+    .shop-item-loading-spinner {
+        width: 1rem;
+        height: 1rem;
+        border: .125rem solid $white;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        animation: shop-item-icon-rotation 1s linear infinite;
     }
 
     .choco-icon {
@@ -108,6 +122,12 @@
         img {
             height: 2.5rem;
             width: 2.5rem;
+        }
+    }
+
+    @keyframes shop-item-icon-rotation {
+        to {
+            transform: rotate(360deg);
         }
     }
 }

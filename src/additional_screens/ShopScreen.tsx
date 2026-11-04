@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
 import shopItems from '../graphics/icons/shop/shop-items.png';
@@ -21,6 +21,33 @@ const shopIconPositions = [
 ];
 
 const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
+  const [shopItemsLoaded, setShopItemsLoaded] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const image = new Image();
+
+    image.onload = () => {
+      if (isMounted) {
+        setShopItemsLoaded(true);
+      }
+    };
+    image.onerror = () => {
+      console.error(`Failed to load shop item icons: ${shopItems}`);
+    };
+    image.src = shopItems;
+
+    if (image.complete && image.naturalWidth > 0) {
+      setShopItemsLoaded(true);
+    }
+
+    return () => {
+      isMounted = false;
+      image.onload = null;
+      image.onerror = null;
+    };
+  }, []);
+
   // Destructure props for ease of access & documentation
   const {
     currentMoney,
@@ -106,15 +133,21 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                         </div>
 
                         <div className='item-top'>
-                            <span
-                                className='item-image'
-                                role='img'
-                                aria-label={item.label}
-                                style={{
-                                    backgroundImage: `url(${shopItems})`,
-                                    backgroundPosition: `-${spriteX}px -${spriteY}px`,
-                                }}
-                            />
+                            {shopItemsLoaded ? (
+                                <span
+                                    className='item-image'
+                                    role='img'
+                                    aria-label={item.label}
+                                    style={{
+                                        backgroundImage: `url(${shopItems})`,
+                                        backgroundPosition: `-${spriteX}px -${spriteY}px`,
+                                    }}
+                                />
+                            ) : (
+                                <span className='item-image item-image-loading' role='status' aria-label={`Loading ${item.label} icon`}>
+                                    <span className='shop-item-loading-spinner' aria-hidden='true' />
+                                </span>
+                            )}
                             <span className='label'>{item.label}</span>
                         </div>
 
