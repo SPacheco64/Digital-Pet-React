@@ -160,7 +160,7 @@ export const sleepingFunction = (
         setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100));
         setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, maxHealth));
         setCurrentlyBusy(false);
-    }, (hasSleepingCap ? 30000 : 60000));
+    }, (hasSleepingCap ? 20000 : 40000));
 
     return () => clearTimeout(sleepingTimer);
 }
