@@ -53,7 +53,7 @@
             font: inherit;
             text-align: left;
             position: relative;
-            user-select: none;
+            user-select: text;
 
             &:hover {
                 background-color: $hover-black;

@@ -69,6 +69,7 @@
             text-align: right;
 
             button {
+                user-select: none;
                 &:hover {
                     transform: scale(1.1);
                 }
