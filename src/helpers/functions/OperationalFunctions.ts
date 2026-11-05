@@ -1,4 +1,5 @@
-import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
+import { SHOP_ITEM_NAMES } from '../../constants/ShopItems';
+import { VALUE_LIMITS } from '../../constants/ValueLimits';
 import { ChocoboSaveData } from '../../types';
 
 // External UI Functions
@@ -64,8 +65,8 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     
     const eatingTimer = setTimeout(() => {
         setCurrentStatus('normal');
-        setCurrentHunger(prevHunger => Math.max(prevHunger - hungerReduction, 0)); // Decrease hunger, but not below 0
-        setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100)); // Increase happiness by 10, but not above 100
+        setCurrentHunger(prevHunger => Math.max(prevHunger - hungerReduction, VALUE_LIMITS.minHunger)); // Decrease hunger, but not below 0
+        setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, VALUE_LIMITS.maxHappiness)); // Increase happiness by 10, but not above 100
         setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, maxEnergy));
         setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, maxHealth));
         setCurrentlyBusy(false);
@@ -108,18 +109,18 @@ export const trainingFunction = (
 
     const trainingTimer = setTimeout(() => {
         setCurrentStatus('normal');
-        setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
-        setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
-        setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, 0));
-    
+        setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, VALUE_LIMITS.maxHunger));
+        setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, VALUE_LIMITS.minEnergy));
+        setCurrentHappiness(prevHappy => Math.max(prevHappy - randomHappinessLoss, VALUE_LIMITS.minHappiness));
+
         if (optionSelected === 1) {
-            setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), 10));
+            setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), VALUE_LIMITS.maxPow));
         } else if (optionSelected === 2) {
-            setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 10));
+            setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), VALUE_LIMITS.maxDef));
         } else if (optionSelected === 3) {
-            setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), 10));
+            setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), VALUE_LIMITS.maxSpd));
         } else {
-            setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), 10));
+            setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), VALUE_LIMITS.maxEnd));
         }
 
         setCurrentQuestionType('');
@@ -154,9 +155,9 @@ export const sleepingFunction = (
 
     const sleepingTimer = setTimeout(() => {
         setCurrentStatus('normal');
-        setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
+        setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, VALUE_LIMITS.maxHunger));
         setCurrentEnergy(prevEnergy => Math.min(prevEnergy + randomEnergyGain, maxEnergy));
-        setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, 100));
+        setCurrentHappiness(prevHappiness => Math.min(prevHappiness + randomHappinessGain, VALUE_LIMITS.maxHappiness));
         setCurrentHealth(prevHealth => Math.min(prevHealth + randomHealthGain, maxHealth));
         setCurrentlyBusy(false);
     }, (hasSleepingCap ? 20000 : 40000));

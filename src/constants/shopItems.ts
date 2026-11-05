@@ -12,4 +12,4 @@ export const SHOP_ITEM_NAMES = {
     powMateria: 'POW Materia',
     defMateria: 'DEF Materia',
     moogle: 'Moogle',
-} as const;
+};

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
 import shopItems from '../graphics/icons/shop/shop-items.png';
-import { SHOP_ITEM_NAMES } from '../constants/shopItems';
+import { SHOP_ITEM_NAMES } from '../constants/ShopItems';
 import { preloadShopItemsImage } from '../helpers/functions/PreloadAssets';
 
 // Positions of the shop item icons within the sprite sheet

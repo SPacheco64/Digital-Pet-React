@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { VALUE_LIMITS } from '../../../constants/ValueLimits';
 
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
 const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 10);
@@ -177,10 +178,10 @@ export const fishingEndFunction = ({
     () => 7 + Math.floor(Math.random() * 7),
   ).reduce((totalReward, reward) => totalReward + reward, 0);
 
-  setCurrentHappiness((happiness) => Math.min(happiness + happinessChange, 100));
-  setCurrentHunger((hunger) => Math.min(hunger + getPlayHungerGain(), 100));
-  setCurrentEnergy((energy) => Math.max(energy - getPlayEnergyCost(), 0));
-  setCurrentMoney((money) => money + earnedCurrency);
+  setCurrentHappiness((happiness) => Math.min(happiness + happinessChange, VALUE_LIMITS.maxHappiness));
+  setCurrentHunger((hunger) => Math.min(hunger + getPlayHungerGain(), VALUE_LIMITS.maxHunger));
+  setCurrentEnergy((energy) => Math.max(energy - getPlayEnergyCost(), VALUE_LIMITS.minEnergy));
+  setCurrentMoney((money) => Math.min(money + earnedCurrency, VALUE_LIMITS.maxMoney));
   setFishingEarnedCurrency(earnedCurrency);
   setFishingComplete(true);
 };

@@ -19,6 +19,7 @@ import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
 import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
 import { preloadGymBackground } from './helpers/functions/PreloadAssets';
+import { VALUE_LIMITS } from './constants/ValueLimits';
 
 const DEFAULT_BATTLE_MESSAGE = 'What will you do?';
 const BATTLE_MESSAGE_DURATION = 1000;
@@ -163,7 +164,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
 
     const burnDamage = Math.min(healthAtTurnEnd, Math.round(maxHealth * 0.1));
-    const remainingHealth = Math.max(healthAtTurnEnd - burnDamage, 0);
+    const remainingHealth = Math.max(healthAtTurnEnd - burnDamage, VALUE_LIMITS.minHP);
     setCurrentHealth(remainingHealth);
     setDamageToPlayer(burnDamage);
     setBurnDamageActive(true);
@@ -585,8 +586,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     if (previousEnergy.current > 0 && currentEnergy === 0) {
       const happinessLoss = 10 + Math.floor(Math.random() * 20);
       const healthLoss = 10 + Math.floor(Math.random() * 20);
-      setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, 0));
-      setCurrentHealth(prevHealth => Math.max(prevHealth - healthLoss, 0)); 
+      setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, VALUE_LIMITS.minHappiness));
+      setCurrentHealth(prevHealth => Math.max(prevHealth - healthLoss, VALUE_LIMITS.minHP)); 
     }
     previousEnergy.current = currentEnergy;
   }, [currentEnergy]);

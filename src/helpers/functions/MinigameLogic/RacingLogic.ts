@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RaceDifficulty } from '../../../types';
+import { VALUE_LIMITS } from '../../../constants/ValueLimits';
 
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
 const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 10);
@@ -404,12 +405,12 @@ export const raceEndFunction = ({
   const enduranceIncrease = Math.round((0.2 * difficulty / place) * 10) / 10;
 
   if (place === 1) setRacesWon((wins) => wins + 1);
-  setCurrentHappiness((happiness) => Math.min(100, happiness + happinessChange));
-  setCurrentHunger((hunger) => Math.min(100, hunger + getPlayHungerGain()));
-  setCurrentEnergy((energy) => Math.max(0, energy - getPlayEnergyCost()));
-  setCurrentMoney((money) => money + raceReward);
-  setCurrentSpeed((speed) =>  Math.min(speed + speedIncrease, 10));
-  setCurrentEndurance((endurance) => Math.min(endurance + enduranceIncrease, 10));
+  setCurrentHappiness((happiness) => Math.min(VALUE_LIMITS.maxHappiness, happiness + happinessChange));
+  setCurrentHunger((hunger) => Math.min(VALUE_LIMITS.maxHunger, hunger + getPlayHungerGain()));
+  setCurrentEnergy((energy) => Math.max(VALUE_LIMITS.minEnergy, energy - getPlayEnergyCost()));
+  setCurrentMoney((money) => Math.min(VALUE_LIMITS.maxMoney, money + raceReward));
+  setCurrentSpeed((speed) =>  Math.min(speed + speedIncrease, VALUE_LIMITS.maxSpd));
+  setCurrentEndurance((endurance) => Math.min(VALUE_LIMITS.maxEnd, endurance + enduranceIncrease));
   setRaceEarnedCurrency(raceReward);
   setRaceComplete(true);
 };

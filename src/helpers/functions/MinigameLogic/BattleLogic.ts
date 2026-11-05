@@ -1,6 +1,7 @@
 import React from "react";
-import type { BattleEnemyId, EnemySpecialAttackType } from "../../../types";
-import { SHOP_ITEM_NAMES } from '../../../constants/shopItems';
+import type { BattleEnemyId, EnemySpecialAttackType } from '../../../types';
+import { SHOP_ITEM_NAMES } from '../../../constants/ShopItems';
+import { VALUE_LIMITS } from '../../../constants/ValueLimits';
 
 export interface EnemyInformation {
     id: BattleEnemyId;
@@ -560,9 +561,9 @@ export const escapeFunction = (options: {
         window.setTimeout(() => {
             setPlayerRunning(false);
             setBattleLocked(false);
-            setCurrentHunger((prevHunger: number) => Math.min(prevHunger + randomHungerGain, 100));
-            setCurrentHappiness((prevHappy: number) => Math.max(prevHappy - randomHappinessLoss, 0));
-            setCurrentEnergy((prevEnergy: number) => Math.max(prevEnergy - randomEnergyLoss, 0));
+            setCurrentHunger((prevHunger: number) => Math.min(prevHunger + randomHungerGain, VALUE_LIMITS.maxHunger));
+            setCurrentHappiness((prevHappy: number) => Math.max(prevHappy - randomHappinessLoss, VALUE_LIMITS.minHappiness));
+            setCurrentEnergy((prevEnergy: number) => Math.max(prevEnergy - randomEnergyLoss, VALUE_LIMITS.minEnergy));
             onEscapeSuccess();
         }, 800);
         return;
@@ -639,8 +640,8 @@ export const battleEndFunction = (
     const randomMoneyGain = (10*difficultyLevel) + Math.floor(Math.random() * (10*difficultyLevel));
     const randomMoneyLoss = (5*difficultyLevel) + Math.floor(Math.random() * (10*difficultyLevel));
 
-    setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, 100));
-    setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, 0));
+    setCurrentHunger(prevHunger => Math.min(prevHunger + randomHungerGain, VALUE_LIMITS.maxHunger));
+    setCurrentEnergy(prevEnergy => Math.max(prevEnergy - randomEnergyLoss, VALUE_LIMITS.minEnergy));
 
     if (victory) {
         console.log('Max HP gain: ', hpGain);
@@ -648,21 +649,21 @@ export const battleEndFunction = (
         console.log('Money gain: ', randomMoneyGain);
         console.log('Stat Gains [POW, DEF, SPD, END]: ', randomPowerGain, randomDefGain, randomSpeedGain, randomEnduranceGain);
         
-        setCurrentHappiness(prevHappy => Math.min(prevHappy + randomHappinessChange, 100));
-        setMaxHealth(prevMaxHealth => Math.min(prevMaxHealth + hpGain, 200));
-        setMaxEnergy(prevMaxEnergy => Math.min(prevMaxEnergy + energyGain, 200));
-        setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), 10));
-        setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), 10));
-        setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), 10));
-        setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), 10));
-        setCurrentMoney(prevMoney => prevMoney + randomMoneyGain);
+        setCurrentHappiness(prevHappy => Math.min(prevHappy + randomHappinessChange, VALUE_LIMITS.maxHappiness));
+        setMaxHealth(prevMaxHealth => Math.min(prevMaxHealth + hpGain, VALUE_LIMITS.maxHP));
+        setMaxEnergy(prevMaxEnergy => Math.min(prevMaxEnergy + energyGain, VALUE_LIMITS.maxEnergy));
+        setCurrentPower(prevStr => Math.min(Number((prevStr + randomPowerGain).toFixed(1)), VALUE_LIMITS.maxPow));
+        setCurrentDefense(prevDef => Math.min(Number((prevDef + randomDefGain).toFixed(1)), VALUE_LIMITS.maxDef));
+        setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), VALUE_LIMITS.maxSpd));
+        setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), VALUE_LIMITS.maxEnd));
+        setCurrentMoney(prevMoney => Math.min(prevMoney + randomMoneyGain, VALUE_LIMITS.maxMoney));
         setTotalBattlesWon(prevWins => prevWins + 1);
 
         const victoryMessage = `Victory! You and ${chocoboName} earned ${randomMoneyGain}G.`;
         setBattleMessage(victoryMessage);
     } else {
-        setCurrentHappiness(prevHappy => Math.max(prevHappy - (difficultyLevel * 5), 0));
-        setCurrentMoney(prevMoney => Math.max(prevMoney - randomMoneyLoss, 0));
+        setCurrentHappiness(prevHappy => Math.max(prevHappy - (difficultyLevel * 5), VALUE_LIMITS.minHappiness));
+        setCurrentMoney(prevMoney => Math.max(prevMoney - randomMoneyLoss, VALUE_LIMITS.minMoney));
         setBattlesLost(prevLosses => prevLosses + 1);
 
         const defeatMessage = `${chocoboName} has lost... ${randomMoneyLoss}G was stolen.`;

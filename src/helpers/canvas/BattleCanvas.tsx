@@ -9,7 +9,7 @@ import BattleLoader from '../components/BattleLoader';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import Konva from 'konva';
 import AttackAnimations, { type AnimAttr } from './AttackAnimations';
-import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
+import { SHOP_ITEM_NAMES } from '../../constants/ShopItems';
 
 const BattleCanvas: React.FC<BattleCanvasProps> = (props: BattleCanvasProps) => {
     // Destructure props for ease of access & documentation

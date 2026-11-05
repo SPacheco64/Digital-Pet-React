@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Sprite } from 'react-konva';
 import useImage from 'use-image';
 import Konva from 'konva';
-import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
+import { SHOP_ITEM_NAMES } from '../../constants/ShopItems';
 import attackSheet from '../../graphics/canvas_sprites/attack-spritesheet.png';
 import type { EnemySpecialAttackType } from '../../types';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
