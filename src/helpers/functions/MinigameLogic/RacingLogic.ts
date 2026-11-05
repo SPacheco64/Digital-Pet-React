@@ -404,7 +404,7 @@ export const raceEndFunction = ({
   const speedIncrease = Math.round((0.2 * difficulty / place) * 10) / 10;
   const enduranceIncrease = Math.round((0.2 * difficulty / place) * 10) / 10;
 
-  if (place === 1) setRacesWon((wins) => wins + 1);
+  if (place === 1) setRacesWon((wins) => Math.min(wins + 1, VALUE_LIMITS.maxRacesWon));
   setCurrentHappiness((happiness) => Math.min(VALUE_LIMITS.maxHappiness, happiness + happinessChange));
   setCurrentHunger((hunger) => Math.min(VALUE_LIMITS.maxHunger, hunger + getPlayHungerGain()));
   setCurrentEnergy((energy) => Math.max(VALUE_LIMITS.minEnergy, energy - getPlayEnergyCost()));

@@ -657,7 +657,7 @@ export const battleEndFunction = (
         setCurrentSpeed(prevSpd => Math.min(Number((prevSpd + randomSpeedGain).toFixed(1)), VALUE_LIMITS.maxSpd));
         setCurrentEndurance(prevEnd => Math.min(Number((prevEnd + randomEnduranceGain).toFixed(1)), VALUE_LIMITS.maxEnd));
         setCurrentMoney(prevMoney => Math.min(prevMoney + randomMoneyGain, VALUE_LIMITS.maxMoney));
-        setTotalBattlesWon(prevWins => prevWins + 1);
+        setTotalBattlesWon(prevWins => Math.min(prevWins + 1, VALUE_LIMITS.maxBattlesWon));
 
         const victoryMessage = `Victory! You and ${chocoboName} earned ${randomMoneyGain}G.`;
         setBattleMessage(victoryMessage);

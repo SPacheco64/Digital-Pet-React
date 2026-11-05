@@ -9,6 +9,8 @@ export const VALUE_LIMITS = {
     maxDef: 10,
     maxSpd: 10,
     maxEnd: 10,
+    maxBattlesWon: 9999,
+    maxRacesWon: 9999,
 
     // Min Vals / Val Floors:
     minHP: 0,
