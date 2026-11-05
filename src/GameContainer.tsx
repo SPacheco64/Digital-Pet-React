@@ -596,7 +596,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
       const happinessLoss = 10 + Math.floor(Math.random() * 20);
       const healthLoss = 10 + Math.floor(Math.random() * 20);
       setCurrentHappiness(prevHappiness => Math.max(prevHappiness - happinessLoss, VALUE_LIMITS.minHappiness));
-      setCurrentHealth(prevHealth => Math.max(prevHealth - healthLoss, VALUE_LIMITS.minHP)); 
+      setCurrentHealth(prevHealth => prevHealth <= VALUE_LIMITS.minHP
+        ? VALUE_LIMITS.minHP
+        : Math.max(prevHealth - healthLoss, VALUE_LIMITS.minHP + 1));
     }
     previousEnergy.current = currentEnergy;
   }, [currentEnergy]);
