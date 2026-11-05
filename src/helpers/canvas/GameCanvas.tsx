@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Stage, Layer, Sprite} from 'react-konva';
 import type Konva from 'konva';
 import useImage from 'use-image';
-import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
+import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
 import { GameCanvasProps } from '../../types';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import '../../../styles/components/game-canvas.scss';

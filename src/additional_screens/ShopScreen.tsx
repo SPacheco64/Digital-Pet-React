@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
-import shopItems from '../graphics/icons/shop/shop-items.png';
+import shopItems from '../graphics/icons/shop/shop-items.webp';
 import { SHOP_ITEM_NAMES } from '../constants/ShopItems';
 import { preloadShopItemsImage } from '../helpers/functions/PreloadAssets';
 

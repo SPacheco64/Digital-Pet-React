@@ -15,16 +15,16 @@
 
     // Determines which game bg to show based on time of day
     &.day-bg {
-        background: url('../../src/graphics/backgrounds/pet-bg-day.png');
+        background: url('../../src/graphics/backgrounds/pet-bg-day.webp');
     }
     &.evening-bg {
-        background: url('../../src/graphics/backgrounds/pet-bg-evening.png');
+        background: url('../../src/graphics/backgrounds/pet-bg-evening.webp');
     }
     &.night-bg {
-        background: url('../../src/graphics/backgrounds/pet-bg-night.png');
+        background: url('../../src/graphics/backgrounds/pet-bg-night.webp');
     }
     &.training-bg {
-        background: url('../../src/graphics/backgrounds/gym-bg.png') center / cover no-repeat;
+        background: url('../../src/graphics/backgrounds/gym-bg.webp') center / cover no-repeat;
     }
 
     .training-loading-overlay {

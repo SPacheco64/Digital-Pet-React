@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import '../../../styles/components/loading-screen.scss';
-import chocoboSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
-import racingRoad from '../../graphics/backgrounds/racing-track-bg.png';
-import racingRock from '../../graphics/minigame_assets/racing/rock.png';
-import loadingBackground from '../../graphics/backgrounds/status-window-bg.png';
+import chocoboSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
+import racingRoad from '../../graphics/backgrounds/racing-track-bg.webp';
+import racingRock from '../../graphics/minigame_assets/racing/rock.webp';
+import loadingBackground from '../../graphics/backgrounds/status-window-bg.webp';
 
 interface RacingLoaderProps {
   isLoading: boolean;

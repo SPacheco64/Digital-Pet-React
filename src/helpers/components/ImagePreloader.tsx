@@ -5,11 +5,11 @@ interface ImagePreloaderProps {
   children: ReactNode;
 }
 
-import statusBg from '../../graphics/backgrounds/status-window-bg.png';
-import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
-import dayBg from '../../graphics/backgrounds/pet-bg-day.png';
-import eveningBg from '../../graphics/backgrounds/pet-bg-evening.png';
-import nightBg from '../../graphics/backgrounds/pet-bg-night.png';
+import statusBg from '../../graphics/backgrounds/status-window-bg.webp';
+import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
+import dayBg from '../../graphics/backgrounds/pet-bg-day.webp';
+import eveningBg from '../../graphics/backgrounds/pet-bg-evening.webp';
+import nightBg from '../../graphics/backgrounds/pet-bg-night.webp';
 
 // Only preloads the background image that corresponds with the current time of day.
 const determineBg = (hour: number) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../../styles/components/question-window.scss';
-import chocoIcon from '../../graphics/creature_sprites/small_choco/choco-looking-away.png'
+import chocoIcon from '../../graphics/creature_sprites/small_choco/choco-looking-away.webp'
 import MenuCanvas from '../canvas/MenuCanvas';
 
 interface QuestionWindowProps {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../../styles/components/racing-minigame.scss';
-import chocoboSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
+import chocoboSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
 import chocoboIcon from '../../graphics/icons/misc-icons/chocobo.svg';
 import RacingLoader from './RacingLoader';
 import { RaceDifficulty } from '../../types';

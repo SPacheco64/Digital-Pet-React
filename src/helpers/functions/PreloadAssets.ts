@@ -1,5 +1,5 @@
-import shopItems from '../../graphics/icons/shop/shop-items.png';
-import gymBackground from '../../graphics/backgrounds/gym-bg.png';
+import shopItems from '../../graphics/icons/shop/shop-items.webp';
+import gymBackground from '../../graphics/backgrounds/gym-bg.webp';
 
 let shopItemsImagePromise: Promise<void> | null = null;
 let gymBackgroundImagePromise: Promise<void> | null = null;

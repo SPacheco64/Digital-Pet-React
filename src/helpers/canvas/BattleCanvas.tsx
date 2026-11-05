@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Layer, Sprite, Stage } from 'react-konva';
 import useImage from 'use-image';
-import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
-import enemySheet from '../../graphics/canvas_sprites/enemy-spritesheet.png';
+import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
+import enemySheet from '../../graphics/canvas_sprites/enemy-spritesheet.webp';
 import type { BattleCanvasProps, BattleEnemyId } from '../../types';
 import '../../../styles/components/battle-canvas.scss';
 import BattleLoader from '../components/BattleLoader';

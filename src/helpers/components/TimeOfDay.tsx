@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { TimeOfDayProps } from '../../types';
-import daySymbol from '../../graphics/time_of_day/sun.png'
-import eveningSymbol from '../../graphics/time_of_day/sun-cloud.png'
-import nightSymbol from '../../graphics/time_of_day/moon.png'
+import daySymbol from '../../graphics/time_of_day/sun.webp'
+import eveningSymbol from '../../graphics/time_of_day/sun-cloud.webp'
+import nightSymbol from '../../graphics/time_of_day/moon.webp'
 
 const TimeOfDay: React.FC<TimeOfDayProps> = (props: TimeOfDayProps) => {
     const {

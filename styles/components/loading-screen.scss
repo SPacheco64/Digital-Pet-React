@@ -31,7 +31,7 @@
 #BattleMinigame {
     .loading-screen {
         background-color: $menu-screen-bg;
-        background: url(../../src/graphics/backgrounds/status-window-bg.png);
+        background: url(../../src/graphics/backgrounds/status-window-bg.webp);
         background-size: contain;
         border-radius: .75rem;
         z-index: 5;
@@ -40,7 +40,7 @@
 
 .minigame-loading-screen {
     background-color: $menu-screen-bg;
-    background: url(../../src/graphics/backgrounds/status-window-bg.png);
+    background: url(../../src/graphics/backgrounds/status-window-bg.webp);
     background-size: contain;
     z-index: 1;
 }

@@ -3,8 +3,8 @@ import { preload } from 'react-dom';
 import '../../../styles/components/loading-screen.scss';
 
 // Import for images to preload
-import enemySprites from '../../graphics/canvas_sprites/enemy-spritesheet.png';
-import attackSprites from '../../graphics/canvas_sprites/attack-spritesheet.png';
+import enemySprites from '../../graphics/canvas_sprites/enemy-spritesheet.webp';
+import attackSprites from '../../graphics/canvas_sprites/attack-spritesheet.webp';
 
 interface BattleLoaderProps {
   children: ReactNode;
