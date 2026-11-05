@@ -6,6 +6,7 @@ import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
 import { GameCanvasProps } from '../../types';
 import { useSpriteAnimation } from '../functions/useSpriteAnimation';
 import '../../../styles/components/game-canvas.scss';
+import { useAudioPlayer } from '../functions/AudioPlayer';
 
 type AnimAttr = {
   x: number;
@@ -42,6 +43,8 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
       || currentStatus === 'sleeping'
       || currentStatus === 'eating'
       || currentStatus === 'egg';
+
+    forceSadReaction ? useAudioPlayer('error') : useAudioPlayer('touch');
 
     // Prevents bugs where buttons would become enabled when they should be disabled
     // as the user touches the chocobo while it is busy with another action.

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ColorPickerProps } from '../../types';
 import colorPickerIcon from '../../graphics/icons/external_ui/color-picker.svg';
+import { useAudioPlayer } from '../functions/AudioPlayer';
 
 const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   // Destructure props for ease of access & documentation
@@ -23,7 +24,10 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
 
   return (
     <div id='ColorPicker'>
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className='options-btn'>
+        <button onClick={() => {
+            useAudioPlayer('select');
+            setIsMenuOpen(!isMenuOpen);
+        }} className='options-btn'>
             <div className='color-menu-icon'>
                 <img className={isMenuOpen ? 'open' : 'closed'} src={colorPickerIcon} alt='open options menu' />
             </div>
@@ -34,7 +38,10 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
             <div className='color-selection'>
                 {
                     colorArray.map((color, index) => (
-                        <button key={index} onClick={() => setCurrentShellColor(color.colorName)}>
+                        <button key={index} onClick={() => {
+                            useAudioPlayer('touch');
+                            setCurrentShellColor(color.colorName);
+                        }}>
                             <span className={`color-circle ${color.colorName}`} style={{backgroundColor: color.circleColor}}>{color.colorName}</span>
                         </button>
                     ))

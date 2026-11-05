@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RaceDifficulty } from '../../../types';
 import { VALUE_LIMITS } from '../../../constants/ValueLimits';
+import { useAudioPlayer } from '../AudioPlayer';
 
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
 const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 10);
@@ -168,8 +169,12 @@ export const useRacingLogic = ({
 
   // Handles the countdown timer before the race starts
   useEffect(() => {
-    if (countdown === null) return;
+    if (countdown === null) {
+      useAudioPlayer('go');
+      return;
+    }
     const countdownTimer = window.setTimeout(() => {
+      useAudioPlayer('count');
       setCountdown(countdown === 1 ? null : countdown - 1);
     }, 1000);
     return () => window.clearTimeout(countdownTimer);
@@ -303,6 +308,7 @@ export const useRacingLogic = ({
           && Math.abs(obstacle.progress - race.playerProgress) < 15) {
           race.hitObstacles.add(index);
           race.collisionCount += 1;
+          useAudioPlayer('bump');
           race.slowdownUntil = time + 1100;
         }
       });
@@ -404,7 +410,12 @@ export const raceEndFunction = ({
   const speedIncrease = Math.round((0.2 * difficulty / place) * 10) / 10;
   const enduranceIncrease = Math.round((0.2 * difficulty / place) * 10) / 10;
 
-  if (place === 1) setRacesWon((wins) => Math.min(wins + 1, VALUE_LIMITS.maxRacesWon));
+  if (place === 1) {
+    useAudioPlayer('win-race');
+    setRacesWon((wins) => Math.min(wins + 1, VALUE_LIMITS.maxRacesWon));
+  } else {
+    useAudioPlayer('lose-race');
+  }
   setCurrentHappiness((happiness) => Math.min(VALUE_LIMITS.maxHappiness, happiness + happinessChange));
   setCurrentHunger((hunger) => Math.min(VALUE_LIMITS.maxHunger, hunger + getPlayHungerGain()));
   setCurrentEnergy((energy) => Math.max(VALUE_LIMITS.minEnergy, energy - getPlayEnergyCost()));

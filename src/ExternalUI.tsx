@@ -11,6 +11,8 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
         setCurrentShellColor,
         retroMode,
         setRetroMode,
+        isMuted,
+        setIsMuted,
         currentTime,
         setCurrentTime,
         onSave,
@@ -25,7 +27,8 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
         <ColorPicker setCurrentShellColor={setCurrentShellColor} />
         <OptionsMenu onSave={onSave} onReset={onReset}
           autosaveEnabled={autosaveEnabled} setAutosaveEnabled={setAutosaveEnabled}
-          retroMode={retroMode} setRetroMode={setRetroMode} />
+          retroMode={retroMode} setRetroMode={setRetroMode}
+          isMuted={isMuted} setIsMuted={setIsMuted} />
         <TimeOfDay currentTime={currentTime} setCurrentTime={setCurrentTime} />
       </div>
     </div>

@@ -3,7 +3,7 @@ import { GameActivity, GameContainerProps, RaceDifficulty } from './types';
 import GameDisplay from './GameDisplay';
 import Menu from './Menu';
 import '../styles/components/game-container.scss';
-import ImagePreloader from './helpers/components/ImagePreloader';
+import StartupPreloader from './helpers/components/StartupPreloader';
 import ExternalUI from './ExternalUI';
 import { eatFunction, hatchingEvent, saveFunction, trainingFunction, sleepingFunction } from './helpers/functions/OperationalFunctions';
 import QuestionWindow from './helpers/components/QuestionWindow';
@@ -19,6 +19,7 @@ import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
 import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
 import { preloadGymBackground } from './helpers/functions/PreloadAssets';
+import { setAudioMuted } from './helpers/functions/AudioPlayer';
 import { VALUE_LIMITS } from './constants/ValueLimits';
 
 const DEFAULT_BATTLE_MESSAGE = 'What will you do?';
@@ -45,6 +46,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [retroMode, setRetroMode] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
   const [questionWindowOpen, setQuestionWindowOpen] = useState<boolean>(false);
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
@@ -89,11 +91,16 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
 
+  useEffect(() => {
+    setAudioMuted(isMuted);
+  }, [isMuted]);
+
   const saveData = createSaveData({
     playerName,
     chocoboName,
     currentShellColor,
     retroMode,
+    isMuted,
     currentHealth,
     maxHealth,
     currentEnergy,
@@ -434,6 +441,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setChocoboName(data.chocoboName);
         setCurrentShellColor(data.currentShellColor);
         setRetroMode(data.retroMode);
+        setIsMuted(data.isMuted);
         setCurrentHealth(data.currentHealth);
         setMaxHealth(data.maxHealth);
         setCurrentEnergy(data.currentEnergy);
@@ -509,6 +517,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     currentStatus,
     currentHunger,
     hideWelcome,
+    isMuted,
     maxEnergy,
     maxHealth,
     playerName,
@@ -623,9 +632,10 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   }, [hideWelcome, dataExists]);
 
   return (
-    <ImagePreloader>
+    <StartupPreloader>
       <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor}
-        retroMode={retroMode} setRetroMode={setRetroMode} setCurrentTime={setCurrentTime}
+        retroMode={retroMode} setRetroMode={setRetroMode} isMuted={isMuted} 
+        setIsMuted={setIsMuted} setCurrentTime={setCurrentTime}
         onSave={() => handleSave({ saveData, storageHydrated, storageReadFailed, saveRecoveryRequired, setSaveError })}
         onReset={() => handleReset(setSaveError)} autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled} />
@@ -827,7 +837,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         </div>
 
       </div>
-    </ImagePreloader>
+    </StartupPreloader>
   );
 };
 

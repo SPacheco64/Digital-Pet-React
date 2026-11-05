@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { VALUE_LIMITS } from '../../../constants/ValueLimits';
+import { useAudioPlayer } from '../AudioPlayer';
 
 const getPlayEnergyCost = () => 10 + Math.floor(Math.random() * 10);
 const getPlayHungerGain = () => 5 + Math.floor(Math.random() * 10);
@@ -61,6 +62,9 @@ export const useFishingLogic = ({
       const targetLeft = (100 - targetWidth) / 2;
       const targetRight = targetLeft + targetWidth;
       const lureCenter = lurePosition + LURE_WIDTH / 2;
+      const isCaught = lureCenter >= targetLeft && lureCenter <= targetRight;
+      isCaught ? useAudioPlayer('catch') : useAudioPlayer('miss');
+      setGameState(isCaught ? 'caught' : 'missed');
       setGameState(lureCenter >= targetLeft && lureCenter <= targetRight ? 'caught' : 'missed');
     } else if (gameState === 'caught' || gameState === 'missed') {
       const nextAttemptCount = attemptCount + 1;

@@ -2,6 +2,7 @@ import React from "react";
 import type { BattleEnemyId, EnemySpecialAttackType } from '../../../types';
 import { SHOP_ITEM_NAMES } from '../../../constants/ShopItems';
 import { VALUE_LIMITS } from '../../../constants/ValueLimits';
+import { useAudioPlayer } from "../AudioPlayer";
 
 export interface EnemyInformation {
     id: BattleEnemyId;
@@ -192,6 +193,7 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
     console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     setBattleLocked(true);
     const usesSpecial = Math.random() < enemyInfo.difficultyLevel * 0.07;
+    usesSpecial ? useAudioPlayer(enemyInfo.specialAttack) : useAudioPlayer('attack');
     const specialType = usesSpecial ? enemyInfo.specialAttack : null;
     const criticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
     const baseDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
@@ -316,6 +318,7 @@ export const attackFunction = (
             * (hasMoogle ? 1.1 : 1),
         );
         
+        useAudioPlayer('attack');
         setDamageToEnemy(finalDamage);
         const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
         enemyDefeated = remainingEnemyHealth === 0;
@@ -450,6 +453,7 @@ export const specialFunction = (options: {
         * (hasMoogle ? 1.1 : 1),
     );
     const remainingEnemyHealth = Math.max(currentEnemyHealth - finalDamage, 0);
+    useAudioPlayer('power');
 
     setPlayerSpecial(true);
     setDamageToEnemy(finalDamage);
@@ -540,6 +544,7 @@ export const escapeFunction = (options: {
         onComplete,
         onTurnComplete,
     } = options;
+    useAudioPlayer('run');
 
     // Randomly generate hunger, happiness loss, and energy changes based on difficulty level.
     // These apply on a successful escape.
@@ -569,7 +574,7 @@ export const escapeFunction = (options: {
         }, 800);
         return;
     }
-
+    
     // On failed escape, display a failure message and trigger the enemy's 
     // counterattack after a short delay.
     setBattleMessage('Escape failed! The enemy attacks!');
@@ -650,6 +655,7 @@ export const battleEndFunction = (
         console.log('Money gain: ', randomMoneyGain);
         console.log('Stat Gains [POW, DEF, SPD, END]: ', randomPowerGain, randomDefGain, randomSpeedGain, randomEnduranceGain);
         
+        useAudioPlayer('win');
         setCurrentHappiness(prevHappy => Math.min(prevHappy + randomHappinessChange, VALUE_LIMITS.maxHappiness));
         setMaxHealth(prevMaxHealth => Math.min(prevMaxHealth + hpGain, VALUE_LIMITS.maxHP));
         setMaxEnergy(prevMaxEnergy => Math.min(prevMaxEnergy + energyGain, VALUE_LIMITS.maxEnergy));
@@ -663,6 +669,7 @@ export const battleEndFunction = (
         const victoryMessage = `Victory! You and ${chocoboName} earned ${randomMoneyGain}G.`;
         setBattleMessage(victoryMessage);
     } else {
+        useAudioPlayer('lose');
         setCurrentHappiness(prevHappy => Math.max(prevHappy - (difficultyLevel * 5), VALUE_LIMITS.minHappiness));
         setCurrentMoney(prevMoney => Math.max(prevMoney - randomMoneyLoss, VALUE_LIMITS.minMoney));
         setBattlesLost(prevLosses => prevLosses + 1);

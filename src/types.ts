@@ -7,6 +7,7 @@ export interface ChocoboSaveData {
     chocoboName: string;
     currentShellColor: string;
     retroMode: boolean;
+    isMuted: boolean;
     currentHealth: number;
     maxHealth: number;
     currentEnergy: number;
@@ -226,6 +227,8 @@ export interface OptionsMenuProps {
     setAutosaveEnabled: React.Dispatch<React.SetStateAction<boolean>>;
     retroMode: boolean;
     setRetroMode: React.Dispatch<React.SetStateAction<boolean>>;
+    isMuted: boolean;
+    setIsMuted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ColorPickerProps {
@@ -241,6 +244,8 @@ export interface ExternalUIProps {
     setCurrentShellColor: React.Dispatch<React.SetStateAction<string>>;
     retroMode: boolean;
     setRetroMode: React.Dispatch<React.SetStateAction<boolean>>;
+    isMuted: boolean;
+    setIsMuted: React.Dispatch<React.SetStateAction<boolean>>;
     currentTime: string;
     setCurrentTime: React.Dispatch<React.SetStateAction<string>>;
     onSave: () => void;

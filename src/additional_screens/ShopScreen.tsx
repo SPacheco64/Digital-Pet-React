@@ -4,6 +4,7 @@ import '../../styles/components/shop-screen.scss';
 import shopItems from '../graphics/icons/shop/shop-items.webp';
 import { SHOP_ITEM_NAMES } from '../constants/ShopItems';
 import { preloadShopItemsImage } from '../helpers/functions/PreloadAssets';
+import { useAudioPlayer } from '../helpers/functions/AudioPlayer';
 
 // Positions of the shop item icons within the sprite sheet
 const shopIconPositions = [
@@ -62,12 +63,13 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   // and adds the item to their list of purchased items.
   const purchaseHandler = (itemName: string, cost: number) => {
     if (cost <= currentMoney) {
+        useAudioPlayer('get');
         setCurrentMoney(prevMoney => (prevMoney - cost));
         setAlreadyPurchased(purchased => (
             purchased.includes(itemName) ? purchased : [...purchased, itemName]
         ));
     } else {
-        // Play sound effect for failure to purchase
+        useAudioPlayer('error');
     }
   }
 
@@ -111,10 +113,16 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
                         disabled={isAlreadyPurchased && !item.repeatable}
                         onClick={() => {
                             if (item.effect === 'health') {
-                                if (currentHealth === maxHealth || currentMoney < item.cost) return;
+                                if (currentHealth === maxHealth || currentMoney < item.cost) {
+                                    useAudioPlayer('error');
+                                    return;
+                                }
                                 setCurrentHealth(maxHealth);
                             } else if (item.effect === 'energy') {
-                                if (currentEnergy === maxEnergy || currentMoney < item.cost) return;
+                                if (currentEnergy === maxEnergy || currentMoney < item.cost) {
+                                    useAudioPlayer('error');
+                                    return;
+                                }
                                 setCurrentEnergy(maxEnergy);
                             }
 

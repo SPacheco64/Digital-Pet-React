@@ -1,6 +1,7 @@
 import { SHOP_ITEM_NAMES } from '../../constants/ShopItems';
 import { VALUE_LIMITS } from '../../constants/ValueLimits';
 import { ChocoboSaveData } from '../../types';
+import { useAudioPlayer } from './AudioPlayer';
 
 // External UI Functions
 export const saveFunction = (saveData: ChocoboSaveData) => {
@@ -63,6 +64,8 @@ export const eatFunction = (setCurrentStatus: React.Dispatch<React.SetStateActio
     const randomHealthGain = 10 + Math.floor(Math.random() * 6) + (hasGysahlGreens ? 5 : 0);
     const hungerReduction = 20 + Math.floor(Math.random() * 10) + (hasGysahlGreens ? 5 : 0);
     
+    useAudioPlayer('eat');
+
     const eatingTimer = setTimeout(() => {
         setCurrentStatus('normal');
         setCurrentHunger(prevHunger => Math.max(prevHunger - hungerReduction, VALUE_LIMITS.minHunger)); // Decrease hunger, but not below 0
@@ -106,6 +109,7 @@ export const trainingFunction = (
     const randomSpeedGain = Number((0.1 + Math.random() * 0.4).toFixed(1)) + (hasSPDBand ? 0.3 : 0);
     const randomEnduranceGain = Number((0.1 + Math.random() * 0.4).toFixed(1)) + (hasENDBand ? 0.3 : 0);
     setCurrentStatus('training');
+    useAudioPlayer('train');
 
     const trainingTimer = setTimeout(() => {
         setCurrentStatus('normal');
@@ -152,6 +156,8 @@ export const sleepingFunction = (
     const randomEnergyGain = 40 + Math.floor(Math.random() * 21) + (hasSoftDown ? 10 : 0);
     const randomHappinessGain = 5 + Math.floor(Math.random() * 11) + (hasSoftDown ? 5 : 0);
     const randomHealthGain = 30 + Math.floor(Math.random() * 11) + (hasSoftDown ? 10 : 0);
+
+    useAudioPlayer('sleep');
 
     const sleepingTimer = setTimeout(() => {
         setCurrentStatus('normal');

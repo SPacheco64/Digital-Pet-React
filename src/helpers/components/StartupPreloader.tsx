@@ -1,15 +1,15 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import '../../../styles/components/loading-screen.scss';
-
-interface ImagePreloaderProps {
-  children: ReactNode;
-}
-
 import statusBg from '../../graphics/backgrounds/status-window-bg.webp';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.webp';
 import dayBg from '../../graphics/backgrounds/pet-bg-day.webp';
 import eveningBg from '../../graphics/backgrounds/pet-bg-evening.webp';
 import nightBg from '../../graphics/backgrounds/pet-bg-night.webp';
+import { preloadAudio } from '../functions/AudioPlayer';
+
+interface StartupPreloaderProps {
+  children: ReactNode;
+}
 
 // Only preloads the background image that corresponds with the current time of day.
 const determineBg = (hour: number) => {
@@ -41,7 +41,7 @@ const loadImage = (imagePath: string) => new Promise<void>((resolve, reject) => 
 // Used to simulate the video game loading experience.
 const MINIMUM_LOADING_TIME = 2000;
 
-const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
+const StartupPreloader: React.FC<StartupPreloaderProps> = ({ children }) => {
   const [imagesLoading, setImagesLoading] = useState<boolean>(true);
 
   const bgToPreload = determineBg(new Date().getHours());
@@ -51,6 +51,10 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
     let finishTimeout: ReturnType<typeof setTimeout> | undefined;
     const loadingStartedAt = Date.now();
     const imagePaths = [chocoSheet, bgToPreload, statusBg];
+
+    // Preload audio files alongside images to ensure they are ready 
+    // when needed in the game.
+    preloadAudio();
 
     const finishLoading = () => {
       const remainingTime = Math.max(
@@ -98,4 +102,4 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
   );
 };
 
-export default ImagePreloader;
+export default StartupPreloader;
