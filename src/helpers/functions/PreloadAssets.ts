@@ -12,12 +12,24 @@ export const preloadShopItemsImage = () => {
   if (!shopItemsImagePromise) {
     shopItemsImagePromise = new Promise<void>((resolve, reject) => {
       const image = new Image();
-      image.onload = () => resolve();
+      let isDecoding = false;
+      const resolveWhenDecoded = () => {
+        if (isDecoding) {
+          return;
+        }
+
+        isDecoding = true;
+        image.decode()
+          .then(resolve)
+          .catch(() => reject(new Error(`Failed to decode shop item icons: ${shopItems}`)));
+      };
+
+      image.onload = resolveWhenDecoded;
       image.onerror = () => reject(new Error(`Failed to load shop item icons: ${shopItems}`));
       image.src = shopItems;
 
       if (image.complete && image.naturalWidth > 0) {
-        resolve();
+        resolveWhenDecoded();
       }
     }).catch((error: unknown) => {
       shopItemsImagePromise = null;
@@ -36,12 +48,24 @@ export const preloadGymBackground = () => {
   if (!gymBackgroundImagePromise) {
     gymBackgroundImagePromise = new Promise<void>((resolve, reject) => {
       const image = new Image();
-      image.onload = () => resolve();
+      let isDecoding = false;
+      const resolveWhenDecoded = () => {
+        if (isDecoding) {
+          return;
+        }
+
+        isDecoding = true;
+        image.decode()
+          .then(resolve)
+          .catch(() => reject(new Error(`Failed to decode training background: ${gymBackground}`)));
+      };
+
+      image.onload = resolveWhenDecoded;
       image.onerror = () => reject(new Error(`Failed to load training background: ${gymBackground}`));
       image.src = gymBackground;
 
       if (image.complete && image.naturalWidth > 0) {
-        resolve();
+        resolveWhenDecoded();
       }
     }).catch((error: unknown) => {
       gymBackgroundImagePromise = null;
