@@ -14,7 +14,8 @@
         }
 
         #GameContainer {
-            background-image: url('../src/graphics/backgrounds/tracks-bg.png');
+            background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
+            background-size: 64px 64px;
 
             &.orange { background-color: $retro-shell-orange; }
             &.red { background-color: $retro-shell-red; }

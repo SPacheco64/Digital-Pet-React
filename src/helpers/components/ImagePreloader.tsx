@@ -6,7 +6,6 @@ interface ImagePreloaderProps {
 }
 
 import statusBg from '../../graphics/backgrounds/status-window-bg.png';
-import shellTexture from '../../graphics/shell_textures/shell-texture.png';
 import chocoSheet from '../../graphics/canvas_sprites/chocobo-spritesheet.png';
 import dayBg from '../../graphics/backgrounds/pet-bg-day.png';
 import eveningBg from '../../graphics/backgrounds/pet-bg-evening.png';
@@ -51,7 +50,7 @@ const ImagePreloader: React.FC<ImagePreloaderProps> = ({ children }) => {
     let isMounted = true;
     let finishTimeout: ReturnType<typeof setTimeout> | undefined;
     const loadingStartedAt = Date.now();
-    const imagePaths = [shellTexture, chocoSheet, bgToPreload, statusBg];
+    const imagePaths = [chocoSheet, bgToPreload, statusBg];
 
     const finishLoading = () => {
       const remainingTime = Math.max(
