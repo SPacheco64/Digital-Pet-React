@@ -195,7 +195,7 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
     const specialType = usesSpecial ? enemyInfo.specialAttack : null;
     const criticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
     const baseDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
-    const specialDmgModifier = specialType === 'power' ? 2 : 1.5;
+    const specialDmgModifier = specialType === 'power' ? 2 : (specialType === 'burn' ? 1.5 : 1.25);
     const attackDamage = usesSpecial ? baseDamage * specialDmgModifier : baseDamage;
     const instantlyKills = usesSpecial && specialType === 'instant-kill' && Math.random() < 0.1;
     const damage = instantlyKills
