@@ -156,6 +156,7 @@ export interface MenuProps {
     setPlayerSpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setEnemySpecial: React.Dispatch<React.SetStateAction<boolean>>;
     setPlayerRunning: React.Dispatch<React.SetStateAction<boolean>>;
+    setSpecialCharge: React.Dispatch<React.SetStateAction<number>>;
     isLoading: boolean;
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;

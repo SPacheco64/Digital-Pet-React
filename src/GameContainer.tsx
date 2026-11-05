@@ -618,6 +618,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     // sitting at 0 hp and sets to 1 instead.
     if (dataExists && (currentHealth < 1)) {
       setCurrentHealth(1);
+      setSpecialCharge(0);
     }
   }, [hideWelcome, dataExists]);
 
@@ -819,9 +820,9 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
             playerSpecial={playerSpecial} enemySpecial={enemySpecial} playerRunning={playerRunning}
             setPlayerAttack={setPlayerAttack} setEnemyAttack={setEnemyAttack} 
             setPlayerSpecial={setPlayerSpecial} setEnemySpecial={setEnemySpecial} 
-            setPlayerRunning={setPlayerRunning} isLoading={isLoading}
-            setIsLoading={setIsLoading} setCurrentHealth={setCurrentHealth}
-            setCurrentEnergy={setCurrentEnergy}
+            setPlayerRunning={setPlayerRunning} setSpecialCharge={setSpecialCharge}
+            isLoading={isLoading} setIsLoading={setIsLoading} 
+            setCurrentHealth={setCurrentHealth} setCurrentEnergy={setCurrentEnergy}
           />
         </div>
 

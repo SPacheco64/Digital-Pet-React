@@ -78,6 +78,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     setRaceSteeringInput,
     setCurrentHealth,
     setCurrentEnergy,
+    setSpecialCharge,
 
     // Props for battle & race functions:
     setPlayerSpecial,
@@ -161,9 +162,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
       onActivityChange('pet');
       setCurrentlyBusy(false);
+
       if (currentHealth === 0) {
         setCurrentHealth(1);
         setCurrentEnergy(1);
+        setSpecialCharge(0);
       }
     }}
   ];
