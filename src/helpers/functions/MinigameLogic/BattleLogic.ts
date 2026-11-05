@@ -217,7 +217,7 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
         setBattleMessage(`${enemyInfo.name} uses a truly powerful attack!`);
     } else if (specialType === 'paralysis') {
         if (applyParalysis) {
-            const turns = 1 + Math.floor(Math.random() * 3);
+            const turns = 1 + Math.floor(Math.random() * 2);
             console.log('Paralysis turns: ', turns);
             setParalysisTurns((current) => Math.max(current, turns));
         }
