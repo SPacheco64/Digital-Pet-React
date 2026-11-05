@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GameDisplayProps } from './types';
 import '../styles/components/game-display.scss';
 import '../styles/components/loading-screen.scss';
@@ -10,8 +10,24 @@ import BattleSelectionScreen from './additional_screens/BattleSelectionScreen';
 import RaceSelectionScreen from './additional_screens/RaceSelectionScreen';
 import FishingMinigame from './helpers/components/FishingMinigame';
 import RacingMinigame from './helpers/components/RacingMinigame';
+import { preloadGymBackground, preloadShopItemsImage } from './helpers/functions/PreloadAssets';
 
 const GameDisplay: React.FC<GameDisplayProps> = (props: GameDisplayProps) => {
+  
+  // Preload the gym background and shop items images when the component 
+  // mounts, so that they are ready for use when the user enters the 
+  // training or shop screens. Loads these in the background to avoid 
+  // a bad user experience when the user enters these screens for the 
+  // first time.
+  useEffect(() => {
+    preloadGymBackground().catch((error: unknown) => {
+      console.error('Failed to preload training background:', error);
+    });
+    preloadShopItemsImage().catch((error: unknown) => {
+      console.error('Failed to preload shop item icons:', error);
+    });
+  }, []);
+
   // Destructure props for ease of access & documentation
   const {
     inCombat,

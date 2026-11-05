@@ -3,6 +3,7 @@ import { ShopScreenProps } from '../types';
 import '../../styles/components/shop-screen.scss';
 import shopItems from '../graphics/icons/shop/shop-items.png';
 import { SHOP_ITEM_NAMES } from '../constants/shopItems';
+import { preloadShopItemsImage } from '../helpers/functions/PreloadAssets';
 
 // Positions of the shop item icons within the sprite sheet
 const shopIconPositions = [
@@ -23,28 +24,22 @@ const shopIconPositions = [
 const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
   const [shopItemsLoaded, setShopItemsLoaded] = useState(false);
 
+  // Preload the shop items image when the component mounts.
+  // Checks if the image is already loaded to avoid unnecessary reloading.
   useEffect(() => {
     let isMounted = true;
-    const image = new Image();
-
-    image.onload = () => {
-      if (isMounted) {
-        setShopItemsLoaded(true);
-      }
-    };
-    image.onerror = () => {
-      console.error(`Failed to load shop item icons: ${shopItems}`);
-    };
-    image.src = shopItems;
-
-    if (image.complete && image.naturalWidth > 0) {
-      setShopItemsLoaded(true);
-    }
+    preloadShopItemsImage()
+      .then(() => {
+        if (isMounted) {
+          setShopItemsLoaded(true);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to load shop item icons:', error);
+      });
 
     return () => {
       isMounted = false;
-      image.onload = null;
-      image.onerror = null;
     };
   }, []);
 
@@ -62,6 +57,9 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
     maxEnergy,
   } = props;
 
+  // Function to handle the purchase of an item. Checks if the user can
+  // afford the item, and if so, deducts the cost from their current money
+  // and adds the item to their list of purchased items.
   const purchaseHandler = (itemName: string, cost: number) => {
     if (cost <= currentMoney) {
         setCurrentMoney(prevMoney => (prevMoney - cost));
@@ -73,6 +71,8 @@ const ShopScreen: React.FC<ShopScreenProps> = (props: ShopScreenProps) => {
     }
   }
 
+  // List of items available in the shop, along with their cost, description, 
+  // and whether they can be purchased multiple times.
   const shopList = [
     {cost: 50, label: SHOP_ITEM_NAMES.healingPotion, description: 'Fully restores HP.', repeatable: true, effect: 'health'},
     {cost: 50, label: SHOP_ITEM_NAMES.energyPotion, description: 'Fully restores Energy.', repeatable: true, effect: 'energy'},

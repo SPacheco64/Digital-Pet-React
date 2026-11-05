@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { MenuProps } from './types';
 import '../styles/components/menu.scss';
 import MenuOption from './helpers/components/MenuOption';
@@ -7,7 +7,6 @@ import trainIcon from './graphics/icons/game_buttons/normal/train.svg';
 import playIcon from './graphics/icons/game_buttons/normal/play.svg';
 import sleepIcon from './graphics/icons/game_buttons/normal/sleep.svg';
 import backIcon from './graphics/icons/game_buttons/normal/back.svg';
-import emptyIcon from './graphics/icons/game_buttons/normal/empty.svg';
 import oneIcon from './graphics/icons/game_buttons/normal/one.svg';
 import twoIcon from './graphics/icons/game_buttons/normal/two.svg';
 import threeIcon from './graphics/icons/game_buttons/normal/three.svg';
@@ -21,7 +20,7 @@ import attackIcon from './graphics/icons/game_buttons/combat/attack.svg';
 import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
-import { preloadGymBackground } from './helpers/functions/OperationalFunctions';
+import { preloadGymBackground } from './helpers/functions/PreloadAssets';
 
 const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;

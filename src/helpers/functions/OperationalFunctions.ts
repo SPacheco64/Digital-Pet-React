@@ -1,6 +1,5 @@
 import { SHOP_ITEM_NAMES } from '../../constants/shopItems';
 import { ChocoboSaveData } from '../../types';
-import gymBackground from '../../graphics/backgrounds/gym-bg.png';
 
 // External UI Functions
 export const saveFunction = (saveData: ChocoboSaveData) => {
@@ -164,21 +163,3 @@ export const sleepingFunction = (
 
     return () => clearTimeout(sleepingTimer);
 }
-
-// Used to preload the Training background asset
-let gymBackgroundPromise: Promise<void> | null = null;
-export const preloadGymBackground = () => {
-    if (!gymBackgroundPromise) {
-        gymBackgroundPromise = new Promise<void>((resolve, reject) => {
-            const image = new Image();
-            image.onload = () => resolve();
-            image.onerror = () => reject(new Error(`Failed to preload training background: ${gymBackground}`));
-            image.src = gymBackground;
-        }).catch((error: unknown) => {
-            gymBackgroundPromise = null;
-            throw error;
-        });
-    }
-
-    return gymBackgroundPromise;
-};
