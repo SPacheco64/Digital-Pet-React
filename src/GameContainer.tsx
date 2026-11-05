@@ -18,6 +18,7 @@ import { fishingEndFunction } from './helpers/functions/MinigameLogic/FishingLog
 import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
 import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
+import { preloadGymBackground } from './helpers/functions/PreloadAssets';
 
 const DEFAULT_BATTLE_MESSAGE = 'What will you do?';
 const BATTLE_MESSAGE_DURATION = 1000;
@@ -549,12 +550,32 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         return;
     }
 
-    return trainingFunction(setCurrentStatus, setCurrentHunger,
-      setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
-      setCurrentEndurance, setCurrentlyBusy, setCurrentQuestionType, setQuestionWindowOpen,
-      setCurrentHappiness, alreadyPurchased,
-      optionSelected, () => setOptionSelected(0)
-    );
+    let isEnded = false;
+    let endTraining: (() => void) | undefined;
+    setIsLoading(true);
+
+    preloadGymBackground()
+      .catch((error: unknown) => {
+        console.error('Failed to load training background:', error);
+      })
+      .then(() => {
+        if (isEnded) {
+          return;
+        }
+
+        setIsLoading(false);
+        endTraining = trainingFunction(setCurrentStatus, setCurrentHunger,
+          setCurrentEnergy, setCurrentPower, setCurrentDefense, setCurrentSpeed,
+          setCurrentEndurance, setCurrentlyBusy, setCurrentQuestionType, setQuestionWindowOpen,
+          setCurrentHappiness, alreadyPurchased,
+          optionSelected, () => setOptionSelected(0)
+        );
+      });
+
+    return () => {
+      isEnded = true;
+      endTraining?.();
+    };
   }, [currentQuestionType, optionSelected]);
 
   // When the chocobo's energy drops to zero, its happiness and health 
