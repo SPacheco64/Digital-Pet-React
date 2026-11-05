@@ -11,7 +11,7 @@ export interface EnemyInformation {
     speed: number;
     health: number;
     specialAttack: EnemySpecialAttackType;
-    difficultyLevel: number; // 1 (easy) -> 5 (difficult) 
+    difficultyLevel: number; // 1 (easy) -> 5 (very difficult) 
 }
 
 export type { EnemySpecialAttackType } from "../../../types";
@@ -190,7 +190,7 @@ export const enemyAttackFunction = (options: EnemyAttackOptions) => {
     console.log('hasDEFMateria? ', hasDefMateria ? 'yes' : 'no');
     console.log('hasMoogle? ', hasMoogle ? 'yes' : 'no');
     setBattleLocked(true);
-    const usesSpecial = Math.random() < enemyInfo.difficultyLevel * 0.05;
+    const usesSpecial = Math.random() < enemyInfo.difficultyLevel * 0.07;
     const specialType = usesSpecial ? enemyInfo.specialAttack : null;
     const criticalHit = Math.random() < ((enemyInfo.speed / 2) / 10);
     const baseDamage = calculateDamage(enemyInfo.power, currentDefense, enemyInfo.difficultyLevel);
