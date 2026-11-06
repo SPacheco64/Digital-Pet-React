@@ -38,6 +38,7 @@ export const hatchingEvent = (currentStatus: string,
 ) => {
 
     const hatchingTimeout = setTimeout(() => {
+        useAudioPlayer('hatch');
         setCurrentStatus('normal');
         setCurrentlyBusy(false);
     }, 13000);
