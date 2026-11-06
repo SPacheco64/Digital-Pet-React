@@ -10,6 +10,7 @@ export const AUDIO_NAMES = {
     sleep: 'SleepSound',
     train: 'TrainSound',
     // Battle Sound Effects
+    battleSelect: 'BattleSelectSound',
     attack: 'AttackSound',
     power: 'PowerSound',
     burn: 'BurnSound',
@@ -22,6 +23,7 @@ export const AUDIO_NAMES = {
     catch: 'CatchSound',
     miss: 'MissSound',
     // Racing Sound Effects
+    raceSelect: 'RaceSelectSound',
     count: 'CountSound',
     go: 'GoSound',
     bump: 'BumpSound',

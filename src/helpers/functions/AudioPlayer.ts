@@ -10,6 +10,7 @@ import SleepSound from '../../sounds/chocobo/Sleep.wav';
 import HatchSound from '../../sounds/chocobo/Hatch.wav';
 import TrainSound from '../../sounds/chocobo/Train.wav';
 // Battle Sound Effects
+import BattleSelectSound from '../../sounds/battle/BattleSelect.wav';
 import AttackSound from '../../sounds/battle/Attack.wav';
 import PowerSound from '../../sounds/battle/Power.wav';
 import BurnSound from '../../sounds/battle/Burn.wav';
@@ -22,6 +23,7 @@ import RunSound from '../../sounds/battle/Run.wav';
 import CatchSound from '../../sounds/fishing/Catch.wav';
 import MissSound from '../../sounds/fishing/Miss.wav';
 // Racing Sound Effects
+import RaceSelectSound from '../../sounds/racing/RaceSelect.wav';
 import CountSound from '../../sounds/racing/Count.wav';
 import GoSound from '../../sounds/racing/Go.wav';
 import BumpSound from '../../sounds/racing/Bump.wav';
@@ -40,6 +42,7 @@ const sounds = {
     [AUDIO_NAMES.hatch]: HatchSound,
     [AUDIO_NAMES.train]: TrainSound,
     // Battle Sound Effects:
+    [AUDIO_NAMES.battleSelect] : BattleSelectSound,
     [AUDIO_NAMES.attack]: AttackSound,
     [AUDIO_NAMES.power]: PowerSound,
     [AUDIO_NAMES.burn]: BurnSound,
@@ -52,6 +55,7 @@ const sounds = {
     [AUDIO_NAMES.catch]: CatchSound,
     [AUDIO_NAMES.miss]: MissSound,
     // Racing Sound Effects:
+    [AUDIO_NAMES.raceSelect]: RaceSelectSound,
     [AUDIO_NAMES.count]: CountSound,
     [AUDIO_NAMES.go]: GoSound,
     [AUDIO_NAMES.bump]: BumpSound,

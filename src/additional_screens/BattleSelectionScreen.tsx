@@ -2,6 +2,7 @@ import React from 'react';
 import { BattleSelectionScreenProps } from '../types';
 import '../../styles/components/battle-selection.scss';
 import chocoboIcon from '../graphics/icons/misc-icons/chocobo.svg';
+import { useAudioPlayer } from '../helpers/functions/AudioPlayer';
 
 const BattleSelectionScreen: React.FC<BattleSelectionScreenProps> = (props: BattleSelectionScreenProps) => {
     // Destructure props for ease of access & documentation
@@ -22,6 +23,7 @@ const BattleSelectionScreen: React.FC<BattleSelectionScreenProps> = (props: Batt
     ];
 
     const startBattle = (level: number) => {
+        useAudioPlayer('battleSelect');
         onStartBattle(level);
     };
 

@@ -19,7 +19,7 @@ import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
 import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
 import { preloadGymBackground } from './helpers/functions/PreloadAssets';
-import { setAudioMuted } from './helpers/functions/AudioPlayer';
+import { setAudioMuted, useAudioPlayer } from './helpers/functions/AudioPlayer';
 import { VALUE_LIMITS } from './constants/ValueLimits';
 
 const DEFAULT_BATTLE_MESSAGE = 'What will you do?';
@@ -713,6 +713,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
                 setCurrentlyBusy(false);
               }}
               onSelectRaceDifficulty={(difficulty) => {
+                useAudioPlayer('raceSelect');
                 setRaceDifficulty(difficulty);
                 setRaceSteeringInput({ direction: 1, sequence: 0 });
                 setRaceComplete(false);

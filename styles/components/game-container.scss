@@ -1,4 +1,5 @@
 #GameContainer {
+    background: linear-gradient(to top, $white 0%, transparent 50%);
     display: flex;
     flex-direction: column;
     width: 100vw;

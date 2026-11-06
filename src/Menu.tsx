@@ -21,6 +21,7 @@ import specialIcon from './graphics/icons/game_buttons/combat/magic.svg';
 import runIcon from './graphics/icons/game_buttons/combat/run.svg';
 import hookIcon from './graphics/icons/game_buttons/normal/hook.svg';
 import { preloadGymBackground } from './helpers/functions/PreloadAssets';
+import { useAudioPlayer } from './helpers/functions/AudioPlayer';
 
 const MIN_PLAY_ENERGY = 5;
 const MIN_TRAINING_ENERGY = 20;
@@ -111,11 +112,11 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const actionFailsWhileHungry = () => currentHunger >= HIGH_HUNGER_THRESHOLD && Math.random() < 0.25;
   const sleepButtonDisabled = () => (currentEnergy === maxEnergy && currentHealth === maxHealth);
 
-  const actionFails = () => {
+  const actionFails = ()=>{
     setActionFailureTrigger(trigger => trigger + 1);
   };
 
-  const startTrainingSelection = async () => {
+  const startTrainingSelection = async ()=>{
     if (actionFailsWhileSad() || actionFailsWhileHungry()) {
       actionFails();
       return;
@@ -140,18 +141,18 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 
   const normalButtonList = [
     {buttonName: 'Feed', buttonIcon: feedIcon, buttonFunction: ()=>{if (actionFailsWhileSad()) { actionFails(); return; } setCurrentStatus('eating'); setCurrentlyBusy(true);}},
-    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: startTrainingSelection},
-    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setTrainingOpen(false); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play');}},
+    {buttonName: 'Train', buttonIcon: trainIcon, buttonFunction: ()=> {startTrainingSelection(); useAudioPlayer('get');}},
+    {buttonName: 'Play', buttonIcon: playIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentlyBusy(true); setTrainingOpen(false); setPlayOpen(true); setQuestionWindowOpen(true); setCurrentQuestionType('play'); useAudioPlayer('get');}},
     {buttonName: 'Sleep', buttonIcon: sleepIcon, buttonFunction: ()=>{if (actionFailsWhileSad() || actionFailsWhileHungry()) { actionFails(); return; } setCurrentStatus('sleeping'); setCurrentlyBusy(true);}},
-    {buttonName: 'Menu', buttonIcon: menuIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
+    {buttonName: 'Menu', buttonIcon: menuIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen); useAudioPlayer('get');}},
   ];
 
   const menuScreenButtonList = [
-    {buttonName: 'Status', buttonIcon: (showStatusScreen ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusScreen(!showStatusScreen);}},
-    {buttonName: 'Shop', buttonIcon: (showShopScreen ? backIcon : shopIcon), buttonFunction: ()=>{setShowShopScreen(!showShopScreen)}},
-    {buttonName: 'Achievements', buttonIcon: (showAchievementsScreen ? backIcon : achievementIcon), buttonFunction: ()=>{setShowAchievementsScreen(!showAchievementsScreen)}},
-    {buttonName: 'Info', buttonIcon: (showInfoScreen ? backIcon : infoIcon), buttonFunction: ()=>{setShowInfoScreen(!showInfoScreen)}},
-    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen);}},
+    {buttonName: 'Status', buttonIcon: (showStatusScreen ? backIcon : statusIcon), buttonFunction: ()=>{setShowStatusScreen(!showStatusScreen); useAudioPlayer('get');}},
+    {buttonName: 'Shop', buttonIcon: (showShopScreen ? backIcon : shopIcon), buttonFunction: ()=>{setShowShopScreen(!showShopScreen); useAudioPlayer('get');}},
+    {buttonName: 'Achievements', buttonIcon: (showAchievementsScreen ? backIcon : achievementIcon), buttonFunction: ()=>{setShowAchievementsScreen(!showAchievementsScreen); useAudioPlayer('get');}},
+    {buttonName: 'Info', buttonIcon: (showInfoScreen ? backIcon : infoIcon), buttonFunction: ()=>{setShowInfoScreen(!showInfoScreen); useAudioPlayer('get');}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setShowMenuScreen(!showMenuScreen); useAudioPlayer('get');}},
   ];
 
   const combatButtonList = [
@@ -160,6 +161,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Special', buttonIcon: specialIcon, buttonFunction: onSpecial},
     {buttonName: 'Run', buttonIcon: runIcon, buttonFunction: onEscape},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
+      useAudioPlayer('get');
       onActivityChange('pet');
       setCurrentlyBusy(false);
 
@@ -174,6 +176,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
   const fishingButtonList = [
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
+      useAudioPlayer('get');
       onActivityChange('pet');
       setFishingComplete(false);
       setFishingInput(0);
@@ -188,6 +191,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: 'Return', buttonIcon: backIcon, buttonFunction: ()=>{
+      useAudioPlayer('get');
       onActivityChange('pet');
       setRaceComplete(false);
       setSprintActive(false);
@@ -197,9 +201,18 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ] : [
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
-    {buttonName: 'Steer Left', buttonIcon: backIcon, buttonFunction: ()=>setRaceSteeringInput((input) => ({ direction: -1, sequence: input.sequence + 1 }))},
-    {buttonName: sprintActive ? 'Stop Sprint' : 'Sprint', buttonIcon: runIcon, buttonFunction: ()=>setSprintActive((active) => !active)},
-    {buttonName: 'Steer Right', buttonIcon: backIcon, buttonFunction: ()=>setRaceSteeringInput((input) => ({ direction: 1, sequence: input.sequence + 1 }))},
+    {buttonName: 'Steer Left', buttonIcon: backIcon, buttonFunction: ()=>{
+      useAudioPlayer('get');
+      setRaceSteeringInput((input) => ({ direction: -1, sequence: input.sequence + 1 }));
+    }},
+    {buttonName: sprintActive ? 'Stop Sprint' : 'Sprint', buttonIcon: runIcon, buttonFunction: ()=>{
+      useAudioPlayer('select');
+      setSprintActive((active) => !active);
+    }},
+    {buttonName: 'Steer Right', buttonIcon: backIcon, buttonFunction: ()=>{
+      useAudioPlayer('get');
+      setRaceSteeringInput((input) => ({ direction: 1, sequence: input.sequence + 1 }));
+    }},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
   ];
 
@@ -209,6 +222,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
       onActivityChange('pet');
       setCurrentlyBusy(false);
+      useAudioPlayer('get');
     }},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
@@ -220,6 +234,7 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{
       onActivityChange('pet');
       setCurrentlyBusy(false);
+      useAudioPlayer('get');
     }},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
@@ -230,13 +245,14 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
     {buttonName: 'Defense', buttonIcon: twoIcon, buttonFunction: ()=>{setOptionSelected(2); setQuestionWindowOpen(false); setTrainingOpen(false);}},
     {buttonName: 'Speed', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setQuestionWindowOpen(false); setTrainingOpen(false);}},
     {buttonName: 'Endurance', buttonIcon: fourIcon, buttonFunction: ()=>{setOptionSelected(4); setQuestionWindowOpen(false); setTrainingOpen(false);}},
-    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setTrainingOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setTrainingOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false); useAudioPlayer('get');}},
   ];
 
   const playQuestionButtonList = [
     {buttonName: '', buttonIcon: null, buttonFunction: ()=>{}},
-    {buttonName: 'Fishing', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setPlayOpen(false); setFishingComplete(false); setFishingInput(0); onActivityChange('fishing'); setQuestionWindowOpen(false); setIsLoading(true);}},
+    {buttonName: 'Fishing', buttonIcon: oneIcon, buttonFunction: ()=>{setOptionSelected(1); setPlayOpen(false); setFishingComplete(false); setFishingInput(0); onActivityChange('fishing'); setQuestionWindowOpen(false); setIsLoading(true); useAudioPlayer('get');}},
     {buttonName: 'Race', buttonIcon: twoIcon, buttonFunction: ()=>{
+      useAudioPlayer('get');
       setOptionSelected(2);
       setPlayOpen(false);
       setQuestionWindowOpen(false);
@@ -244,8 +260,8 @@ const Menu: React.FC<MenuProps> = (props: MenuProps) => {
       setRaceComplete(false);
       setSprintActive(false);
     }},
-    {buttonName: 'Battle', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setPlayOpen(false); setQuestionWindowOpen(false); onActivityChange('battle-selection');}},
-    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setPlayOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false);}},
+    {buttonName: 'Battle', buttonIcon: threeIcon, buttonFunction: ()=>{setOptionSelected(3); setPlayOpen(false); setQuestionWindowOpen(false); onActivityChange('battle-selection'); useAudioPlayer('get');}},
+    {buttonName: 'Go Back', buttonIcon: backIcon, buttonFunction: ()=>{setPlayOpen(false); setCurrentlyBusy(false); setQuestionWindowOpen(false); useAudioPlayer('get');}},
   ];
 
   return (

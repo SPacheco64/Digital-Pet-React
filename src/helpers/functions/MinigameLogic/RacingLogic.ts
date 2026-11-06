@@ -199,14 +199,17 @@ export const useRacingLogic = ({
       if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
         event.preventDefault();
         steer(-1);
+        useAudioPlayer('get');
       } else if (event.code === 'ArrowRight' || event.code === 'KeyD') {
         event.preventDefault();
         steer(1);
+        useAudioPlayer('get');
       } else if (event.code === 'Space') {
         event.preventDefault();
         sprintActiveRef.current = false;
         setSprintActive(false);
         spaceHeld.current = true;
+        useAudioPlayer('select');
       }
     };
     const handleKeyUp = (event: KeyboardEvent) => {
