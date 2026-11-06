@@ -186,7 +186,15 @@ const GameCanvas: React.FC<GameCanvasProps> = (props: GameCanvasProps) => {
 
   return (
     <>
-      <Stage id='GameStage' className='game-canvas' height={248} width={256} ref={stageRef} onClick={() => touchReaction()}>
+      <Stage
+        id='GameStage'
+        className='game-canvas'
+        height={248}
+        width={256}
+        ref={stageRef}
+        onClick={() => touchReaction()}
+        onTap={() => touchReaction()}
+      >
         <Layer id='GameLayer'>
           {chocoSheetImg && <Sprite
             ref={spriteRef}

@@ -14,9 +14,6 @@
         }
 
         #GameContainer {
-            background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
-            background-size: 64px 64px;
-
             &.orange { background-color: $retro-shell-orange; }
             &.red { background-color: $retro-shell-red; }
             &.green { background-color: $retro-shell-green; }
@@ -25,6 +22,12 @@
             &.purple { background-color: $retro-shell-purple; }
             &.gray { background-color: $retro-shell-gray; }
             &.yellow { background-color: $retro-shell-yellow; }
+
+            // Background pattern for the Game Shell only on Tablets & Larger devices
+            @media (min-width: 768px) {
+                background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
+                background-size: 64px 64px;
+            }
         }
 
         #Menu {

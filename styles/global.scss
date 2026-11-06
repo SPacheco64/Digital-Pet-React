@@ -23,6 +23,11 @@
         background-color: $dark-gray;
     }
 
+    .bottom-panel {
+        margin-top: 1rem;
+        @media (min-width: 768px) { margin: 0; }
+    }
+
     .warning {
         color: $warning-color;
         border-color: $warning-color;

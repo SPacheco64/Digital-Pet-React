@@ -1,24 +1,30 @@
 #GameContainer {
     display: flex;
     flex-direction: column;
-    width: 25rem;
-    height: 30rem;
+    width: 100vw;
+    height: 100vh;
     position: absolute;
     text-align: center;
     padding: 2rem;
     align-items: center;
     justify-content: center;
-    border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-    background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
-    background-size: 64px 64px;
 
-    &::before {
-        content: '';
-        box-shadow: 3px 4px 11px rgba(0, 0, 0, 0.4);
-        height: 100%;
-        width: 100%;
-        position: absolute;
+    // Tablets & Larger devices use the Egg-Shaped Game Shell
+    @media (min-width: 768px) {
+        width: 25rem;
+        height: 30rem;
         border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+        background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
+        background-size: 64px 64px;
+
+        &::before {
+            content: '';
+            box-shadow: 3px 4px 11px rgba(0, 0, 0, 0.4);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+        }
     }
 
     // List of possible Game Shell color classes
