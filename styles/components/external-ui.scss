@@ -1,9 +1,11 @@
 #ExternalUI {
     position: fixed;
+    z-index: 2;
     top: 0;
     height: 100%;
     width: 100%;
     padding: 1rem;
+    pointer-events: none;
 
     .ui-container {
         position: relative; 
@@ -11,6 +13,7 @@
         width: 100%;
 
         button img, button {
+            pointer-events: auto;
             height: 2.5rem;
             width: 2.5rem;
             background: none;
