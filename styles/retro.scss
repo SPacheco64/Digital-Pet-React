@@ -53,6 +53,7 @@
         
         .game-screen {
             filter: opacity(.7) grayscale(100%);
+            border: none;
 
             &::after {
                 content: " ";

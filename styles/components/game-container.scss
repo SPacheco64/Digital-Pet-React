@@ -1,19 +1,24 @@
 #GameContainer {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    position: relative;
-    flex-shrink: 0;
+    width: 25rem;
+    height: 30rem;
+    position: absolute;
     text-align: center;
-    padding: 3.5rem .75rem 4.5rem;
+    padding: 2rem;
     align-items: center;
     justify-content: center;
-    background: none;
+    border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+    background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
+    background-size: 64px 64px;
 
     &::before {
-        content: none;
+        content: '';
+        box-shadow: 3px 4px 11px rgba(0, 0, 0, 0.4);
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
     }
 
     // List of possible Game Shell color classes
@@ -26,166 +31,12 @@
     &.gray { background-color: $shell-gray; .menu-btn { background-color: $gray-btn-bg; border-color: $gray-btn-border;}}
     &.yellow { background-color: $shell-yellow; .menu-btn { background-color: $yellow-btn-bg; border-color: $yellow-btn-border;}}
 
-    #DigipetRoot & > .top-panel {
-        display: flex;
-        flex: 0 1 auto;
-        width: min(16rem, 100%, calc(103.2vh - 14.45rem));
-        height: auto;
-        max-height: min(15.5rem, calc(100vh - 14rem));
-        aspect-ratio: 16 / 15.5;
-        margin: 0 0 .5rem;
-        background: none;
-        border-radius: 0;
-    }
-
-    #DigipetRoot & > .bottom-panel {
-        flex: 0 0 auto;
-        width: 100%;
-        align-items: center;
-    }
-
     #GameDisplay {
-        flex: 1 1 auto;
-        width: 100%;
-        min-height: 0;
+        flex: auto;
     }
 
     #Menu {
-        flex: 0 0 auto;
-        width: 100%;
-        height: auto;
-        max-width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-}
-
-@media (min-width: 576px) and (max-width: 767.98px) {
-    #GameContainer {
-        padding-right: 1rem;
-        padding-left: 1rem;
-
-        #DigipetRoot & > .top-panel {
-            max-width: 42rem;
-        }
-    }
-}
-
-@media (min-width: 768px) {
-    #GameContainer {
-        width: min(25rem, calc(100vw - 2rem), calc(83.333vh - 2rem));
-        height: auto;
-        aspect-ratio: 5 / 6;
-        padding: 2rem;
-        border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-        background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
-        background-size: 64px 64px;
-
-        @supports (height: 100dvh) {
-            width: min(25rem, calc(100vw - 2rem), calc(83.333dvh - 2rem));
-        }
-
-        &::before {
-            content: '';
-            box-shadow: 3px 4px 11px rgba(0, 0, 0, 0.4);
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-        }
-
-        #DigipetRoot & > .top-panel {
-            flex: 0 1 auto;
-            width: 16rem;
-            height: 15.5rem;
-            margin: 1.5rem 0 .5rem;
-            background-color: $dark-gray;
-            border-radius: 1rem;
-        }
-
-        #DigipetRoot & > .bottom-panel {
-            width: auto;
-        }
-
-        #Menu {
-            flex: auto;
-            width: auto;
-            height: 100%;
-            max-width: none;
-
-            .normal-button {
-                &-1, &-3 { top: 1.5rem; }
-                &-2 { top: 2rem; }
-            }
-        }
-    }
-}
-
-@media (max-width: 767.98px) {
-    #DigipetRoot {
-        background-image: none;
-    }
-
-    #DigipetRoot #ExternalUI {
-        z-index: 10;
-    }
-
-    #DigipetRoot #GameContainer {
-        background-image: none;
-
-        > .top-panel {
-            width: min(16rem, 100%, calc(103.2dvh - 14.45rem));
-            max-height: min(15.5rem, calc(100dvh - 14rem));
-            border: 0;
-            filter: none;
-            overflow: visible;
-        }
-    }
-
-    #DigipetRoot.retro:has(#GameContainer) #GameContainer {
-        background-image: none;
-    }
-
-    #DigipetRoot:has(#GameContainer.orange) { background-color: $shell-orange; }
-    #DigipetRoot:has(#GameContainer.red) { background-color: $shell-red; }
-    #DigipetRoot:has(#GameContainer.green) { background-color: $shell-green; }
-    #DigipetRoot:has(#GameContainer.blue) { background-color: $shell-blue; }
-    #DigipetRoot:has(#GameContainer.pink) { background-color: $shell-pink; }
-    #DigipetRoot:has(#GameContainer.purple) { background-color: $shell-purple; }
-    #DigipetRoot:has(#GameContainer.gray) { background-color: $shell-gray; }
-    #DigipetRoot:has(#GameContainer.yellow) { background-color: $shell-yellow; }
-
-    #DigipetRoot.retro:has(#GameContainer.orange) { background-color: $retro-shell-orange; }
-    #DigipetRoot.retro:has(#GameContainer.red) { background-color: $retro-shell-red; }
-    #DigipetRoot.retro:has(#GameContainer.green) { background-color: $retro-shell-green; }
-    #DigipetRoot.retro:has(#GameContainer.blue) { background-color: $retro-shell-blue; }
-    #DigipetRoot.retro:has(#GameContainer.pink) { background-color: $retro-shell-pink; }
-    #DigipetRoot.retro:has(#GameContainer.purple) { background-color: $retro-shell-purple; }
-    #DigipetRoot.retro:has(#GameContainer.gray) { background-color: $retro-shell-gray; }
-    #DigipetRoot.retro:has(#GameContainer.yellow) { background-color: $retro-shell-yellow; }
-}
-
-@media (orientation: landscape) and (min-width: 400px) and (max-width: 767.98px) and (max-height: 28rem) {
-    #GameContainer {
-        padding-bottom: 1rem;
-
-        #Menu {
-            padding-right: 4rem;
-        }
-
-        #DigipetRoot & > .top-panel {
-            width: min(16rem, 100%, calc(103.2vh - 10.85rem));
-            max-height: min(15.5rem, calc(100vh - 10.5rem));
-        }
-    }
-
-    @supports (height: 100dvh) {
-        #GameContainer {
-            #DigipetRoot & > .top-panel {
-                width: min(16rem, 100%, calc(103.2dvh - 10.85rem));
-                max-height: min(15.5rem, calc(100dvh - 10.5rem));
-            }
-        }
+        flex: auto;
     }
 }
 
