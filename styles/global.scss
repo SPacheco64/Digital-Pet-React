@@ -13,7 +13,7 @@
     .top-panel, .bottom-panel {
         display: flex;
         flex-direction: column;
-        border-radius: 1rem;
+        border-radius: 1.25rem;
     }
 
     .top-panel {
@@ -28,6 +28,25 @@
     .warning {
         color: $warning-color;
         border-color: $warning-color;
+    }
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $game-screen-border transparent;
+
+    &::-webkit-scrollbar {
+        width: .375rem;
+        height: .375rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $game-screen-border;
+        border-radius: 1rem;
     }
 }
 
