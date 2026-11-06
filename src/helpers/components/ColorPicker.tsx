@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ColorPickerProps } from '../../types';
 import colorPickerIcon from '../../graphics/icons/external_ui/color-picker.svg';
 import { useAudioPlayer } from '../functions/AudioPlayer';
@@ -10,6 +10,18 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const colorPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      if (colorPickerRef.current && !colorPickerRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handleOutsidePointerDown);
+    return () => document.removeEventListener('pointerdown', handleOutsidePointerDown);
+  }, []);
 
   const colorArray = [
     {colorName: 'orange', circleColor: '#fa9d23'},
@@ -23,7 +35,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   ];
 
   return (
-    <div id='ColorPicker'>
+    <div id='ColorPicker' ref={colorPickerRef}>
         <button onClick={() => {
             useAudioPlayer('select');
             setIsMenuOpen(!isMenuOpen);

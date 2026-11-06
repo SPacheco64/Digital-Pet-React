@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { OptionsMenuProps } from '../../types';
 import { githubFunction, websiteFunction } from '../functions/OperationalFunctions';
 import closedMenuIcon from '../../graphics/icons/external_ui/closed-menu.svg';
@@ -24,6 +24,18 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
     setIsMuted,
 }: OptionsMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const optionsMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      if (optionsMenuRef.current && !optionsMenuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handleOutsidePointerDown);
+    return () => document.removeEventListener('pointerdown', handleOutsidePointerDown);
+  }, []);
 
   const optionsArray = [
         {optionName: 'Save', function: () => {
@@ -67,7 +79,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
   ];
 
   return (
-    <div id='OptionsMenu'>
+    <div id='OptionsMenu' ref={optionsMenuRef}>
         <button onClick={() => {
             useAudioPlayer('select');
             setIsMenuOpen(!isMenuOpen);

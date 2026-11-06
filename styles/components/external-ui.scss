@@ -13,8 +13,8 @@
         width: 100%;
 
         button img, button {
-            height: 2.5rem;
-            width: 2.5rem;
+            height: 2rem;
+            width: 2rem;
             background: none;
             border: none;
             cursor: pointer;
@@ -43,8 +43,28 @@
             }
 
             .color-selection {
-                display: flex;
-                flex-direction: column;
+                background: rgba(0, 0, 0, .75);
+                border: 2px solid $white;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                grid-column-gap: .25rem;
+                padding: 0 .5rem;
+                top: 0.5rem;
+
+                @media (min-width: 768px) {
+                    display: flex;
+                    flex-direction: column;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    top: 0;
+                }
+
+                button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
             }
 
             .color-circle {
@@ -79,10 +99,24 @@
             }
 
             .option-selection {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
                 position: relative;
+                background: rgba(0, 0, 0, .75);
+                border: 2px solid $white;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                grid-column-gap: 1rem;
+                padding: 0 1rem;
+                top: 0.5rem;
+
+                @media (min-width: 768px) {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    top: 0;
+                }
 
                 .option-container {
                     position: relative;
