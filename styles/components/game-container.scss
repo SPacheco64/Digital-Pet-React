@@ -15,7 +15,7 @@
         height: 30rem;
         border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
         background: linear-gradient(135deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(225deg, $game-shell-default-bg 25%, transparent 25%) -32px 0, linear-gradient(315deg, $game-shell-default-bg 25%, transparent 25%), linear-gradient(45deg, $game-shell-default-bg 25%, transparent 25%);
-        background-size: 64px 64px;
+        background-size: 10% 18%;
 
         &::before {
             content: '';
