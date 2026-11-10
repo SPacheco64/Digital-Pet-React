@@ -19,7 +19,7 @@ import { raceEndFunction } from './helpers/functions/MinigameLogic/RacingLogic';
 import { parseChocoboSaveData } from './helpers/functions/DataManagement/SaveData';
 import { createSaveData, handleReset, handleSave, handleSaveRecovery, reportSaveError } from './helpers/functions/DataManagement/SaveManagement';
 import { preloadGymBackground } from './helpers/functions/PreloadAssets';
-import { setAudioMuted, useAudioPlayer } from './helpers/functions/AudioPlayer';
+import { setAudioMuted, setBackgroundMusic, setMusicMuted, triggerAutoplay, useAudioPlayer } from './helpers/functions/AudioPlayer';
 import { VALUE_LIMITS } from './constants/ValueLimits';
 
 const DEFAULT_BATTLE_MESSAGE = 'What will you do?';
@@ -46,7 +46,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [currentTime, setCurrentTime] = useState<string>('Day');
   const [currentShellColor, setCurrentShellColor] = useState<string>('orange');
   const [retroMode, setRetroMode] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false); // For game sound effects
+  const [isMusicMuted, setIsMusicMuted] = useState<boolean>(true); // For game music
   const [currentlyBusy, setCurrentlyBusy] = useState<boolean>(false);
   const [questionWindowOpen, setQuestionWindowOpen] = useState<boolean>(false);
   const [currentQuestionType, setCurrentQuestionType] = useState<string>(''); // training, play
@@ -91,9 +92,17 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [actionFailureTrigger, setActionFailureTrigger] = useState<number>(0);
   const previousEnergy = useRef<number>(currentEnergy);
 
+  // Whenever the "isMuted" value is altered (i.e via user mute btn click)
+  // Sets whether the game sound audio is muted or unmuted
   useEffect(() => {
     setAudioMuted(isMuted);
   }, [isMuted]);
+
+  // Whenever the "isMuted" value is altered (i.e via user mute btn click)
+  // Sets whether the game music audio is muted or unmuted
+  useEffect(() => {
+    setMusicMuted(isMusicMuted);
+  }, [isMusicMuted]);
 
   const saveData = createSaveData({
     playerName,
@@ -101,6 +110,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     currentShellColor,
     retroMode,
     isMuted,
+    isMusicMuted,
     currentHealth,
     maxHealth,
     currentEnergy,
@@ -138,6 +148,35 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
   const [paralysisTurns, setParalysisTurns] = useState<number>(0);
   const [burnTurns, setBurnTurns] = useState<number>(0);
   const burnDamageTimeout = useRef<number | null>(null);
+
+  // Sets which piece of music should be playing based on which screen the
+  // player is on. Main vs. Battle vs. Racing themes.
+  useEffect(() => {
+    const inBattle = activity === 'battle';
+    const inRace = activity === 'race';
+
+    // If user is in battle and the battle has not ended: play battle theme
+    // If user is racing and the race has not ended: play racing theme
+    // If neither is true, and user is not currently in a battle/race end state:
+    // play the main theme.
+    const musicTheme = 
+      inBattle ? (battleResult !== null || escapeComplete) ? null : 'battle'
+      : inRace ? raceComplete ? null : 'race'
+      : 'main';
+    setBackgroundMusic(musicTheme);
+  }, [
+    activity,
+    battleResult,
+    escapeComplete,
+    hideWelcome,
+    questionWindowOpen,
+    raceComplete,
+    showAchievementsScreen,
+    showInfoScreen,
+    showMenuScreen,
+    showShopScreen,
+    showStatusScreen,
+  ]);
 
   const handleFishingComplete = (caughtCount: number) => fishingEndFunction({
     caughtCount,
@@ -231,6 +270,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
 
     return { canAct: true, health: currentHealth };
   };
+
   // Handles the player's attack action, including turn preparation and 
   // battle logic.
   const handleAttack = () => {
@@ -442,6 +482,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
         setCurrentShellColor(data.currentShellColor);
         setRetroMode(data.retroMode);
         setIsMuted(data.isMuted);
+        setIsMusicMuted(data.isMusicMuted);
         setCurrentHealth(data.currentHealth);
         setMaxHealth(data.maxHealth);
         setCurrentEnergy(data.currentEnergy);
@@ -469,6 +510,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     }
 
     setStorageHydrated(true);
+    triggerAutoplay();
   }, []);
 
   useEffect(() => {
@@ -518,6 +560,7 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     currentHunger,
     hideWelcome,
     isMuted,
+    isMusicMuted,
     maxEnergy,
     maxHealth,
     playerName,
@@ -637,7 +680,8 @@ const GameContainer: React.FC<GameContainerProps> = (props: GameContainerProps) 
     <StartupPreloader>
       <ExternalUI currentTime={currentTime} setCurrentShellColor={setCurrentShellColor}
         retroMode={retroMode} setRetroMode={setRetroMode} isMuted={isMuted} 
-        setIsMuted={setIsMuted} setCurrentTime={setCurrentTime}
+        setIsMuted={setIsMuted} isMusicMuted={isMusicMuted} 
+        setIsMusicMuted={setIsMusicMuted} setCurrentTime={setCurrentTime}
         onSave={() => handleSave({ saveData, storageHydrated, storageReadFailed, saveRecoveryRequired, setSaveError })}
         onReset={() => handleReset(setSaveError)} autosaveEnabled={autosaveEnabled}
         setAutosaveEnabled={setAutosaveEnabled} />

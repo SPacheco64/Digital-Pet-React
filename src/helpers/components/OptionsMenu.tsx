@@ -5,12 +5,15 @@ import closedMenuIcon from '../../graphics/icons/external_ui/closed-menu.svg';
 import openedMenuIcon from '../../graphics/icons/external_ui/opened-menu.svg';
 import saveIcon from '../../graphics/icons/external_ui/save.svg';
 import autosaveIcon from '../../graphics/icons/external_ui/autosave.svg';
+import autosaveDisabledIcon from '../../graphics/icons/external_ui/autosave-disabled.svg';
 import resetIcon from '../../graphics/icons/external_ui/reset.svg';
 import retroIcon from '../../graphics/icons/external_ui/retro.svg';
 import githubIcon from '../../graphics/icons/external_ui/github.svg';
 import webIcon from '../../graphics/icons/external_ui/website-icon.svg'
 import mutedIcon from '../../graphics/icons/external_ui/muted.svg';
 import unmutedIcon from '../../graphics/icons/external_ui/unmuted.svg';
+import musicMutedIcon from '../../graphics/icons/external_ui/music-muted.svg';
+import musicEnabledIcon from '../../graphics/icons/external_ui/music-enabled.svg';
 import { setAudioMuted, useAudioPlayer } from '../functions/AudioPlayer';
 
 const OptionsMenu: React.FC<OptionsMenuProps> = ({
@@ -22,6 +25,8 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
     setRetroMode,
     isMuted,
     setIsMuted,
+    isMusicMuted,
+    setIsMusicMuted,
 }: OptionsMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const optionsMenuRef = useRef<HTMLDivElement>(null);
@@ -51,9 +56,9 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                 function: () => {
                     useAudioPlayer('touch');
                     setAutosaveEnabled((enabled) => !enabled);
-                }, icon: autosaveIcon, isToggle: true, isActive: autosaveEnabled,
+                }, icon: autosaveEnabled ? autosaveIcon : autosaveDisabledIcon, isToggle: true, isActive: autosaveEnabled,
         },
-        {optionName: `Sound: ${isMuted ? 'Off' : 'On'}`, function: () => {
+        {optionName: `Sounds: ${isMuted ? 'Off' : 'On'}`, function: () => {
             const unmuting = isMuted;
             if (unmuting) {
                 // Only play the sound when unmuting. Sets the audioMuted 
@@ -64,6 +69,10 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
             }
             setIsMuted((muted) => !muted);
         }, icon: isMuted ? mutedIcon : unmutedIcon, isToggle: true, isActive: isMuted},
+        {optionName: `Music: ${isMusicMuted ? 'Off' : 'On'}`, function: () => {
+            setIsMusicMuted((muted) => !muted);
+            useAudioPlayer('touch');
+        }, icon: isMusicMuted ? musicMutedIcon : musicEnabledIcon, isToggle: true, isActive: isMusicMuted},
         {optionName: `Retro: ${retroMode ? 'On' : 'Off'}`, function: () => {
             useAudioPlayer('touch');
             setRetroMode((enabled) => !enabled);

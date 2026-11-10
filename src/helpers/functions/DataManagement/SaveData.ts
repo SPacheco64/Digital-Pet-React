@@ -82,12 +82,18 @@ export const parseChocoboSaveData = (value: unknown): ChocoboSaveData => {
         throw new Error('Invalid save field: isMuted');
     }
 
+    const isMusicMuted = value.isMusicMuted ?? false;
+    if (typeof isMusicMuted !== 'boolean') {
+        throw new Error('Invalid save field: isMusicMuted');
+    }
+
     return {
         playerName: requireString(value, 'playerName'),
         chocoboName: requireString(value, 'chocoboName'),
         currentShellColor: shellColor,
         retroMode,
         isMuted,
+        isMusicMuted,
         currentHealth: Math.min(maxHealth, Math.max(0, requireNumber(value, 'currentHealth'))),
         maxHealth,
         currentEnergy: Math.min(maxEnergy, Math.max(0, requireNumber(value, 'currentEnergy'))),

@@ -30,5 +30,12 @@ export const AUDIO_NAMES = {
     'win-race': 'WinRaceSound',
     'lose-race': 'LoseRaceSound',
 };
-
 export type AudioEvent = keyof typeof AUDIO_NAMES;
+
+// These constants are for the games music:
+export const MUSIC_THEMES = {
+    battle: 'BattleTheme',
+    main: 'MainTheme',
+    race: 'RaceTheme',
+};
+export type MusicTheme = keyof typeof MUSIC_THEMES;

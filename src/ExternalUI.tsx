@@ -13,6 +13,8 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
         setRetroMode,
         isMuted,
         setIsMuted,
+        isMusicMuted,
+        setIsMusicMuted,
         currentTime,
         setCurrentTime,
         onSave,
@@ -28,7 +30,8 @@ const ExternalUI: React.FC<ExternalUIProps> = (props: ExternalUIProps) => {
         <OptionsMenu onSave={onSave} onReset={onReset}
           autosaveEnabled={autosaveEnabled} setAutosaveEnabled={setAutosaveEnabled}
           retroMode={retroMode} setRetroMode={setRetroMode}
-          isMuted={isMuted} setIsMuted={setIsMuted} />
+          isMuted={isMuted} setIsMuted={setIsMuted}
+          isMusicMuted={isMusicMuted} setIsMusicMuted={setIsMusicMuted} />
         <TimeOfDay currentTime={currentTime} setCurrentTime={setCurrentTime} />
       </div>
     </div>
